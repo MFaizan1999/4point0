@@ -38,962 +38,265 @@
     --blue: #2563eb;
     --blue-bg: #eff6ff;
     --blue-border: #bfdbfe;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-    --shadow-lg: 0 12px 40px rgba(0,0,0,0.1);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Geist', sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Geist', sans-serif;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ── HEADER ── */
-  header {
-    height: 56px;
-    background: var(--white);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 28px;
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    gap: 0;
-  }
-
-  .logo {
-    font-family: 'Instrument Serif', serif;
-    font-size: 1.45rem;
-    letter-spacing: -0.02em;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-right: 28px;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-
-  .logo-gem {
-    width: 8px; height: 8px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex-shrink: 0;
-  }
-
+  header { height: 56px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 28px; position: sticky; top: 0; z-index: 200; }
+  .logo { font-family: 'Instrument Serif', serif; font-size: 1.45rem; letter-spacing: -0.02em; display: flex; align-items: center; gap: 6px; margin-right: 28px; flex-shrink: 0; cursor: pointer; }
+  .logo-gem { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
   nav { display: flex; gap: 1px; flex: 1; }
-
-  .nav-btn {
-    background: none;
-    border: none;
-    color: var(--text-3);
-    padding: 6px 14px;
-    border-radius: 7px;
-    font-family: 'Geist', sans-serif;
-    font-size: 0.83rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-  }
-
+  .nav-btn { background: none; border: none; color: var(--text-3); padding: 6px 14px; border-radius: 7px; font-family: 'Geist', sans-serif; font-size: 0.83rem; font-weight: 500; cursor: pointer; transition: all 0.15s; position: relative; }
   .nav-btn:hover { color: var(--text); background: var(--bg); }
   .nav-btn.active { color: var(--text); font-weight: 600; }
-  .nav-btn.active::after {
-    content: '';
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px; height: 2px;
-    background: var(--gold);
-    border-radius: 1px;
-  }
-
+  .nav-btn.active::after { content: ''; position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%); width: 20px; height: 2px; background: var(--gold); border-radius: 1px; }
   .header-right { display: flex; align-items: center; gap: 10px; }
-
-  .notif-btn {
-    width: 32px; height: 32px;
-    border-radius: 7px;
-    border: 1px solid var(--border);
-    background: none;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.85rem;
-    color: var(--text-3);
-    transition: all 0.15s;
-    position: relative;
-  }
-
-  .notif-btn:hover { background: var(--bg); color: var(--text); }
-
-  .notif-dot {
-    position: absolute;
-    top: 6px; right: 6px;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    border: 1.5px solid var(--white);
-  }
-
-  .gpa-pill {
-    background: var(--gold-pale);
-    border: 1px solid var(--gold-border);
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.76rem;
-    font-weight: 600;
-    color: var(--warn);
-    display: flex; align-items: center; gap: 5px;
-    cursor: pointer;
-  }
-
+  .notif-btn { width: 32px; height: 32px; border-radius: 7px; border: 1px solid var(--border); background: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: var(--text-3); transition: all 0.15s; position: relative; }
+  .notif-btn:hover { background: var(--bg); }
+  .notif-dot { position: absolute; top: 6px; right: 6px; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); border: 1.5px solid var(--white); }
+  .gpa-pill { background: var(--gold-pale); border: 1px solid var(--gold-border); padding: 5px 12px; border-radius: 20px; font-size: 0.76rem; font-weight: 600; color: var(--warn); display: flex; align-items: center; gap: 5px; cursor: pointer; }
   .gpa-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
-
-  .avatar {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.68rem; font-weight: 700; color: white;
-    border: 1.5px solid var(--gold-border);
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
-
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-light), var(--gold)); display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: white; border: 1.5px solid var(--gold-border); cursor: pointer; transition: transform 0.15s; }
   .avatar:hover { transform: scale(1.05); }
 
-  /* ── PAGE SYSTEM ── */
   .page { display: none; }
-  .page.active { display: flex; }
+  #page-community.active { display: grid; grid-template-columns: 1fr 356px; min-height: calc(100vh - 56px); }
+  #page-grades.active { display: flex; flex-direction: column; padding: 32px 40px; max-width: 900px; margin: 0 auto; width: 100%; }
+  #page-schedule.active { display: flex; flex-direction: column; padding: 32px 40px; max-width: 1000px; margin: 0 auto; width: 100%; }
 
-  /* ── COMMUNITY PAGE ── */
-  #page-community {
-    grid-template-columns: 1fr 356px;
-    min-height: calc(100vh - 56px);
-  }
-
-  .community {
-    padding: 30px 34px;
-    overflow-y: auto;
-  }
-
-  .page-eyebrow {
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--gold);
-    margin-bottom: 5px;
-  }
-
-  .page-title {
-    font-family: 'Instrument Serif', serif;
-    font-size: 2rem;
-    letter-spacing: -0.03em;
-    margin-bottom: 4px;
-    line-height: 1.1;
-  }
-
-  .page-sub {
-    font-size: 0.8rem;
-    color: var(--text-3);
-    margin-bottom: 22px;
-  }
-
-  .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 12px;
-  }
-
+  .community { padding: 30px 34px; overflow-y: auto; }
+  .page-eyebrow { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 5px; }
+  .page-title { font-family: 'Instrument Serif', serif; font-size: 2rem; letter-spacing: -0.03em; margin-bottom: 4px; line-height: 1.1; }
+  .page-sub { font-size: 0.8rem; color: var(--text-3); margin-bottom: 22px; }
+  .toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; gap: 12px; }
   .filter-row { display: flex; gap: 5px; flex-wrap: wrap; }
-
-  .chip {
-    background: var(--white);
-    border: 1px solid var(--border);
-    color: var(--text-3);
-    padding: 4px 12px;
-    border-radius: 6px;
-    font-size: 0.76rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-
+  .chip { background: var(--white); border: 1px solid var(--border); color: var(--text-3); padding: 4px 12px; border-radius: 6px; font-size: 0.76rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
   .chip:hover { border-color: var(--gold-border); color: var(--warn); }
   .chip.active { background: var(--gold-pale); border-color: var(--gold-border); color: var(--warn); font-weight: 600; }
-
-  .live-badge {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 0.72rem; color: var(--success); font-weight: 600;
-    background: var(--success-bg); border: 1px solid var(--success-border);
-    padding: 4px 10px; border-radius: 6px; white-space: nowrap;
-    flex-shrink: 0;
-  }
-
+  .live-badge { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--success); font-weight: 600; background: var(--success-bg); border: 1px solid var(--success-border); padding: 4px 10px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
   .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--success); animation: blink 2s infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* ── IMPROVED COURSE CARD ── */
-  .course-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: var(--shadow-sm);
-    animation: up 0.35s ease both;
-    overflow: hidden;
-  }
+  .loading-state { text-align: center; padding: 48px 20px; color: var(--text-3); font-size: 0.85rem; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .loading-spinner { width: 24px; height: 24px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
+  .course-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s; box-shadow: var(--shadow-sm); overflow: hidden; animation: up 0.35s ease both; }
   @keyframes up { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-  .course-card:nth-child(1){animation-delay:0s}
-  .course-card:nth-child(2){animation-delay:0.06s}
-  .course-card:nth-child(3){animation-delay:0.12s}
-  .course-card:nth-child(4){animation-delay:0.18s}
-
+  .course-card:nth-child(1){animation-delay:0s} .course-card:nth-child(2){animation-delay:0.06s} .course-card:nth-child(3){animation-delay:0.12s} .course-card:nth-child(4){animation-delay:0.18s}
   .course-card:hover { border-color: var(--gold-border); box-shadow: var(--shadow-md); transform: translateY(-2px); }
   .course-card.expanded { border-color: var(--gold-border); }
-
-  /* COLOR STRIPE */
-  .card-stripe {
-    height: 3px;
-    width: 100%;
-  }
-
+  .card-stripe { height: 3px; }
   .stripe-red { background: linear-gradient(90deg, var(--danger), #e74c3c); }
   .stripe-amber { background: linear-gradient(90deg, var(--warn), var(--gold)); }
   .stripe-green { background: linear-gradient(90deg, var(--success), #27ae60); }
-
   .card-inner { padding: 16px 20px 18px; }
-
   .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
   .course-left { flex: 1; min-width: 0; }
-
   .course-code-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
-
-  .course-code {
-    font-size: 0.67rem; font-weight: 700; color: var(--gold);
-    letter-spacing: 0.1em; text-transform: uppercase;
-  }
-
-  .diff-badge {
-    font-size: 0.65rem; font-weight: 600; padding: 1px 7px; border-radius: 4px;
-  }
-
+  .course-code { font-size: 0.67rem; font-weight: 700; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; }
+  .diff-badge { font-size: 0.65rem; font-weight: 600; padding: 1px 7px; border-radius: 4px; }
   .diff-hard { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
   .diff-medium { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
   .diff-easy { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
-
-  .course-name {
-    font-family: 'Instrument Serif', serif;
-    font-size: 1.1rem; letter-spacing: -0.02em; margin-bottom: 8px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-
-  .course-meta { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
+  .course-name { font-family: 'Instrument Serif', serif; font-size: 1.1rem; letter-spacing: -0.02em; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .course-meta { display: flex; align-items: center; flex-wrap: wrap; }
   .meta-item { font-size: 0.72rem; color: var(--text-3); }
   .meta-item+.meta-item::before { content: '·'; margin: 0 6px; color: var(--border-strong); }
-
   .card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-
   .score-block { text-align: right; }
-  .score-num {
-    font-family: 'Instrument Serif', serif;
-    font-size: 2.2rem; letter-spacing: -0.04em; line-height: 1; color: var(--text);
-  }
-
+  .score-num { font-family: 'Instrument Serif', serif; font-size: 2.2rem; letter-spacing: -0.04em; line-height: 1; }
   .score-sub { font-size: 0.66rem; color: var(--text-3); margin-top: 1px; }
-
-  .exam-badge {
-    font-size: 0.68rem; font-weight: 600; padding: 3px 9px;
-    border-radius: 5px; white-space: nowrap;
-  }
-
+  .exam-badge { font-size: 0.68rem; font-weight: 600; padding: 3px 9px; border-radius: 5px; white-space: nowrap; }
   .exam-soon { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
   .exam-mid { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
   .exam-far { background: var(--gold-pale); color: var(--warn); border: 1px solid var(--gold-border); }
-
-  /* CARD STATS ROW */
-  .card-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-    margin-top: 14px;
-    background: var(--off-white);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .stat-cell {
-    padding: 10px 12px;
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 2px;
-  }
-
+  .card-stats { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 14px; background: var(--off-white); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .stat-cell { padding: 10px 12px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 2px; }
   .stat-cell:last-child { border-right: none; }
-
-  .stat-val { font-size: 0.88rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+  .stat-val { font-size: 0.88rem; font-weight: 700; letter-spacing: -0.01em; }
   .stat-lbl { font-size: 0.63rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-3); }
-
-  /* PASS RATE BAR */
-  .pass-row {
-    display: flex; align-items: center; gap: 10px; margin-top: 12px;
-  }
-
+  .pass-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
   .pass-label { font-size: 0.72rem; color: var(--text-3); white-space: nowrap; }
   .pass-bar { flex: 1; height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; }
-  .pass-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--gold-light), var(--gold)); transition: width 1s ease; }
+  .pass-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--gold-light), var(--gold)); }
   .pass-pct { font-size: 0.72rem; font-weight: 600; color: var(--warn); white-space: nowrap; }
 
-  /* TREND PILL */
-  .trend-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-  .trend-pill {
-    display: flex; align-items: center; gap: 4px;
-    font-size: 0.7rem; font-weight: 600;
-    padding: 3px 9px; border-radius: 5px;
-  }
-
-  .trend-up { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
-  .trend-down { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
-  .trend-neutral { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
-
-  .trend-text { font-size: 0.7rem; color: var(--text-3); }
-
-  /* COMMENTS */
   .card-comments { display: none; }
   .course-card.expanded .card-comments { display: block; }
-
-  .comments-header {
-    display: flex; align-items: center; gap: 10px; margin: 14px 0 10px;
-  }
-
+  .comments-header { display: flex; align-items: center; gap: 10px; margin: 14px 0 10px; }
   .comments-line { flex: 1; height: 1px; background: var(--border); }
   .comments-label { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); white-space: nowrap; }
-
-  .comment {
-    background: var(--off-white); border: 1px solid var(--border);
-    border-radius: 8px; padding: 11px 13px; margin-bottom: 7px;
-    font-size: 0.8rem; line-height: 1.55; color: var(--text-2);
-    animation: up 0.2s ease both;
-  }
-
+  .comment { background: var(--off-white); border: 1px solid var(--border); border-radius: 8px; padding: 11px 13px; margin-bottom: 7px; font-size: 0.8rem; line-height: 1.55; color: var(--text-2); }
   .comment-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
   .comment-author { font-size: 0.74rem; font-weight: 600; color: var(--text); }
   .comment-time { font-size: 0.67rem; color: var(--text-3); }
-
-  .upvote-btn {
-    background: none; border: 1px solid var(--border); color: var(--text-3);
-    padding: 3px 9px; border-radius: 5px; font-size: 0.7rem;
-    cursor: pointer; font-family: 'Geist', sans-serif; margin-top: 7px;
-    transition: all 0.15s;
-  }
-
+  .upvote-btn { background: none; border: 1px solid var(--border); color: var(--text-3); padding: 3px 9px; border-radius: 5px; font-size: 0.7rem; cursor: pointer; font-family: 'Geist', sans-serif; margin-top: 7px; transition: all 0.15s; }
   .upvote-btn:hover { border-color: var(--gold-border); color: var(--warn); }
-
   .add-row { display: flex; gap: 7px; margin-top: 8px; }
-  .add-row input {
-    flex: 1; background: var(--white); border: 1px solid var(--border);
-    color: var(--text); padding: 7px 11px; border-radius: 7px;
-    font-family: 'Geist', sans-serif; font-size: 0.79rem; outline: none;
-    transition: border-color 0.15s;
-  }
-
+  .add-row input { flex: 1; background: var(--white); border: 1px solid var(--border); color: var(--text); padding: 7px 11px; border-radius: 7px; font-family: 'Geist', sans-serif; font-size: 0.79rem; outline: none; transition: border-color 0.15s; }
   .add-row input:focus { border-color: var(--gold); }
-
-  .add-row button {
-    background: var(--gold-pale); color: var(--warn); border: 1px solid var(--gold-border);
-    padding: 7px 13px; border-radius: 7px; font-size: 0.75rem; font-weight: 600;
-    cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s;
-  }
-
+  .add-row input::placeholder { color: var(--text-3); }
+  .add-row button { background: var(--gold-pale); color: var(--warn); border: 1px solid var(--gold-border); padding: 7px 13px; border-radius: 7px; font-size: 0.75rem; font-weight: 600; cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s; }
   .add-row button:hover { background: var(--gold-border); }
 
-  /* ── AI PANEL ── */
-  .ai-panel {
-    background: var(--white);
-    border-left: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    position: sticky; top: 56px;
-    height: calc(100vh - 56px);
-    overflow: hidden;
-  }
-
+  .ai-panel { background: var(--white); border-left: 1px solid var(--border); display: flex; flex-direction: column; position: sticky; top: 56px; height: calc(100vh - 56px); overflow: hidden; }
   .panel-hdr { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
-
-  .panel-title-row {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
-  }
-
+  .panel-title-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .panel-title { font-family: 'Instrument Serif', serif; font-size: 1.05rem; letter-spacing: -0.02em; }
-
-  .online-tag {
-    font-size: 0.66rem; font-weight: 600; color: var(--success);
-    background: var(--success-bg); border: 1px solid var(--success-border);
-    padding: 2px 8px; border-radius: 4px; display: flex; align-items: center; gap: 4px;
-  }
-
+  .online-tag { font-size: 0.66rem; font-weight: 600; color: var(--success); background: var(--success-bg); border: 1px solid var(--success-border); padding: 2px 8px; border-radius: 4px; display: flex; align-items: center; gap: 4px; }
   .online-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--success); animation: blink 2s infinite; }
-
   .ctx-row { display: flex; gap: 5px; flex-wrap: wrap; }
-
-  .ctx-chip {
-    background: var(--off-white); border: 1px solid var(--border); color: var(--text-3);
-    padding: 4px 11px; border-radius: 6px; font-size: 0.74rem; font-weight: 500;
-    cursor: pointer; transition: all 0.15s;
-  }
-
+  .ctx-chip { background: var(--off-white); border: 1px solid var(--border); color: var(--text-3); padding: 4px 11px; border-radius: 6px; font-size: 0.74rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
   .ctx-chip:hover { border-color: var(--gold-border); color: var(--warn); }
   .ctx-chip.active { background: var(--gold-pale); border-color: var(--gold-border); color: var(--warn); font-weight: 600; }
-
   .work-area { padding: 14px 22px; border-bottom: 1px solid var(--border); background: var(--off-white); }
   .work-label { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); font-weight: 600; margin-bottom: 7px; }
-
-  .work-input {
-    width: 100%; background: var(--white); border: 1px solid var(--border);
-    border-radius: 8px; color: var(--text); font-family: 'Geist', sans-serif;
-    font-size: 0.8rem; padding: 9px 12px; resize: none; height: 70px;
-    outline: none; line-height: 1.55; transition: border-color 0.15s;
-  }
-
+  .work-input { width: 100%; background: var(--white); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Geist', sans-serif; font-size: 0.8rem; padding: 9px 12px; resize: none; height: 70px; outline: none; line-height: 1.55; transition: border-color 0.15s; }
   .work-input:focus { border-color: var(--gold); }
   .work-input::placeholder { color: var(--text-3); }
-
   .qa-row { display: flex; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
-
-  .qa-btn {
-    background: var(--white); border: 1px solid var(--border); color: var(--text-2);
-    padding: 4px 10px; border-radius: 5px; font-size: 0.71rem; font-weight: 500;
-    cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s;
-  }
-
+  .qa-btn { background: var(--white); border: 1px solid var(--border); color: var(--text-2); padding: 4px 10px; border-radius: 5px; font-size: 0.71rem; font-weight: 500; cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s; }
   .qa-btn:hover { border-color: var(--gold-border); color: var(--warn); background: var(--gold-pale); }
-
-  .chat-area {
-    flex: 1; overflow-y: auto; padding: 16px 22px;
-    display: flex; flex-direction: column; gap: 10px;
-  }
-
+  .chat-area { flex: 1; overflow-y: auto; padding: 16px 22px; display: flex; flex-direction: column; gap: 10px; }
   .chat-area::-webkit-scrollbar { width: 3px; }
   .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
   .msg { display: flex; flex-direction: column; gap: 3px; animation: up 0.2s ease both; }
-  .msg.user { align-items: flex-end; }
-  .msg.ai { align-items: flex-start; }
-
+  .msg.user { align-items: flex-end; } .msg.ai { align-items: flex-start; }
   .msg-lbl { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0 2px; }
-  .msg.user .msg-lbl { color: var(--gold); }
-  .msg.ai .msg-lbl { color: var(--text-3); }
-
+  .msg.user .msg-lbl { color: var(--gold); } .msg.ai .msg-lbl { color: var(--text-3); }
   .bubble { padding: 10px 13px; border-radius: 10px; font-size: 0.81rem; line-height: 1.6; max-width: 95%; }
   .msg.user .bubble { background: var(--gold-pale); border: 1px solid var(--gold-border); border-bottom-right-radius: 2px; }
   .msg.ai .bubble { background: var(--off-white); border: 1px solid var(--border); border-bottom-left-radius: 2px; }
-
-  .intel-bubble {
-    background: var(--gold-pale); border: 1px solid var(--gold-border);
-    border-radius: 10px; border-bottom-left-radius: 2px;
-    padding: 11px 13px; font-size: 0.8rem; line-height: 1.55; max-width: 95%; color: var(--text-2);
-  }
-
+  .intel-bubble { background: var(--gold-pale); border: 1px solid var(--gold-border); border-radius: 10px; border-bottom-left-radius: 2px; padding: 11px 13px; font-size: 0.8rem; line-height: 1.55; max-width: 95%; color: var(--text-2); }
   .intel-lbl { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
-
-  .typing {
-    display: flex; gap: 3px; align-items: center;
-    padding: 10px 13px; background: var(--off-white); border: 1px solid var(--border);
-    border-radius: 10px; border-bottom-left-radius: 2px; width: fit-content;
-  }
-
+  .typing { display: flex; gap: 3px; align-items: center; padding: 10px 13px; background: var(--off-white); border: 1px solid var(--border); border-radius: 10px; border-bottom-left-radius: 2px; width: fit-content; }
   .t-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--text-3); animation: bounce 1.2s infinite; }
-  .t-dot:nth-child(2){animation-delay:0.15s}
-  .t-dot:nth-child(3){animation-delay:0.3s}
+  .t-dot:nth-child(2){animation-delay:0.15s} .t-dot:nth-child(3){animation-delay:0.3s}
   @keyframes bounce { 0%,80%,100%{transform:translateY(0);opacity:0.4} 40%{transform:translateY(-4px);opacity:1} }
-
-  .input-row {
-    padding: 10px 22px 16px; border-top: 1px solid var(--border);
-    display: flex; gap: 7px; align-items: flex-end;
-  }
-
-  .chat-input {
-    flex: 1; background: var(--off-white); border: 1px solid var(--border);
-    color: var(--text); font-family: 'Geist', sans-serif; font-size: 0.81rem;
-    padding: 9px 12px; border-radius: 8px; resize: none; max-height: 90px;
-    outline: none; line-height: 1.5; transition: border-color 0.15s;
-  }
-
+  .input-row { padding: 10px 22px 16px; border-top: 1px solid var(--border); display: flex; gap: 7px; align-items: flex-end; }
+  .chat-input { flex: 1; background: var(--off-white); border: 1px solid var(--border); color: var(--text); font-family: 'Geist', sans-serif; font-size: 0.81rem; padding: 9px 12px; border-radius: 8px; resize: none; max-height: 90px; outline: none; line-height: 1.5; transition: border-color 0.15s; }
   .chat-input:focus { border-color: var(--gold); }
   .chat-input::placeholder { color: var(--text-3); }
+  .send-btn { background: var(--gold); border: none; color: white; width: 34px; height: 34px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; transition: all 0.15s; }
+  .send-btn:hover { background: var(--gold-hover); transform: translateY(-1px); }
 
-  .send-btn {
-    background: var(--gold); border: none; color: white;
-    width: 34px; height: 34px; border-radius: 8px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.9rem; flex-shrink: 0; transition: all 0.15s;
-  }
-
-  .send-btn:hover { background: var(--gold-hover); transform: translateY(-1px); box-shadow: 0 3px 12px rgba(201,168,76,0.35); }
-
-  /* ── GRADES PAGE ── */
-  #page-grades { flex-direction: column; padding: 32px 40px; max-width: 900px; margin: 0 auto; width: 100%; }
-
+  /* GRADES */
   .grades-header { margin-bottom: 28px; }
-
-  .gpa-hero {
-    display: flex; align-items: flex-end; gap: 24px;
-    background: var(--white); border: 1px solid var(--border);
-    border-radius: 14px; padding: 24px 28px; margin-bottom: 20px;
-    box-shadow: var(--shadow-sm);
-    position: relative; overflow: hidden;
-  }
-
-  .gpa-hero::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--gold-light), var(--gold));
-  }
-
+  .gpa-hero { display: flex; align-items: flex-end; gap: 24px; background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; box-shadow: var(--shadow-sm); position: relative; overflow: hidden; }
+  .gpa-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--gold-light), var(--gold)); }
   .gpa-main { flex: 1; }
   .gpa-eyebrow { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 6px; }
-
-  .gpa-number {
-    font-family: 'Instrument Serif', serif;
-    font-size: 4rem; letter-spacing: -0.04em; line-height: 1; color: var(--text);
-  }
-
+  .gpa-number { font-family: 'Instrument Serif', serif; font-size: 4rem; letter-spacing: -0.04em; line-height: 1; }
   .gpa-sub { font-size: 0.8rem; color: var(--text-3); margin-top: 6px; }
-
-  .gpa-stats { display: flex; gap: 0; }
-
-  .gpa-stat {
-    padding: 0 22px; border-left: 1px solid var(--border);
-    display: flex; flex-direction: column; gap: 4px; text-align: center;
-  }
-
+  .gpa-stats { display: flex; }
+  .gpa-stat { padding: 0 22px; border-left: 1px solid var(--border); display: flex; flex-direction: column; gap: 4px; text-align: center; }
   .gpa-stat-val { font-family: 'Instrument Serif', serif; font-size: 1.6rem; letter-spacing: -0.03em; }
   .gpa-stat-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-3); }
-
-  .semester-label {
-    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 10px; margin-top: 4px;
-  }
-
-  .grade-row {
-    background: var(--white); border: 1px solid var(--border); border-radius: 10px;
-    padding: 0; margin-bottom: 8px; overflow: hidden;
-    box-shadow: var(--shadow-sm); animation: up 0.3s ease both;
-    transition: all 0.2s;
-  }
-
+  .semester-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 10px; margin-top: 4px; }
+  .grade-row { background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px; overflow: hidden; box-shadow: var(--shadow-sm); transition: all 0.2s; animation: up 0.3s ease both; }
   .grade-row:hover { border-color: var(--gold-border); box-shadow: var(--shadow-md); }
-  .grade-row:nth-child(1){animation-delay:0.05s}
-  .grade-row:nth-child(2){animation-delay:0.1s}
-  .grade-row:nth-child(3){animation-delay:0.15s}
-  .grade-row:nth-child(4){animation-delay:0.2s}
-
+  .grade-row:nth-child(1){animation-delay:0.05s} .grade-row:nth-child(2){animation-delay:0.1s} .grade-row:nth-child(3){animation-delay:0.15s} .grade-row:nth-child(4){animation-delay:0.2s}
   .grade-inner { display: flex; align-items: center; padding: 14px 18px; gap: 16px; }
-
   .grade-left-stripe { width: 3px; height: 36px; border-radius: 2px; flex-shrink: 0; }
-
   .grade-info { flex: 1; min-width: 0; }
   .grade-code { font-size: 0.67rem; font-weight: 700; color: var(--gold); letter-spacing: 0.08em; text-transform: uppercase; }
   .grade-name { font-family: 'Instrument Serif', serif; font-size: 0.98rem; letter-spacing: -0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .grade-meta { font-size: 0.72rem; color: var(--text-3); margin-top: 1px; }
-
   .grade-breakdown { display: flex; gap: 16px; align-items: center; }
-
   .grade-component { text-align: center; }
   .grade-comp-val { font-size: 0.82rem; font-weight: 600; }
   .grade-comp-lbl { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
-
-  .grade-letter {
-    font-family: 'Instrument Serif', serif;
-    font-size: 2rem; letter-spacing: -0.03em; line-height: 1;
-    width: 52px; text-align: center;
-  }
-
-  .grade-a { color: var(--success); }
-  .grade-b { color: var(--blue); }
-  .grade-c { color: var(--warn); }
-
+  .grade-letter { font-family: 'Instrument Serif', serif; font-size: 2rem; letter-spacing: -0.03em; line-height: 1; width: 52px; text-align: center; }
+  .grade-a { color: var(--success); } .grade-b { color: var(--blue); }
   .grade-progress-wrap { width: 100px; }
   .grade-bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
   .grade-fill { height: 100%; border-radius: 2px; }
   .fill-a { background: linear-gradient(90deg, #27ae60, var(--success)); }
   .fill-b { background: linear-gradient(90deg, #3b82f6, var(--blue)); }
-  .fill-c { background: linear-gradient(90deg, var(--gold-light), var(--gold)); }
   .grade-pct { font-size: 0.7rem; color: var(--text-3); margin-top: 3px; text-align: right; }
 
-  /* ── SCHEDULE PAGE ── */
-  #page-schedule { flex-direction: column; padding: 32px 40px; max-width: 1000px; margin: 0 auto; width: 100%; }
-
-  .week-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;
-  }
-
+  /* SCHEDULE */
+  .week-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
   .week-nav { display: flex; align-items: center; gap: 10px; }
-  .week-nav button {
-    background: var(--white); border: 1px solid var(--border); color: var(--text-2);
-    width: 30px; height: 30px; border-radius: 7px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; font-size: 0.8rem;
-    transition: all 0.15s;
-  }
-
+  .week-nav button { background: var(--white); border: 1px solid var(--border); color: var(--text-2); width: 30px; height: 30px; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; transition: all 0.15s; }
   .week-nav button:hover { border-color: var(--gold-border); color: var(--warn); }
   .week-title { font-family: 'Instrument Serif', serif; font-size: 1.2rem; letter-spacing: -0.02em; }
-
-  .today-btn {
-    background: var(--gold-pale); border: 1px solid var(--gold-border);
-    color: var(--warn); padding: 5px 14px; border-radius: 7px;
-    font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Geist', sans-serif;
-    transition: all 0.15s;
-  }
-
+  .today-btn { background: var(--gold-pale); border: 1px solid var(--gold-border); color: var(--warn); padding: 5px 14px; border-radius: 7px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s; }
   .today-btn:hover { background: var(--gold-border); }
-
-  .week-grid {
-    display: grid;
-    grid-template-columns: 60px repeat(5, 1fr);
-    gap: 0;
-    background: var(--white); border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; box-shadow: var(--shadow-sm);
-  }
-
-  .day-header {
-    padding: 12px 10px; border-bottom: 1px solid var(--border);
-    text-align: center; background: var(--off-white);
-  }
-
+  .week-grid { display: grid; grid-template-columns: 60px repeat(5, 1fr); background: var(--white); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .day-header { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: center; background: var(--off-white); }
   .day-name { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); }
   .day-num { font-family: 'Instrument Serif', serif; font-size: 1.3rem; letter-spacing: -0.02em; margin-top: 2px; }
   .day-num.today { color: var(--gold); }
-
   .time-col { background: var(--off-white); border-right: 1px solid var(--border); }
   .time-col-header { padding: 12px 10px; border-bottom: 1px solid var(--border); background: var(--off-white); }
-
-  .time-slot {
-    height: 56px; padding: 4px 8px;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.65rem; color: var(--text-3); font-weight: 500;
-    display: flex; align-items: flex-start; justify-content: flex-end;
-  }
-
+  .time-slot { height: 56px; padding: 4px 8px; border-bottom: 1px solid var(--border); font-size: 0.65rem; color: var(--text-3); font-weight: 500; display: flex; align-items: flex-start; justify-content: flex-end; }
   .day-col { border-right: 1px solid var(--border); position: relative; }
   .day-col:last-child { border-right: none; }
-
-  .day-slot {
-    height: 56px; border-bottom: 1px solid var(--border);
-    position: relative;
-  }
-
+  .day-slot { height: 56px; border-bottom: 1px solid var(--border); position: relative; }
   .day-slot:last-child { border-bottom: none; }
-
-  .event-block {
-    position: absolute; left: 4px; right: 4px;
-    border-radius: 6px; padding: 5px 8px;
-    cursor: pointer; transition: all 0.15s; z-index: 1;
-  }
-
+  .event-block { position: absolute; left: 4px; right: 4px; border-radius: 6px; padding: 5px 8px; cursor: pointer; transition: all 0.15s; z-index: 1; }
   .event-block:hover { filter: brightness(0.96); transform: scale(1.01); }
-
   .event-title { font-size: 0.72rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .event-time { font-size: 0.64rem; margin-top: 1px; opacity: 0.7; }
-
   .ev-cs { background: #fef2f2; border: 1px solid var(--danger-border); color: var(--danger); }
   .ev-math { background: var(--warn-bg); border: 1px solid var(--warn-border); color: var(--warn); }
   .ev-bio { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success); }
   .ev-econ { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--blue); }
   .ev-gold { background: var(--gold-pale); border: 1px solid var(--gold-border); color: var(--warn); }
-
   .upcoming-list { margin-top: 20px; }
-
   .upcoming-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-3); margin-bottom: 10px; }
-
-  .upcoming-item {
-    display: flex; align-items: center; gap: 14px;
-    background: var(--white); border: 1px solid var(--border); border-radius: 9px;
-    padding: 12px 16px; margin-bottom: 7px; box-shadow: var(--shadow-sm);
-    transition: all 0.15s; animation: up 0.3s ease both;
-  }
-
+  .upcoming-item { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1px solid var(--border); border-radius: 9px; padding: 12px 16px; margin-bottom: 7px; box-shadow: var(--shadow-sm); transition: all 0.15s; animation: up 0.3s ease both; }
   .upcoming-item:hover { border-color: var(--gold-border); box-shadow: var(--shadow-md); }
-  .upcoming-item:nth-child(1){animation-delay:0.05s}
-  .upcoming-item:nth-child(2){animation-delay:0.1s}
-  .upcoming-item:nth-child(3){animation-delay:0.15s}
-
-  .upcoming-date {
-    width: 42px; height: 42px; border-radius: 8px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-
+  .upcoming-date { width: 42px; height: 42px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; }
   .upcoming-month { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
   .upcoming-day { font-family: 'Instrument Serif', serif; font-size: 1.2rem; letter-spacing: -0.02em; line-height: 1; }
-
   .upcoming-info { flex: 1; }
   .upcoming-name { font-size: 0.86rem; font-weight: 600; margin-bottom: 2px; }
   .upcoming-meta { font-size: 0.73rem; color: var(--text-3); }
-
   .upcoming-tag { font-size: 0.68rem; font-weight: 600; padding: 3px 9px; border-radius: 5px; flex-shrink: 0; }
-
-  /* full page layout - controlled by .page and .page.active */
-  #page-community.active { display: grid; }
-  #page-grades.active, #page-schedule.active { display: flex; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
-  <div class="logo" onclick="switchPage('community')">
-    <div class="logo-gem"></div>4.0
-  </div>
+  <div class="logo" onclick="switchPage('community')"><div class="logo-gem"></div>4.0</div>
   <nav>
     <button class="nav-btn active" onclick="switchPage('community', this)">Community</button>
     <button class="nav-btn" onclick="switchPage('schedule', this)">Schedule</button>
     <button class="nav-btn" onclick="switchPage('grades', this)">Grades</button>
-
   </nav>
   <div class="header-right">
     <button class="notif-btn">🔔<div class="notif-dot"></div></button>
     <div class="gpa-pill">GPA 3.82</div>
-    <div class="avatar">AK</div>
+    <div class="avatar" id="userAvatar">?</div>
   </div>
 </header>
 
-<!-- ── COMMUNITY PAGE ── -->
+<!-- COMMUNITY PAGE -->
 <div id="page-community" class="page active">
   <div class="community">
-    <div class="page-eyebrow">Finals Week</div>
+    <div class="page-eyebrow">Live</div>
     <div class="page-title">Test Intel</div>
     <div class="page-sub">Student-reported difficulty, tips & exam dates — updated live</div>
-
     <div class="toolbar">
       <div class="filter-row">
         <div class="chip active" onclick="toggleChip(this)">All Courses</div>
         <div class="chip" onclick="toggleChip(this)">CS</div>
         <div class="chip" onclick="toggleChip(this)">Math</div>
         <div class="chip" onclick="toggleChip(this)">Biology</div>
-        <div class="chip" onclick="toggleChip(this)">My Courses</div>
       </div>
-      <div class="live-badge"><div class="live-dot"></div>142 students active</div>
+      <div class="live-badge"><div class="live-dot"></div>Live</div>
     </div>
-
-    <!-- CS 301 -->
-    <div class="course-card" onclick="toggleCard(this)">
-      <div class="card-stripe stripe-red"></div>
-      <div class="card-inner">
-        <div class="card-top">
-          <div class="course-left">
-            <div class="course-code-row">
-              <div class="course-code">CS 301</div>
-              <span class="diff-badge diff-hard">Hard</span>
-            </div>
-            <div class="course-name">Algorithms & Data Structures</div>
-            <div class="course-meta">
-              <span class="meta-item">Prof. Martinez</span>
-              <span class="meta-item">89 reports this week</span>
-              <span class="meta-item">Trending ↑</span>
-            </div>
-          </div>
-          <div class="card-right">
-            <div class="score-block">
-              <div class="score-num">3.8</div>
-              <div class="score-sub">community rating</div>
-            </div>
-            <div class="exam-badge exam-soon">Midterm · Mar 14</div>
-          </div>
-        </div>
-
-        <div class="card-stats">
-          <div class="stat-cell">
-            <div class="stat-val">68%</div>
-            <div class="stat-lbl">Avg Pass</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-val">89</div>
-            <div class="stat-lbl">Reports</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-val">Mar 14</div>
-            <div class="stat-lbl">Next Exam</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-val" style="color:var(--success)">+12</div>
-            <div class="stat-lbl">This Week</div>
-          </div>
-        </div>
-
-        <div class="pass-row">
-          <div class="pass-label">Pass rate</div>
-          <div class="pass-bar"><div class="pass-fill" style="width:68%"></div></div>
-          <div class="pass-pct">68%</div>
-        </div>
-
-        <div class="trend-row">
-          <div class="trend-pill trend-down">↓ Getting harder</div>
-          <div class="trend-text">Difficulty up vs last semester</div>
-        </div>
-
-        <div class="card-comments">
-          <div class="comments-header">
-            <div class="comments-line"></div>
-            <div class="comments-label">Student Tips (34)</div>
-            <div class="comments-line"></div>
-          </div>
-          <div class="comment">
-            <div class="comment-hdr"><span class="comment-author">jaypark</span><span class="comment-time">2h ago</span></div>
-            Last midterm was brutal — graph algorithms were half the exam. Memorize Dijkstra vs Bellman-Ford cold.
-            <div><button class="upvote-btn" onclick="event.stopPropagation();upvote(this)">▲ 34 helpful</button></div>
-          </div>
-          <div class="comment">
-            <div class="comment-hdr"><span class="comment-author">mia_c</span><span class="comment-time">5h ago</span></div>
-            Office hours with Martinez are super helpful — he basically told us the format: 3 coding questions, 1 proof.
-            <div><button class="upvote-btn" onclick="event.stopPropagation();upvote(this)">▲ 21 helpful</button></div>
-          </div>
-          <div class="add-row" onclick="event.stopPropagation()">
-            <input type="text" placeholder="Share a tip with your classmates...">
-            <button onclick="addComment(this)">Post</button>
-          </div>
-        </div>
-      </div>
+    <div id="courses-container">
+      <div class="loading-state"><div class="loading-spinner"></div>Loading courses...</div>
     </div>
-
-    <!-- MATH 241 -->
-    <div class="course-card" onclick="toggleCard(this)">
-      <div class="card-stripe stripe-amber"></div>
-      <div class="card-inner">
-        <div class="card-top">
-          <div class="course-left">
-            <div class="course-code-row">
-              <div class="course-code">MATH 241</div>
-              <span class="diff-badge diff-medium">Medium</span>
-            </div>
-            <div class="course-name">Multivariable Calculus</div>
-            <div class="course-meta">
-              <span class="meta-item">Prof. Chen</span>
-              <span class="meta-item">61 reports this week</span>
-            </div>
-          </div>
-          <div class="card-right">
-            <div class="score-block">
-              <div class="score-num">4.1</div>
-              <div class="score-sub">community rating</div>
-            </div>
-            <div class="exam-badge exam-mid">Quiz · Mar 8</div>
-          </div>
-        </div>
-
-        <div class="card-stats">
-          <div class="stat-cell"><div class="stat-val">79%</div><div class="stat-lbl">Avg Pass</div></div>
-          <div class="stat-cell"><div class="stat-val">61</div><div class="stat-lbl">Reports</div></div>
-          <div class="stat-cell"><div class="stat-val">Mar 8</div><div class="stat-lbl">Next Exam</div></div>
-          <div class="stat-cell"><div class="stat-val" style="color:var(--success)">+7</div><div class="stat-lbl">This Week</div></div>
-        </div>
-
-        <div class="pass-row">
-          <div class="pass-label">Pass rate</div>
-          <div class="pass-bar"><div class="pass-fill" style="width:79%"></div></div>
-          <div class="pass-pct">79%</div>
-        </div>
-
-        <div class="trend-row">
-          <div class="trend-pill trend-up">↑ Getting easier</div>
-          <div class="trend-text">Difficulty down vs last semester</div>
-        </div>
-
-        <div class="card-comments">
-          <div class="comments-header">
-            <div class="comments-line"></div>
-            <div class="comments-label">Student Tips (18)</div>
-            <div class="comments-line"></div>
-          </div>
-          <div class="comment">
-            <div class="comment-hdr"><span class="comment-author">ryan_liu</span><span class="comment-time">1d ago</span></div>
-            Chen recycles problems from old exams. Do the past 3 years of finals and you'll be fine.
-            <div><button class="upvote-btn" onclick="event.stopPropagation();upvote(this)">▲ 57 helpful</button></div>
-          </div>
-          <div class="add-row" onclick="event.stopPropagation()">
-            <input type="text" placeholder="Share a tip...">
-            <button onclick="addComment(this)">Post</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- BIO 210 -->
-    <div class="course-card" onclick="toggleCard(this)">
-      <div class="card-stripe stripe-green"></div>
-      <div class="card-inner">
-        <div class="card-top">
-          <div class="course-left">
-            <div class="course-code-row">
-              <div class="course-code">BIO 210</div>
-              <span class="diff-badge diff-easy">Easy</span>
-            </div>
-            <div class="course-name">Cell Biology & Genetics</div>
-            <div class="course-meta">
-              <span class="meta-item">Prof. Okafor</span>
-              <span class="meta-item">44 reports this week</span>
-            </div>
-          </div>
-          <div class="card-right">
-            <div class="score-block">
-              <div class="score-num">4.6</div>
-              <div class="score-sub">community rating</div>
-            </div>
-            <div class="exam-badge exam-far">Final · Apr 22</div>
-          </div>
-        </div>
-
-        <div class="card-stats">
-          <div class="stat-cell"><div class="stat-val">91%</div><div class="stat-lbl">Avg Pass</div></div>
-          <div class="stat-cell"><div class="stat-val">44</div><div class="stat-lbl">Reports</div></div>
-          <div class="stat-cell"><div class="stat-val">Apr 22</div><div class="stat-lbl">Next Exam</div></div>
-          <div class="stat-cell"><div class="stat-val" style="color:var(--success)">+3</div><div class="stat-lbl">This Week</div></div>
-        </div>
-
-        <div class="pass-row">
-          <div class="pass-label">Pass rate</div>
-          <div class="pass-bar"><div class="pass-fill" style="width:91%"></div></div>
-          <div class="pass-pct">91%</div>
-        </div>
-
-        <div class="trend-row">
-          <div class="trend-pill trend-neutral">→ Stable</div>
-          <div class="trend-text">Consistent with last semester</div>
-        </div>
-
-        <div class="card-comments">
-          <div class="comments-header">
-            <div class="comments-line"></div>
-            <div class="comments-label">Student Tips (9)</div>
-            <div class="comments-line"></div>
-          </div>
-          <div class="comment">
-            <div class="comment-hdr"><span class="comment-author">sofia_m</span><span class="comment-time">3d ago</span></div>
-            Okafor is the best. Lab reports are what kill your grade — make your discussion section thorough.
-            <div><button class="upvote-btn" onclick="event.stopPropagation();upvote(this)">▲ 18 helpful</button></div>
-          </div>
-          <div class="add-row" onclick="event.stopPropagation()">
-            <input type="text" placeholder="Share a tip...">
-            <button onclick="addComment(this)">Post</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- AI PANEL -->
   <div class="ai-panel">
     <div class="panel-hdr">
       <div class="panel-title-row">
@@ -1020,13 +323,13 @@
     <div class="chat-area" id="chatArea">
       <div class="msg ai">
         <div class="msg-lbl">4.0 AI</div>
-        <div class="bubble">Hey! Paste your work above and I'll help you strengthen it — or just ask me anything about your courses.</div>
+        <div class="bubble">Hey! Paste your work above and I'll help you strengthen it — or ask me anything about your courses.</div>
       </div>
       <div class="msg ai">
         <div class="msg-lbl">4.0 AI</div>
         <div class="intel-bubble">
           <div class="intel-lbl">Community Intel</div>
-          89 CS 301 reports suggest your midterm focuses on graph algorithms. Want me to quiz you on Dijkstra vs Bellman-Ford?
+          Click any course card to see live student tips and post your own.
         </div>
       </div>
     </div>
@@ -1037,14 +340,13 @@
   </div>
 </div>
 
-<!-- ── GRADES PAGE ── -->
+<!-- GRADES PAGE -->
 <div id="page-grades" class="page">
   <div class="grades-header">
     <div class="page-eyebrow">Spring 2026</div>
     <div class="page-title">Your Grades</div>
     <div class="page-sub">Current standing across all enrolled courses</div>
   </div>
-
   <div class="gpa-hero">
     <div class="gpa-main">
       <div class="gpa-eyebrow">Cumulative GPA</div>
@@ -1052,330 +354,53 @@
       <div class="gpa-sub">↑ Up 0.08 from last semester · Top 14% of class</div>
     </div>
     <div class="gpa-stats">
-      <div class="gpa-stat">
-        <div class="gpa-stat-val" style="color:var(--success)">3.91</div>
-        <div class="gpa-stat-lbl">This Sem</div>
-      </div>
-      <div class="gpa-stat">
-        <div class="gpa-stat-val">16</div>
-        <div class="gpa-stat-lbl">Credits</div>
-      </div>
-      <div class="gpa-stat">
-        <div class="gpa-stat-val">4</div>
-        <div class="gpa-stat-lbl">Courses</div>
-      </div>
+      <div class="gpa-stat"><div class="gpa-stat-val" style="color:var(--success)">3.91</div><div class="gpa-stat-lbl">This Sem</div></div>
+      <div class="gpa-stat"><div class="gpa-stat-val">16</div><div class="gpa-stat-lbl">Credits</div></div>
+      <div class="gpa-stat"><div class="gpa-stat-val">4</div><div class="gpa-stat-lbl">Courses</div></div>
     </div>
   </div>
-
   <div class="semester-label">Spring 2026 — Current</div>
-
-  <div class="grade-row">
-    <div class="grade-inner">
-      <div class="grade-left-stripe" style="background:var(--danger)"></div>
-      <div class="grade-info">
-        <div class="grade-code">CS 301</div>
-        <div class="grade-name">Algorithms & Data Structures</div>
-        <div class="grade-meta">Prof. Martinez · 4 credits · Midterm in 9 days</div>
-      </div>
-      <div class="grade-breakdown">
-        <div class="grade-component">
-          <div class="grade-comp-val">88%</div>
-          <div class="grade-comp-lbl">HW</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">79%</div>
-          <div class="grade-comp-lbl">Midterm</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">—</div>
-          <div class="grade-comp-lbl">Final</div>
-        </div>
-      </div>
-      <div class="grade-progress-wrap">
-        <div class="grade-bar"><div class="grade-fill fill-b" style="width:84%"></div></div>
-        <div class="grade-pct">84% overall</div>
-      </div>
-      <div class="grade-letter grade-b">B+</div>
-    </div>
-  </div>
-
-  <div class="grade-row">
-    <div class="grade-inner">
-      <div class="grade-left-stripe" style="background:var(--warn)"></div>
-      <div class="grade-info">
-        <div class="grade-code">MATH 241</div>
-        <div class="grade-name">Multivariable Calculus</div>
-        <div class="grade-meta">Prof. Chen · 4 credits · Quiz in 3 days</div>
-      </div>
-      <div class="grade-breakdown">
-        <div class="grade-component">
-          <div class="grade-comp-val">95%</div>
-          <div class="grade-comp-lbl">HW</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">91%</div>
-          <div class="grade-comp-lbl">Quiz 1</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">—</div>
-          <div class="grade-comp-lbl">Midterm</div>
-        </div>
-      </div>
-      <div class="grade-progress-wrap">
-        <div class="grade-bar"><div class="grade-fill fill-a" style="width:93%"></div></div>
-        <div class="grade-pct">93% overall</div>
-      </div>
-      <div class="grade-letter grade-a">A</div>
-    </div>
-  </div>
-
-  <div class="grade-row">
-    <div class="grade-inner">
-      <div class="grade-left-stripe" style="background:var(--success)"></div>
-      <div class="grade-info">
-        <div class="grade-code">BIO 210</div>
-        <div class="grade-name">Cell Biology & Genetics</div>
-        <div class="grade-meta">Prof. Okafor · 4 credits · Final in 48 days</div>
-      </div>
-      <div class="grade-breakdown">
-        <div class="grade-component">
-          <div class="grade-comp-val">97%</div>
-          <div class="grade-comp-lbl">Labs</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">94%</div>
-          <div class="grade-comp-lbl">Midterm</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">—</div>
-          <div class="grade-comp-lbl">Final</div>
-        </div>
-      </div>
-      <div class="grade-progress-wrap">
-        <div class="grade-bar"><div class="grade-fill fill-a" style="width:96%"></div></div>
-        <div class="grade-pct">96% overall</div>
-      </div>
-      <div class="grade-letter grade-a">A+</div>
-    </div>
-  </div>
-
-  <div class="grade-row">
-    <div class="grade-inner">
-      <div class="grade-left-stripe" style="background:var(--blue)"></div>
-      <div class="grade-info">
-        <div class="grade-code">ECON 150</div>
-        <div class="grade-name">Introduction to Microeconomics</div>
-        <div class="grade-meta">Prof. Williams · 4 credits · Midterm in 21 days</div>
-      </div>
-      <div class="grade-breakdown">
-        <div class="grade-component">
-          <div class="grade-comp-val">82%</div>
-          <div class="grade-comp-lbl">HW</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">78%</div>
-          <div class="grade-comp-lbl">Quiz 1</div>
-        </div>
-        <div class="grade-component">
-          <div class="grade-comp-val">—</div>
-          <div class="grade-comp-lbl">Midterm</div>
-        </div>
-      </div>
-      <div class="grade-progress-wrap">
-        <div class="grade-bar"><div class="grade-fill fill-b" style="width:80%"></div></div>
-        <div class="grade-pct">80% overall</div>
-      </div>
-      <div class="grade-letter grade-b">B−</div>
-    </div>
-  </div>
+  <div class="grade-row"><div class="grade-inner"><div class="grade-left-stripe" style="background:var(--danger)"></div><div class="grade-info"><div class="grade-code">CS 301</div><div class="grade-name">Algorithms & Data Structures</div><div class="grade-meta">Prof. Martinez · 4 credits · Midterm in 9 days</div></div><div class="grade-breakdown"><div class="grade-component"><div class="grade-comp-val">88%</div><div class="grade-comp-lbl">HW</div></div><div class="grade-component"><div class="grade-comp-val">79%</div><div class="grade-comp-lbl">Midterm</div></div><div class="grade-component"><div class="grade-comp-val">—</div><div class="grade-comp-lbl">Final</div></div></div><div class="grade-progress-wrap"><div class="grade-bar"><div class="grade-fill fill-b" style="width:84%"></div></div><div class="grade-pct">84% overall</div></div><div class="grade-letter grade-b">B+</div></div></div>
+  <div class="grade-row"><div class="grade-inner"><div class="grade-left-stripe" style="background:var(--warn)"></div><div class="grade-info"><div class="grade-code">MATH 241</div><div class="grade-name">Multivariable Calculus</div><div class="grade-meta">Prof. Chen · 4 credits · Quiz in 3 days</div></div><div class="grade-breakdown"><div class="grade-component"><div class="grade-comp-val">95%</div><div class="grade-comp-lbl">HW</div></div><div class="grade-component"><div class="grade-comp-val">91%</div><div class="grade-comp-lbl">Quiz 1</div></div><div class="grade-component"><div class="grade-comp-val">—</div><div class="grade-comp-lbl">Midterm</div></div></div><div class="grade-progress-wrap"><div class="grade-bar"><div class="grade-fill fill-a" style="width:93%"></div></div><div class="grade-pct">93% overall</div></div><div class="grade-letter grade-a">A</div></div></div>
+  <div class="grade-row"><div class="grade-inner"><div class="grade-left-stripe" style="background:var(--success)"></div><div class="grade-info"><div class="grade-code">BIO 210</div><div class="grade-name">Cell Biology & Genetics</div><div class="grade-meta">Prof. Okafor · 4 credits · Final in 48 days</div></div><div class="grade-breakdown"><div class="grade-component"><div class="grade-comp-val">97%</div><div class="grade-comp-lbl">Labs</div></div><div class="grade-component"><div class="grade-comp-val">94%</div><div class="grade-comp-lbl">Midterm</div></div><div class="grade-component"><div class="grade-comp-val">—</div><div class="grade-comp-lbl">Final</div></div></div><div class="grade-progress-wrap"><div class="grade-bar"><div class="grade-fill fill-a" style="width:96%"></div></div><div class="grade-pct">96% overall</div></div><div class="grade-letter grade-a">A+</div></div></div>
+  <div class="grade-row"><div class="grade-inner"><div class="grade-left-stripe" style="background:var(--blue)"></div><div class="grade-info"><div class="grade-code">ECON 150</div><div class="grade-name">Introduction to Microeconomics</div><div class="grade-meta">Prof. Williams · 4 credits · Midterm in 21 days</div></div><div class="grade-breakdown"><div class="grade-component"><div class="grade-comp-val">82%</div><div class="grade-comp-lbl">HW</div></div><div class="grade-component"><div class="grade-comp-val">78%</div><div class="grade-comp-lbl">Quiz 1</div></div><div class="grade-component"><div class="grade-comp-val">—</div><div class="grade-comp-lbl">Midterm</div></div></div><div class="grade-progress-wrap"><div class="grade-bar"><div class="grade-fill fill-b" style="width:80%"></div></div><div class="grade-pct">80% overall</div></div><div class="grade-letter grade-b">B−</div></div></div>
 </div>
 
-<!-- ── SCHEDULE PAGE ── -->
+<!-- SCHEDULE PAGE -->
 <div id="page-schedule" class="page">
   <div class="week-header">
-    <div>
-      <div class="page-eyebrow">Weekly View</div>
-      <div class="page-title">Schedule</div>
-    </div>
+    <div><div class="page-eyebrow">Weekly View</div><div class="page-title">Schedule</div></div>
     <div class="week-nav">
       <button>‹</button>
       <div class="week-title">March 3 – 7, 2026</div>
       <button>›</button>
-      <button class="today-btn" style="width:auto;font-size:0.78rem;">Today</button>
+      <button class="today-btn">Today</button>
     </div>
   </div>
-
   <div class="week-grid">
-    <!-- Headers -->
     <div class="time-col-header"></div>
     <div class="day-header"><div class="day-name">Mon</div><div class="day-num">3</div></div>
     <div class="day-header"><div class="day-name">Tue</div><div class="day-num">4</div></div>
     <div class="day-header"><div class="day-name">Wed</div><div class="day-num today">5</div></div>
     <div class="day-header"><div class="day-name">Thu</div><div class="day-num">6</div></div>
     <div class="day-header"><div class="day-name">Fri</div><div class="day-num">7</div></div>
-
-    <!-- Time slots + events -->
     <div class="time-col"><div class="time-slot">8am</div><div class="time-slot">9am</div><div class="time-slot">10am</div><div class="time-slot">11am</div><div class="time-slot">12pm</div><div class="time-slot">1pm</div><div class="time-slot">2pm</div><div class="time-slot">3pm</div><div class="time-slot">4pm</div></div>
-
-    <!-- MON -->
-    <div class="day-col">
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-cs" style="top:4px;height:104px">
-          <div class="event-title">CS 301</div>
-          <div class="event-time">9:00 – 10:30am</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-math" style="top:4px;height:104px">
-          <div class="event-title">MATH 241</div>
-          <div class="event-time">11:00am – 12:30pm</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-    </div>
-
-    <!-- TUE -->
-    <div class="day-col">
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-bio" style="top:4px;height:104px">
-          <div class="event-title">BIO 210</div>
-          <div class="event-time">10:00 – 11:30am</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-econ" style="top:4px;height:104px">
-          <div class="event-title">ECON 150</div>
-          <div class="event-time">1:00 – 2:30pm</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-    </div>
-
-    <!-- WED (today) -->
-    <div class="day-col" style="background:rgba(201,168,76,0.03)">
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-cs" style="top:4px;height:104px">
-          <div class="event-title">CS 301</div>
-          <div class="event-time">9:00 – 10:30am</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-math" style="top:4px;height:104px">
-          <div class="event-title">MATH 241</div>
-          <div class="event-time">11:00am – 12:30pm</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-gold" style="top:4px;height:48px">
-          <div class="event-title">Office Hours</div>
-          <div class="event-time">1:00 – 1:50pm</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-    </div>
-
-    <!-- THU -->
-    <div class="day-col">
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-bio" style="top:4px;height:104px">
-          <div class="event-title">BIO 210 Lab</div>
-          <div class="event-time">10:00am – 12:00pm</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-econ" style="top:4px;height:104px">
-          <div class="event-title">ECON 150</div>
-          <div class="event-time">1:00 – 2:30pm</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-    </div>
-
-    <!-- FRI -->
-    <div class="day-col">
-      <div class="day-slot"></div>
-      <div class="day-slot" style="position:relative">
-        <div class="event-block ev-cs" style="top:4px;height:104px">
-          <div class="event-title">CS 301 Lab</div>
-          <div class="event-time">9:00 – 10:30am</div>
-        </div>
-      </div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-      <div class="day-slot"></div>
-    </div>
+    <div class="day-col"><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-cs" style="top:4px;height:104px"><div class="event-title">CS 301</div><div class="event-time">9:00–10:30am</div></div></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-math" style="top:4px;height:104px"><div class="event-title">MATH 241</div><div class="event-time">11:00am–12:30pm</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div></div>
+    <div class="day-col"><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-bio" style="top:4px;height:104px"><div class="event-title">BIO 210</div><div class="event-time">10:00–11:30am</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-econ" style="top:4px;height:104px"><div class="event-title">ECON 150</div><div class="event-time">1:00–2:30pm</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div></div>
+    <div class="day-col" style="background:rgba(201,168,76,0.03)"><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-cs" style="top:4px;height:104px"><div class="event-title">CS 301</div><div class="event-time">9:00–10:30am</div></div></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-math" style="top:4px;height:104px"><div class="event-title">MATH 241</div><div class="event-time">11:00am–12:30pm</div></div></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-gold" style="top:4px;height:48px"><div class="event-title">Office Hours</div><div class="event-time">1:00–1:50pm</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div></div>
+    <div class="day-col"><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-bio" style="top:4px;height:104px"><div class="event-title">BIO 210 Lab</div><div class="event-time">10:00am–12:00pm</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-econ" style="top:4px;height:104px"><div class="event-title">ECON 150</div><div class="event-time">1:00–2:30pm</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div></div>
+    <div class="day-col"><div class="day-slot"></div><div class="day-slot" style="position:relative"><div class="event-block ev-cs" style="top:4px;height:104px"><div class="event-title">CS 301 Lab</div><div class="event-time">9:00–10:30am</div></div></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div><div class="day-slot"></div></div>
   </div>
-
-  <!-- Upcoming exams -->
   <div class="upcoming-list">
     <div class="upcoming-title">Upcoming Exams & Deadlines</div>
-
-    <div class="upcoming-item">
-      <div class="upcoming-date" style="background:var(--warn-bg);border:1px solid var(--warn-border)">
-        <div class="upcoming-month" style="color:var(--warn)">MAR</div>
-        <div class="upcoming-day" style="color:var(--warn)">8</div>
-      </div>
-      <div class="upcoming-info">
-        <div class="upcoming-name">MATH 241 — Quiz 2</div>
-        <div class="upcoming-meta">Prof. Chen · Covers sections 12.1–12.6 · 3 days away</div>
-      </div>
-      <div class="upcoming-tag exam-mid">In 3 days</div>
-    </div>
-
-    <div class="upcoming-item">
-      <div class="upcoming-date" style="background:var(--danger-bg);border:1px solid var(--danger-border)">
-        <div class="upcoming-month" style="color:var(--danger)">MAR</div>
-        <div class="upcoming-day" style="color:var(--danger)">14</div>
-      </div>
-      <div class="upcoming-info">
-        <div class="upcoming-name">CS 301 — Midterm Exam</div>
-        <div class="upcoming-meta">Prof. Martinez · Algorithms, graphs, complexity · 9 days away</div>
-      </div>
-      <div class="upcoming-tag exam-soon">In 9 days</div>
-    </div>
-
-    <div class="upcoming-item">
-      <div class="upcoming-date" style="background:var(--gold-pale);border:1px solid var(--gold-border)">
-        <div class="upcoming-month" style="color:var(--warn)">MAR</div>
-        <div class="upcoming-day" style="color:var(--warn)">26</div>
-      </div>
-      <div class="upcoming-info">
-        <div class="upcoming-name">ECON 150 — Midterm Exam</div>
-        <div class="upcoming-meta">Prof. Williams · Microeconomic theory · 21 days away</div>
-      </div>
-      <div class="upcoming-tag exam-far">In 21 days</div>
-    </div>
+    <div class="upcoming-item"><div class="upcoming-date" style="background:var(--warn-bg);border:1px solid var(--warn-border)"><div class="upcoming-month" style="color:var(--warn)">MAR</div><div class="upcoming-day" style="color:var(--warn)">8</div></div><div class="upcoming-info"><div class="upcoming-name">MATH 241 — Quiz 2</div><div class="upcoming-meta">Prof. Chen · Covers sections 12.1–12.6</div></div><div class="upcoming-tag exam-mid">In 3 days</div></div>
+    <div class="upcoming-item"><div class="upcoming-date" style="background:var(--danger-bg);border:1px solid var(--danger-border)"><div class="upcoming-month" style="color:var(--danger)">MAR</div><div class="upcoming-day" style="color:var(--danger)">14</div></div><div class="upcoming-info"><div class="upcoming-name">CS 301 — Midterm Exam</div><div class="upcoming-meta">Prof. Martinez · Algorithms, graphs, complexity</div></div><div class="upcoming-tag exam-soon">In 9 days</div></div>
+    <div class="upcoming-item"><div class="upcoming-date" style="background:var(--gold-pale);border:1px solid var(--gold-border)"><div class="upcoming-month" style="color:var(--warn)">MAR</div><div class="upcoming-day" style="color:var(--warn)">26</div></div><div class="upcoming-info"><div class="upcoming-name">ECON 150 — Midterm Exam</div><div class="upcoming-meta">Prof. Williams · Microeconomic theory</div></div><div class="upcoming-tag exam-far">In 21 days</div></div>
   </div>
 </div>
 
 <script>
+  // PAGE NAVIGATION
   function switchPage(id, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
@@ -1400,70 +425,200 @@
     card.classList.toggle('expanded');
   }
 
-  function upvote(btn) {
-    const m = btn.textContent.match(/▲ (\d+)/);
-    if (m) { btn.textContent = `▲ ${parseInt(m[1]) + 1} helpful`; btn.style.color = 'var(--warn)'; btn.style.borderColor = 'var(--gold-border)'; }
+  // HELPERS
+  function timeAgo(d) {
+    const s = Math.floor((Date.now() - new Date(d)) / 1000);
+    if (s < 60) return 'just now';
+    if (s < 3600) return Math.floor(s/60) + 'm ago';
+    if (s < 86400) return Math.floor(s/3600) + 'h ago';
+    return Math.floor(s/86400) + 'd ago';
   }
 
-  function addComment(btn) {
-    const input = btn.previousElementSibling;
-    if (!input.value.trim()) return;
-    const c = document.createElement('div'); c.className = 'comment';
-    c.innerHTML = `<div class="comment-hdr"><span class="comment-author">you</span><span class="comment-time">just now</span></div>${input.value}<div><button class="upvote-btn" onclick="event.stopPropagation();upvote(this)">▲ 1 helpful</button></div>`;
-    btn.parentElement.parentElement.insertBefore(c, btn.parentElement);
-    input.value = '';
+  function diffClass(d) { return d==='Hard'?'diff-hard':d==='Medium'?'diff-medium':'diff-easy'; }
+  function stripe(d) { return d==='Hard'?'stripe-red':d==='Medium'?'stripe-amber':'stripe-green'; }
+  function examClass(t) { return t==='Midterm'?'exam-soon':t==='Quiz'?'exam-mid':'exam-far'; }
+
+  // LOAD COURSES FROM SUPABASE
+  async function loadCourses() {
+    const container = document.getElementById('courses-container');
+
+    const { data: courses, error } = await db.from('courses').select('*').order('created_at');
+    if (error) {
+      container.innerHTML = '<div style="padding:20px;color:var(--danger);font-size:0.84rem;">Failed to load courses.</div>';
+      return;
+    }
+
+    const { data: allComments } = await db.from('comments').select('*').order('upvotes', { ascending: false });
+
+    container.innerHTML = courses.map(course => {
+      const tips = (allComments || []).filter(c => c.course_id === course.id);
+      const tipsHTML = tips.length
+        ? tips.map(c => `
+          <div class="comment">
+            <div class="comment-hdr">
+              <span class="comment-author">${c.author_name || 'anonymous'}</span>
+              <span class="comment-time">${timeAgo(c.created_at)}</span>
+            </div>
+            ${c.content}
+            <div><button class="upvote-btn" onclick="event.stopPropagation();upvote(this,'${c.id}',${c.upvotes})">▲ ${c.upvotes} helpful</button></div>
+          </div>`).join('')
+        : '<div style="color:var(--text-3);font-size:0.79rem;padding:6px 0 4px;">No tips yet — be the first!</div>';
+
+      return `
+        <div class="course-card" onclick="toggleCard(this)">
+          <div class="card-stripe ${stripe(course.difficulty)}"></div>
+          <div class="card-inner">
+            <div class="card-top">
+              <div class="course-left">
+                <div class="course-code-row">
+                  <div class="course-code">${course.code}</div>
+                  <span class="diff-badge ${diffClass(course.difficulty)}">${course.difficulty}</span>
+                </div>
+                <div class="course-name">${course.name}</div>
+                <div class="course-meta">
+                  <span class="meta-item">${course.professor}</span>
+                  <span class="meta-item">${course.report_count} reports</span>
+                </div>
+              </div>
+              <div class="card-right">
+                <div class="score-block">
+                  <div class="score-num">${course.avg_rating}</div>
+                  <div class="score-sub">community rating</div>
+                </div>
+                <div class="exam-badge ${examClass(course.exam_type)}">${course.exam_type} · ${course.exam_date}</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="stat-cell"><div class="stat-val">${course.pass_rate}%</div><div class="stat-lbl">Avg Pass</div></div>
+              <div class="stat-cell"><div class="stat-val">${course.report_count}</div><div class="stat-lbl">Reports</div></div>
+              <div class="stat-cell"><div class="stat-val">${course.exam_date}</div><div class="stat-lbl">Next Exam</div></div>
+              <div class="stat-cell"><div class="stat-val" style="color:var(--success)">${tips.length}</div><div class="stat-lbl">Tips</div></div>
+            </div>
+            <div class="pass-row">
+              <div class="pass-label">Pass rate</div>
+              <div class="pass-bar"><div class="pass-fill" style="width:${course.pass_rate}%"></div></div>
+              <div class="pass-pct">${course.pass_rate}%</div>
+            </div>
+            <div class="card-comments">
+              <div class="comments-header">
+                <div class="comments-line"></div>
+                <div class="comments-label">Student Tips (${tips.length})</div>
+                <div class="comments-line"></div>
+              </div>
+              ${tipsHTML}
+              <div class="add-row" onclick="event.stopPropagation()">
+                <input type="text" id="tip-${course.id}" placeholder="Share a tip with your classmates...">
+                <button onclick="postTip('${course.id}')">Post</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
   }
 
+  // POST TIP
+  async function postTip(courseId) {
+    const input = document.getElementById('tip-' + courseId);
+    const content = input.value.trim();
+    if (!content) return;
+
+    const { data: { user } } = await db.auth.getUser();
+    const authorName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'anonymous';
+
+    const { error } = await db.from('comments').insert({
+      course_id: courseId,
+      user_id: user?.id || null,
+      content,
+      author_name: authorName,
+      upvotes: 0
+    });
+
+    if (!error) { input.value = ''; loadCourses(); }
+  }
+
+  // UPVOTE
+  async function upvote(btn, commentId, count) {
+    const n = count + 1;
+    btn.textContent = `▲ ${n} helpful`;
+    btn.style.color = 'var(--warn)';
+    btn.style.borderColor = 'var(--gold-border)';
+    btn.disabled = true;
+    await db.from('comments').update({ upvotes: n }).eq('id', commentId);
+  }
+
+  // SET AVATAR
+  async function initUser() {
+    const { data: { user } } = await db.auth.getUser();
+    if (user) {
+      const name = user.user_metadata?.full_name || user.email || '?';
+      const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+      document.getElementById('userAvatar').textContent = initials;
+    }
+  }
+
+  // AI CHAT
   function qa(action) {
     const w = document.getElementById('workInput').value;
     document.getElementById('chatInput').value = w ? `${action}: "${w}"` : action;
     sendMessage();
   }
 
-  function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
 
   async function sendMessage() {
     const input = document.getElementById('chatInput');
-    const msg = input.value.trim(); if (!msg) return;
+    const msg = input.value.trim();
+    if (!msg) return;
     const chat = document.getElementById('chatArea');
     input.value = '';
 
-    const um = document.createElement('div'); um.className = 'msg user';
+    const um = document.createElement('div');
+    um.className = 'msg user';
     um.innerHTML = `<div class="msg-lbl">You</div><div class="bubble">${msg}</div>`;
     chat.appendChild(um);
 
-    const ty = document.createElement('div'); ty.className = 'msg ai';
+    const ty = document.createElement('div');
+    ty.className = 'msg ai';
     ty.innerHTML = `<div class="msg-lbl">4.0 AI</div><div class="typing"><div class="t-dot"></div><div class="t-dot"></div><div class="t-dot"></div></div>`;
-    chat.appendChild(ty); chat.scrollTop = chat.scrollHeight;
+    chat.appendChild(ty);
+    chat.scrollTop = chat.scrollHeight;
 
     const ctx = document.querySelector('.ctx-chip.active')?.textContent || 'general';
     const work = document.getElementById('workInput').value;
 
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: 'claude-sonnet-4-20250514',
           max_tokens: 1000,
-          system: `You are 4.0, a sharp AI study assistant built into a student productivity app. Help students improve their grades with specific, actionable advice. Be concise, direct, and genuinely useful — no fluff. Context: student is working on a ${ctx}.${work ? ` Their work: "${work}"` : ''}`,
-          messages: [{ role: "user", content: msg }]
+          system: `You are 4.0, a sharp AI study assistant. Help students improve grades with specific, actionable advice. Be concise and direct. Context: ${ctx}.${work ? ` Their work: "${work}"` : ''}`,
+          messages: [{ role: 'user', content: msg }]
         })
       });
       const data = await res.json();
-      const reply = data.content?.map(b => b.text || '').join('') || "Something went wrong.";
+      const reply = data.content?.map(b => b.text||'').join('') || 'Something went wrong.';
       ty.remove();
-      const am = document.createElement('div'); am.className = 'msg ai';
-      am.innerHTML = `<div class="msg-lbl">4.0 AI</div><div class="bubble">${reply.replace(/\n/g, '<br>')}</div>`;
+      const am = document.createElement('div');
+      am.className = 'msg ai';
+      am.innerHTML = `<div class="msg-lbl">4.0 AI</div><div class="bubble">${reply.replace(/\n/g,'<br>')}</div>`;
       chat.appendChild(am);
-    } catch (e) {
+    } catch(e) {
       ty.remove();
-      const am = document.createElement('div'); am.className = 'msg ai';
-      am.innerHTML = `<div class="msg-lbl">4.0 AI</div><div class="bubble">Connection error. Try again.</div>`;
+      const am = document.createElement('div');
+      am.className = 'msg ai';
+      am.innerHTML = `<div class="msg-lbl">4.0 AI</div><div class="bubble">AI will work once deployed to Vercel.</div>`;
       chat.appendChild(am);
     }
     chat.scrollTop = chat.scrollHeight;
   }
+
+  // INIT
+  loadCourses();
+  initUser();
 </script>
 </body>
 </html>
