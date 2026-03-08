@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.0 — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://ivfvywlzmugnennznqyh.supabase.co'
+  const SUPABASE_KEY = 'sb_publishable_9T6QrjSB4t-V6Qpp4bEEWA_7Hx83k_H'
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+</script>
+<style>
+  :root {
+    --white: #ffffff;
+    --bg: #f4f3ef;
+    --gold: #c9a84c;
+    --gold-hover: #b8943e;
+    --gold-light: #e8d48a;
+    --gold-pale: #fdf8ec;
+    --gold-border: #e8d9a8;
+    --text: #1a1916;
+    --text-2: #4a4845;
+    --text-3: #9a9690;
+    --border: #e8e6e0;
+    --danger: #c0392b;
+    --danger-bg: #fef2f2;
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Geist', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.8rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+
+  .logo-gem {
+    width: 9px; height: 9px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .tagline {
+    font-size: 0.82rem;
+    color: var(--text-3);
+    margin-bottom: 32px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 0;
+    background: var(--bg);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 24px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 7px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    font-family: 'Geist', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-3);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tab.active {
+    background: var(--white);
+    color: var(--text);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .form { display: flex; flex-direction: column; gap: 14px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+
+  .field label {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-2);
+    letter-spacing: 0.01em;
+  }
+
+  .field input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-family: 'Geist', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .field input:focus { border-color: var(--gold); background: var(--white); }
+  .field input::placeholder { color: var(--text-3); }
+
+  .submit-btn {
+    background: var(--gold);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 11px;
+    font-family: 'Geist', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+
+  .submit-btn:hover { background: var(--gold-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,168,76,0.3); }
+
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .error-msg {
+    background: var(--danger-bg);
+    border: 1px solid #fcd5d5;
+    color: var(--danger);
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 0.79rem;
+    display: none;
+  }
+
+  .success-msg {
+    background: #f0faf5;
+    border: 1px solid #b8e8cf;
+    color: #2d7d52;
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 0.79rem;
+    display: none;
+  }
+
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 4px 0;
+  }
+
+  .divider-line { flex: 1; height: 1px; background: var(--border); }
+  .divider-text { font-size: 0.72rem; color: var(--text-3); }
+
+  .footer-text {
+    text-align: center;
+    font-size: 0.74rem;
+    color: var(--text-3);
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo"><div class="logo-gem"></div>4.0</div>
+  <div class="tagline">Your AI-powered study companion</div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('login', this)">Sign In</button>
+    <button class="tab" onclick="switchTab('signup', this)">Create Account</button>
+  </div>
+
+  <!-- LOGIN FORM -->
+  <div id="login-form" class="form">
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="you@domain.com">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••">
+    </div>
+    <div class="error-msg" id="login-error"></div>
+    <button class="submit-btn" onclick="login()">Sign In</button>
+  </div>
+
+  <!-- SIGNUP FORM -->
+  <div id="signup-form" class="form" style="display:none">
+    <div class="field">
+      <label>Full Name</label>
+      <input type="text" id="signup-name" placeholder="Alex Kim">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="signup-email" placeholder="you@domain.com">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="signup-password" placeholder="Min. 6 characters">
+    </div>
+    <div class="error-msg" id="signup-error"></div>
+    <div class="success-msg" id="signup-success"></div>
+    <button class="submit-btn" onclick="signup()">Create Account</button>
+  </div>
+
+  <div class="footer-text">
+    By continuing you agree to 4.0's Terms of Service
+  </div>
+</div>
+
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('login-form').style.display = tab === 'login' ? 'flex' : 'none';
+    document.getElementById('signup-form').style.display = tab === 'signup' ? 'flex' : 'none';
+  }
+
+  async function login() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error');
+    const btn = event.target;
+
+    if (!email || !password) {
+      errorEl.textContent = 'Please fill in all fields.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    errorEl.style.display = 'none';
+
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      errorEl.textContent = error.message;
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    } else {
+      window.location.href = '4point0_v3.html';
+    }
+  }
+
+  async function signup() {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const errorEl = document.getElementById('signup-error');
+    const successEl = document.getElementById('signup-success');
+    const btn = event.target;
+
+    if (!name || !email || !password) {
+      errorEl.textContent = 'Please fill in all fields.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    if (password.length < 6) {
+      errorEl.textContent = 'Password must be at least 6 characters.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+    errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+
+    const { data, error } = await db.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: name } }
+    });
+
+    if (error) {
+      errorEl.textContent = error.message;
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    } else {
+      successEl.textContent = 'Account created! Check your email to confirm then sign in.';
+      successEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+  }
+
+  // If already logged in, redirect to app
+  db.auth.getSession().then(({ data: { session } }) => {
+    if (session) window.location.href = '4point0_v3.html';
+  });
+</script>
+</body>
+</html>
