@@ -1280,4 +1280,13 @@
     });
 
     // Check if any courses had schedule
-    const hasSchedule = (courses || []).some(c =
+    const hasSchedule = (courses || []).some(c => c.schedule && parseSchedule(c.schedule));
+    if (!hasSchedule) {
+      container.innerHTML += `<div class="no-schedule-msg" style="margin-top:12px"><div class="no-schedule-title">No schedule data yet</div><div class="no-schedule-sub">When you create courses, add the class days and times — they'll show up here automatically.</div></div>`;
+    }
+  }
+
+  init();
+</script>
+</body>
+</html>
