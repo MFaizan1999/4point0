@@ -832,7 +832,7 @@
               </div>
               <div class="card-right">
                 <div class="difficulty-display">
-                  <div class="difficulty-num" style="color:${getDiffColor(avgRating ? parseFloat(avgRating) : null)}">${avgRating || '—'}</div>
+                  <div class="difficulty-num" id="avgNum-${course.id}" style="color:${getDiffColor(avgRating ? parseFloat(avgRating) : null)}">${avgRating || '—'}</div>
                   <div class="difficulty-label">difficulty</div>
                 </div>
                 <button class="report-btn" onclick="reportCourse('${course.code}', '${course.name}')">⚑ Report</button>
@@ -844,7 +844,7 @@
             <div class="difficulty-section">
               <div class="diff-section-header">
                 <div class="diff-section-title">Difficulty Rating</div>
-                <div class="diff-count">${ratings.length} student${ratings.length !== 1 ? 's' : ''} rated</div>
+                <div class="diff-count" id="ratingCount-${course.id}">${ratings.length} student${ratings.length !== 1 ? 's' : ''} rated</div>
               </div>
               <div class="diff-labels">
                 <span class="diff-label-text">Easy</span>
@@ -943,8 +943,8 @@
       const { data: ratings } = await db.from('difficulty_ratings').select('rating').eq('course_id', courseId);
       if (ratings && ratings.length) {
         const avg = (ratings.reduce((s, r) => s + parseFloat(r.rating), 0) / ratings.length).toFixed(1);
-        const numEl = document.querySelector(`#comments-${courseId}`)?.closest('.course-card')?.querySelector('.difficulty-num');
-        const countEl = document.querySelector(`#comments-${courseId}`)?.closest('.course-card')?.querySelector('.diff-count');
+        const numEl = document.getElementById('avgNum-' + courseId);
+        const countEl = document.getElementById('ratingCount-' + courseId);
         if (numEl) { numEl.textContent = avg; numEl.style.color = getDiffColor(parseFloat(avg)); }
         if (countEl) countEl.textContent = `${ratings.length} student${ratings.length !== 1 ? 's' : ''} rated`;
       }
