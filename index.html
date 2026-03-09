@@ -248,7 +248,13 @@
     const { data, error } = await db.auth.signInWithPassword({ email, password });
 
     if (error) {
-      errorEl.textContent = error.message;
+      if (error.message.includes('Invalid login credentials') || error.message.includes('invalid_credentials')) {
+        errorEl.textContent = 'Incorrect email or password. Please try again.';
+      } else if (error.message.includes('Email not confirmed')) {
+        errorEl.textContent = 'Please confirm your email before signing in.';
+      } else {
+        errorEl.textContent = error.message;
+      }
       errorEl.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Sign In';
