@@ -527,39 +527,73 @@
     overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 12px;
     animation: up 0.3s ease both;
   }
-  .prof-card:hover { border-color: var(--gold-border); box-shadow: var(--shadow-md); }
+  .prof-card:hover { border-color: var(--gold-border); }
 
-  .prof-card-main { padding: 18px 20px; }
+  .prof-card-main { padding: 20px; }
+  .prof-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .prof-name { font-family: 'Instrument Serif', serif; font-size: 1.3rem; letter-spacing: -0.02em; }
+  .prof-uni { font-size: 0.74rem; color: var(--text-3); margin-top: 3px; }
+  .prof-rating-count { font-size: 0.72rem; color: var(--text-3); margin-top: 4px; }
 
-  .prof-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
-  .prof-name { font-family: 'Instrument Serif', serif; font-size: 1.2rem; letter-spacing: -0.02em; }
-  .prof-courses { font-size: 0.74rem; color: var(--text-3); margin-top: 3px; }
-
-  .prof-scores { display: flex; gap: 12px; }
-  .prof-score {
-    text-align: center; background: var(--off-white); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px 12px; min-width: 64px;
+  .prof-overall-score {
+    text-align: center; min-width: 72px;
   }
-  .prof-score-num { font-family: 'Instrument Serif', serif; font-size: 1.4rem; letter-spacing: -0.03em; line-height: 1; }
-  .prof-score-label { font-size: 0.62rem; color: var(--text-3); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
-
-  .prof-rating-section {
-    background: var(--off-white); border: 1px solid var(--border); border-radius: 8px;
-    padding: 14px; margin-bottom: 0;
+  .prof-overall-num {
+    font-family: 'Instrument Serif', serif; font-size: 2.4rem; letter-spacing: -0.04em; line-height: 1;
   }
-  .prof-rating-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 12px; }
+  .prof-overall-label { font-size: 0.62rem; color: var(--text-3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
 
-  .prof-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .prof-slider-label { font-size: 0.76rem; font-weight: 600; color: var(--text-2); width: 90px; flex-shrink: 0; }
-  .prof-slider-val { font-size: 0.74rem; font-weight: 700; color: var(--warn); width: 28px; text-align: right; flex-shrink: 0; }
-
-  .prof-rate-btn {
-    background: var(--gold); color: white; border: none; border-radius: 6px;
-    padding: 6px 16px; font-size: 0.76rem; font-weight: 600; cursor: pointer;
-    font-family: 'Geist', sans-serif; transition: all 0.15s; margin-top: 4px;
+  /* RATING TABS */
+  .prof-tabs { display: flex; background: var(--bg); border-radius: 8px; padding: 3px; margin-bottom: 16px; }
+  .prof-tab {
+    flex: 1; padding: 6px; border: none; background: none; border-radius: 6px;
+    font-family: 'Geist', sans-serif; font-size: 0.78rem; font-weight: 500;
+    color: var(--text-3); cursor: pointer; transition: all 0.15s;
   }
-  .prof-rate-btn:hover { background: var(--gold-hover); }
-  .prof-rate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .prof-tab.active { background: var(--white); color: var(--text); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+  .prof-tab-content { display: none; }
+  .prof-tab-content.active { display: block; }
+
+  /* RATING BUTTONS */
+  .rating-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .rating-option {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px; cursor: pointer;
+    transition: all 0.15s; font-size: 0.84rem; font-weight: 500; color: var(--text-2);
+    background: var(--white);
+  }
+  .rating-option:hover { border-color: var(--gold-border); background: var(--gold-pale); }
+  .rating-option.selected { border-color: var(--gold); background: var(--gold-pale); color: var(--warn); font-weight: 600; }
+  .rating-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .would-take-row {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+    font-size: 0.82rem; font-weight: 600; color: var(--text-2);
+  }
+  .wta-btn {
+    padding: 6px 16px; border-radius: 6px; border: 1.5px solid var(--border);
+    background: var(--white); font-family: 'Geist', sans-serif; font-size: 0.78rem;
+    font-weight: 600; cursor: pointer; transition: all 0.15s; color: var(--text-2);
+  }
+  .wta-btn.selected-yes { border-color: var(--success-border); background: var(--success-bg); color: var(--success); }
+  .wta-btn.selected-no { border-color: var(--danger-border); background: var(--danger-bg); color: var(--danger); }
+  .wta-btn:hover { border-color: var(--gold-border); background: var(--gold-pale); }
+
+  /* PIE CHARTS */
+  .charts-row { display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .chart-box {
+    flex: 1; min-width: 140px; background: var(--off-white); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; text-align: center;
+  }
+  .chart-title { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 10px; }
+  .chart-box canvas { max-width: 120px; max-height: 120px; }
+  .chart-legend { margin-top: 8px; text-align: left; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.68rem; color: var(--text-2); margin-bottom: 3px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  .wta-display { font-family: 'Instrument Serif', serif; font-size: 2.2rem; letter-spacing: -0.03em; }
+  .wta-sub { font-size: 0.72rem; color: var(--text-3); }
 
   /* TOAST */
   .toast {
@@ -621,10 +655,20 @@
   <div class="community-page">
     <div class="page-eyebrow">Memorial University</div>
     <div class="page-title">Professors</div>
-    <div class="page-sub">Rate your professors and share your experience with other students.</div>
-    <div id="professorsList">
-      <div class="loading-state"><div class="loading-spinner"></div>Loading professors...</div>
+    <div class="page-sub">Search any professor at Memorial to view ratings or leave your own.</div>
+
+    <!-- PROFESSOR SEARCH -->
+    <div class="search-section">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="profSearchInput" placeholder="Search professor name..." oninput="onProfSearch(this.value)" autocomplete="off">
+        <button style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:0.8rem;" onclick="clearProfSearch()">✕</button>
+      </div>
+      <div class="search-results" id="profSearchResults"></div>
     </div>
+
+    <!-- PROFESSOR CARD DISPLAY -->
+    <div id="profCardDisplay"></div>
   </div>
 </div>
 
@@ -742,7 +786,7 @@
       btn.classList.add('active');
     }
     if (id === 'schedule') loadSchedule();
-    if (id === 'professors') loadProfessors();
+    if (id === 'professors') document.getElementById('profCardDisplay').innerHTML = '';
   }
 
   // ── HELPERS ──
@@ -1340,195 +1384,309 @@
     }
   }
 
-  // ── PROFESSORS PAGE ──
-  async function loadProfessors() {
-    const container = document.getElementById('professorsList');
-    container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div>Loading professors...</div>';
+  // ── PROFESSOR SEARCH ──
+  const RATING_OPTIONS = [
+    { label: 'Phenomenal', color: '#2d7d52' },
+    { label: 'Great', color: '#27ae60' },
+    { label: 'Good', color: '#b7770d' },
+    { label: 'Not Bad', color: '#e67e22' },
+    { label: 'Do Not Recommend', color: '#c0392b' },
+  ];
 
-    const { data: enrollments } = await db.from('enrollments').select('course_id').eq('user_id', currentUser.id);
-    if (!enrollments || enrollments.length === 0) {
-      container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">No professors yet</div><div class="empty-state-sub">Join courses from the Community tab and your professors will appear here.</div></div>`;
-      return;
+  let profSearchTimeout = null;
+  let currentProfId = null;
+  let selectedRating = null;
+  let selectedWTA = null;
+
+  async function onProfSearch(val) {
+    clearTimeout(profSearchTimeout);
+    const results = document.getElementById('profSearchResults');
+    if (!val.trim()) { results.style.display = 'none'; return; }
+
+    profSearchTimeout = setTimeout(async () => {
+      const { data: profs } = await db.from('professors')
+        .select('*')
+        .eq('university', 'Memorial University of Newfoundland')
+        .ilike('name', `%${val}%`)
+        .limit(6);
+
+      let html = '';
+      if (profs && profs.length > 0) {
+        html += profs.map(p => `
+          <div class="search-result-item" onclick="loadProfCard('${p.id}')">
+            <div class="result-info">
+              <div class="result-name">${p.name}</div>
+              <div class="result-meta">Memorial University</div>
+            </div>
+            <span style="font-size:0.72rem;color:var(--gold);font-weight:600;">View →</span>
+          </div>`).join('');
+      }
+      html += `<div class="create-course-btn" onclick="createAndLoadProf('${val.trim()}')">
+        <span>+</span> Add "${val.trim()}" as a new professor
+      </div>`;
+      results.innerHTML = html;
+      results.style.display = 'block';
+    }, 300);
+  }
+
+  function clearProfSearch() {
+    document.getElementById('profSearchInput').value = '';
+    document.getElementById('profSearchResults').style.display = 'none';
+    document.getElementById('profCardDisplay').innerHTML = '';
+    currentProfId = null;
+    selectedRating = null;
+    selectedWTA = null;
+  }
+
+  async function createAndLoadProf(name) {
+    const { data: existing } = await db.from('professors').select('id').eq('name', name).eq('university', 'Memorial University of Newfoundland').maybeSingle();
+    if (existing) { loadProfCard(existing.id); return; }
+
+    const { data: newProf, error } = await db.from('professors').insert({
+      name, university: 'Memorial University of Newfoundland', created_by: currentUser.id
+    }).select().single();
+
+    if (!error) {
+      document.getElementById('profSearchResults').style.display = 'none';
+      loadProfCard(newProf.id);
+    }
+  }
+
+  async function loadProfCard(profId) {
+    document.getElementById('profSearchResults').style.display = 'none';
+    currentProfId = profId;
+    selectedRating = null;
+    selectedWTA = null;
+
+    const display = document.getElementById('profCardDisplay');
+    display.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div>Loading...</div>';
+
+    const { data: prof } = await db.from('professors').select('*').eq('id', profId).single();
+    const { data: ratings } = await db.from('professor_ratings').select('*').eq('professor_id', profId);
+    const { data: myRating } = await db.from('professor_ratings').select('*').eq('professor_id', profId).eq('user_id', currentUser.id).maybeSingle();
+    const { data: comments } = await db.from('professor_comments').select('*').eq('professor_id', profId).order('created_at', { ascending: false });
+
+    const total = ratings?.length || 0;
+    const wtaCount = ratings?.filter(r => r.would_take_again === true).length || 0;
+    const wtaPct = total ? Math.round((wtaCount / total) * 100) : null;
+
+    // Overall score mapping
+    const scoreMap = { 'Phenomenal': 5, 'Great': 4, 'Good': 3, 'Not Bad': 2, 'Do Not Recommend': 1 };
+    const avgScore = total ? (ratings.reduce((s, r) => s + (scoreMap[r.rating] || 0), 0) / total).toFixed(1) : '—';
+    const avgLabel = avgScore !== '—' ? RATING_OPTIONS[Math.max(0, 5 - Math.round(avgScore))].label : '—';
+
+    // Rating distribution for pie
+    const distrib = {};
+    RATING_OPTIONS.forEach(o => distrib[o.label] = 0);
+    (ratings || []).forEach(r => { if (distrib[r.rating] !== undefined) distrib[r.rating]++; });
+
+    const canvasId = `pieChart-${profId}`;
+    const wtaCanvasId = `wtaChart-${profId}`;
+
+    display.innerHTML = `
+      <div class="prof-card">
+        <div class="card-stripe stripe-default"></div>
+        <div class="prof-card-main">
+          <div class="prof-top">
+            <div>
+              <div class="prof-name">${prof.name}</div>
+              <div class="prof-uni">Memorial University of Newfoundland</div>
+              <div class="prof-rating-count">${total} rating${total !== 1 ? 's' : ''}</div>
+            </div>
+            <div class="prof-overall-score">
+              <div class="prof-overall-num" style="color:${total ? RATING_OPTIONS[Math.max(0,5-Math.round(avgScore))].color : 'var(--text-3)'}">
+                ${avgScore}
+              </div>
+              <div class="prof-overall-label">${total ? avgLabel : 'No ratings'}</div>
+            </div>
+          </div>
+
+          <!-- CHARTS -->
+          ${total > 0 ? `
+          <div class="charts-row">
+            <div class="chart-box">
+              <div class="chart-title">Rating Distribution</div>
+              <canvas id="${canvasId}" width="120" height="120"></canvas>
+              <div class="chart-legend">
+                ${RATING_OPTIONS.map(o => distrib[o.label] > 0 ? `
+                  <div class="legend-item">
+                    <div class="legend-dot" style="background:${o.color}"></div>
+                    ${o.label} (${distrib[o.label]})
+                  </div>` : '').join('')}
+              </div>
+            </div>
+            <div class="chart-box">
+              <div class="chart-title">Would Take Again</div>
+              <canvas id="${wtaCanvasId}" width="120" height="120"></canvas>
+              <div style="margin-top:8px">
+                <div class="wta-display" style="color:${wtaPct >= 60 ? 'var(--success)' : wtaPct >= 40 ? 'var(--warn)' : 'var(--danger)'}">${wtaPct}%</div>
+                <div class="wta-sub">${wtaCount} of ${total} students</div>
+              </div>
+            </div>
+          </div>` : ''}
+
+          <!-- TABS -->
+          <div class="prof-tabs">
+            <button class="prof-tab active" onclick="switchProfTab('rate', this, '${profId}')">Rate</button>
+            <button class="prof-tab" onclick="switchProfTab('comments', this, '${profId}')">Comments (${comments?.length || 0})</button>
+            <button class="prof-tab" onclick="switchProfTab('ai', this, '${profId}')">AI Summary</button>
+          </div>
+
+          <!-- RATE TAB -->
+          <div class="prof-tab-content active" id="profTab-rate-${profId}">
+            <div style="font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:10px;">Overall Rating</div>
+            <div class="rating-options">
+              ${RATING_OPTIONS.map(o => `
+                <div class="rating-option ${myRating?.rating === o.label ? 'selected' : ''}" onclick="selectRating(this, '${o.label}', '${profId}')" data-rating="${o.label}">
+                  <div class="rating-dot" style="background:${o.color}"></div>
+                  ${o.label}
+                </div>`).join('')}
+            </div>
+            <div style="font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:8px;">Would you take this professor again?</div>
+            <div class="would-take-row">
+              <button class="wta-btn ${myRating?.would_take_again === true ? 'selected-yes' : ''}" id="wtaYes-${profId}" onclick="selectWTA(true, '${profId}')">👍 Yes</button>
+              <button class="wta-btn ${myRating?.would_take_again === false ? 'selected-no' : ''}" id="wtaNo-${profId}" onclick="selectWTA(false, '${profId}')">👎 No</button>
+            </div>
+            <button class="btn-primary" id="profSubmitBtn-${profId}" onclick="submitProfRating('${profId}')">
+              ${myRating ? 'Update Rating' : 'Submit Rating'}
+            </button>
+          </div>
+
+          <!-- COMMENTS TAB -->
+          <div class="prof-tab-content" id="profTab-comments-${profId}">
+            <div style="margin-bottom:12px">
+              ${comments && comments.length
+                ? comments.map(c => `
+                  <div class="comment">
+                    <div class="comment-hdr">
+                      <span class="comment-author">${c.author_name || 'anonymous'}</span>
+                      <span class="comment-time">${timeAgo(c.created_at)}</span>
+                    </div>
+                    ${c.content}
+                    <div><button class="upvote-btn" onclick="upvoteProfComment(this,'${c.id}',${c.upvotes})">▲ ${c.upvotes} helpful</button></div>
+                  </div>`).join('')
+                : '<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 12px;">No comments yet — be the first!</div>'
+              }
+            </div>
+            <div class="add-comment">
+              <div class="anon-row">
+                <label class="anon-toggle">
+                  <input type="checkbox" id="profAnon-${profId}"> Post anonymously
+                </label>
+              </div>
+              <div class="comment-input-row">
+                <textarea class="comment-input" id="profTipInput-${profId}" placeholder="Share your experience with this professor..." rows="1"></textarea>
+                <button class="post-btn" onclick="postProfComment('${profId}')">Post</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI TAB -->
+          <div class="prof-tab-content" id="profTab-ai-${profId}">
+            <div style="text-align:center;padding:32px 16px;color:var(--text-3)">
+              <div style="font-size:1.8rem;margin-bottom:10px">🤖</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:1.1rem;color:var(--text-2);margin-bottom:6px">AI Professor Summary</div>
+              <div style="font-size:0.8rem;line-height:1.6">Coming soon — AI will summarize all student reviews into a concise professor profile.</div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    // Set pre-selected values from existing rating
+    if (myRating) {
+      selectedRating = myRating.rating;
+      selectedWTA = myRating.would_take_again;
     }
 
-    const courseIds = enrollments.map(e => e.course_id);
-    const { data: courses } = await db.from('courses').select('professor, code, name').in('id', courseIds);
+    // Draw pie charts
+    if (total > 0) {
+      drawPieChart(canvasId, RATING_OPTIONS.map(o => distrib[o.label]), RATING_OPTIONS.map(o => o.color));
+      drawPieChart(wtaCanvasId, [wtaCount, total - wtaCount], ['#2d7d52', '#e8e6e0']);
+    }
+  }
 
-    // Group by professor
-    const profMap = {};
-    (courses || []).forEach(c => {
-      if (!profMap[c.professor]) profMap[c.professor] = [];
-      profMap[c.professor].push(`${c.code}`);
+  function drawPieChart(canvasId, data, colors) {
+    setTimeout(() => {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const total = data.reduce((a, b) => a + b, 0);
+      if (!total) return;
+
+      let startAngle = -Math.PI / 2;
+      const cx = canvas.width / 2, cy = canvas.height / 2, r = Math.min(cx, cy) - 4;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      data.forEach((val, i) => {
+        if (!val) return;
+        const slice = (val / total) * 2 * Math.PI;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, startAngle, startAngle + slice);
+        ctx.closePath();
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+        startAngle += slice;
+      });
+
+      // Center hole for donut
+      ctx.beginPath();
+      ctx.arc(cx, cy, r * 0.55, 0, 2 * Math.PI);
+      ctx.fillStyle = '#f4f3ef';
+      ctx.fill();
+    }, 50);
+  }
+
+  function switchProfTab(tab, btn, profId) {
+    ['rate','comments','ai'].forEach(t => {
+      const el = document.getElementById(`profTab-${t}-${profId}`);
+      if (el) el.classList.remove('active');
     });
-
-    const professors = Object.keys(profMap);
-    if (professors.length === 0) {
-      container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">No professors yet</div><div class="empty-state-sub">Join courses and your professors will appear here.</div></div>`;
-      return;
-    }
-
-    const { data: allRatings } = await db.from('professor_ratings').select('*').eq('university', 'Memorial University of Newfoundland').in('professor', professors);
-    const { data: myRatings } = await db.from('professor_ratings').select('*').eq('user_id', currentUser.id).in('professor', professors);
-    const { data: allComments } = await db.from('professor_comments').select('*').in('professor', professors).order('created_at', { ascending: false });
-
-    container.innerHTML = professors.map(prof => {
-      const ratings = (allRatings || []).filter(r => r.professor === prof);
-      const myRating = (myRatings || []).find(r => r.professor === prof);
-      const comments = (allComments || []).filter(c => c.professor === prof);
-
-      const avg = (field) => ratings.length
-        ? (ratings.reduce((s, r) => s + parseFloat(r[field] || 0), 0) / ratings.filter(r => r[field]).length || 0).toFixed(1)
-        : '—';
-
-      const avgHelp = avg('helpfulness');
-      const avgClarity = avg('clarity');
-      const avgWorkload = avg('workload');
-
-      const myHelp = myRating?.helpfulness || 3.0;
-      const myClarity = myRating?.clarity || 3.0;
-      const myWorkload = myRating?.workload || 3.0;
-
-      const profId = prof.replace(/[^a-z0-9]/gi, '_');
-
-      return `
-        <div class="prof-card">
-          <div class="card-stripe stripe-default"></div>
-          <div class="prof-card-main">
-            <div class="prof-header">
-              <div>
-                <div class="prof-name">${prof}</div>
-                <div class="prof-courses">${profMap[prof].join(', ')}</div>
-              </div>
-              <div class="prof-scores">
-                <div class="prof-score">
-                  <div class="prof-score-num" id="avgHelp-${profId}" style="color:${getDiffColor(avgHelp !== '—' ? parseFloat(avgHelp) : null)}">${avgHelp}</div>
-                  <div class="prof-score-label">Help</div>
-                </div>
-                <div class="prof-score">
-                  <div class="prof-score-num" id="avgClarity-${profId}" style="color:${getDiffColor(avgClarity !== '—' ? parseFloat(avgClarity) : null)}">${avgClarity}</div>
-                  <div class="prof-score-label">Clarity</div>
-                </div>
-                <div class="prof-score">
-                  <div class="prof-score-num" id="avgWorkload-${profId}" style="color:${getDiffColor(avgWorkload !== '—' ? parseFloat(avgWorkload) : null)}">${avgWorkload}</div>
-                  <div class="prof-score-label">Workload</div>
-                </div>
-              </div>
-            </div>
-
-            <div class="prof-rating-section">
-              <div class="prof-rating-title">Rate this Professor</div>
-              <div class="prof-slider-row">
-                <span class="prof-slider-label">Helpfulness</span>
-                <input type="range" min="1" max="5" step="0.1" value="${myHelp}" style="flex:1;--fill:${((myHelp-1)/4*100)}%" oninput="updateProfSlider(this,'profHelp-${profId}')" id="sliderHelp-${profId}">
-                <span class="prof-slider-val" id="profHelp-${profId}">${parseFloat(myHelp).toFixed(1)}</span>
-              </div>
-              <div class="prof-slider-row">
-                <span class="prof-slider-label">Clarity</span>
-                <input type="range" min="1" max="5" step="0.1" value="${myClarity}" style="flex:1;--fill:${((myClarity-1)/4*100)}%" oninput="updateProfSlider(this,'profClarity-${profId}')" id="sliderClarity-${profId}">
-                <span class="prof-slider-val" id="profClarity-${profId}">${parseFloat(myClarity).toFixed(1)}</span>
-              </div>
-              <div class="prof-slider-row">
-                <span class="prof-slider-label">Workload</span>
-                <input type="range" min="1" max="5" step="0.1" value="${myWorkload}" style="flex:1;--fill:${((myWorkload-1)/4*100)}%" oninput="updateProfSlider(this,'profWorkload-${profId}')" id="sliderWorkload-${profId}">
-                <span class="prof-slider-val" id="profWorkload-${profId}">${parseFloat(myWorkload).toFixed(1)}</span>
-              </div>
-              <button class="prof-rate-btn" id="profRateBtn-${profId}" onclick="submitProfRating('${prof}','${profId}')">
-                ${myRating ? 'Update Rating' : 'Submit Rating'}
-              </button>
-            </div>
-          </div>
-
-          <div class="comments-section" id="profComments-${profId}">
-            <div class="comments-toggle" onclick="toggleComments('profComments-${profId}', true)">
-              <div class="comments-toggle-label">
-                Student Comments
-                <span class="comments-count">${comments.length}</span>
-              </div>
-              <span class="toggle-arrow">▼</span>
-            </div>
-            <div class="comments-body">
-              <div>
-                ${comments.length
-                  ? comments.map(c => `
-                    <div class="comment">
-                      <div class="comment-hdr">
-                        <span class="comment-author">${c.author_name || 'anonymous'}</span>
-                        <span class="comment-time">${timeAgo(c.created_at)}</span>
-                      </div>
-                      ${c.content}
-                      <div><button class="upvote-btn" onclick="upvoteProfComment(this,'${c.id}',${c.upvotes})">▲ ${c.upvotes} helpful</button></div>
-                    </div>`).join('')
-                  : '<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 8px;">No comments yet — be the first!</div>'
-                }
-              </div>
-              <div class="add-comment">
-                <div class="anon-row">
-                  <label class="anon-toggle">
-                    <input type="checkbox" id="profAnon-${profId}"> Post anonymously
-                  </label>
-                </div>
-                <div class="comment-input-row">
-                  <textarea class="comment-input" id="profTipInput-${profId}" placeholder="Share your experience with this professor..." rows="1"></textarea>
-                  <button class="post-btn" onclick="postProfComment('${prof}','${profId}')">Post</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>`;
-    }).join('');
+    btn.closest('.prof-tabs').querySelectorAll('.prof-tab').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(`profTab-${tab}-${profId}`);
+    if (target) target.classList.add('active');
+    btn.classList.add('active');
   }
 
-  function updateProfSlider(input, valId) {
-    const val = parseFloat(input.value);
-    const pct = ((val - 1) / 4) * 100;
-    input.style.setProperty('--fill', pct + '%');
-    document.getElementById(valId).textContent = val.toFixed(1);
+  function selectRating(el, rating, profId) {
+    document.querySelectorAll(`#profTab-rate-${profId} .rating-option`).forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedRating = rating;
   }
 
-  async function submitProfRating(prof, profId) {
-    const helpfulness = parseFloat(document.getElementById('sliderHelp-' + profId).value);
-    const clarity = parseFloat(document.getElementById('sliderClarity-' + profId).value);
-    const workload = parseFloat(document.getElementById('sliderWorkload-' + profId).value);
-    const btn = document.getElementById('profRateBtn-' + profId);
+  function selectWTA(val, profId) {
+    selectedWTA = val;
+    document.getElementById('wtaYes-' + profId).className = 'wta-btn' + (val === true ? ' selected-yes' : '');
+    document.getElementById('wtaNo-' + profId).className = 'wta-btn' + (val === false ? ' selected-no' : '');
+  }
 
+  async function submitProfRating(profId) {
+    if (!selectedRating) { showToast('Please select a rating first!'); return; }
+    if (selectedWTA === null) { showToast('Please answer "Would take again?"'); return; }
+
+    const btn = document.getElementById('profSubmitBtn-' + profId);
     btn.disabled = true;
     btn.textContent = 'Saving...';
 
     const { error } = await db.from('professor_ratings').upsert({
       user_id: currentUser.id,
-      professor: prof,
-      university: 'Memorial University of Newfoundland',
-      helpfulness,
-      clarity,
-      workload,
+      professor_id: profId,
+      rating: selectedRating,
+      would_take_again: selectedWTA,
       updated_at: new Date().toISOString()
-    }, { onConflict: 'user_id,professor,university' });
+    }, { onConflict: 'user_id,professor_id' });
 
     if (!error) {
-      btn.disabled = false;
-      btn.textContent = 'Update Rating';
-      showToast('Professor rating saved!');
-
-      // Update scores instantly
-      const { data: ratings } = await db.from('professor_ratings').select('*').eq('professor', prof).eq('university', 'Memorial University of Newfoundland');
-      if (ratings && ratings.length) {
-        const avgH = (ratings.reduce((s,r) => s + parseFloat(r.helpfulness||0), 0) / ratings.length).toFixed(1);
-        const avgC = (ratings.reduce((s,r) => s + parseFloat(r.clarity||0), 0) / ratings.length).toFixed(1);
-        const avgW = (ratings.reduce((s,r) => s + parseFloat(r.workload||0), 0) / ratings.length).toFixed(1);
-        const hEl = document.getElementById('avgHelp-' + profId);
-        const cEl = document.getElementById('avgClarity-' + profId);
-        const wEl = document.getElementById('avgWorkload-' + profId);
-        if (hEl) { hEl.textContent = avgH; hEl.style.color = getDiffColor(parseFloat(avgH)); }
-        if (cEl) { cEl.textContent = avgC; cEl.style.color = getDiffColor(parseFloat(avgC)); }
-        if (wEl) { wEl.textContent = avgW; wEl.style.color = getDiffColor(parseFloat(avgW)); }
-      }
+      showToast('Rating saved!');
+      loadProfCard(profId);
     } else {
       btn.disabled = false;
       btn.textContent = 'Submit Rating';
+      showToast('Something went wrong.');
     }
   }
 
-  async function postProfComment(prof, profId) {
+  async function postProfComment(profId) {
     const input = document.getElementById('profTipInput-' + profId);
     const content = input.value.trim();
     if (!content) return;
@@ -1536,8 +1694,7 @@
     const authorName = isAnon ? 'anonymous' : (currentProfile?.username || 'anonymous');
 
     const { error } = await db.from('professor_comments').insert({
-      professor: prof,
-      university: 'Memorial University of Newfoundland',
+      professor_id: profId,
       user_id: currentUser.id,
       content,
       author_name: authorName,
@@ -1547,7 +1704,7 @@
     if (!error) {
       input.value = '';
       showToast('Comment posted!');
-      loadProfessors();
+      loadProfCard(profId);
     }
   }
 
