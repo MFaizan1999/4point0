@@ -521,6 +521,46 @@
   }
   .logout-btn:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
 
+  /* PROFESSOR CARDS */
+  .prof-card {
+    background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; box-shadow: var(--shadow-sm); margin-bottom: 12px;
+    animation: up 0.3s ease both;
+  }
+  .prof-card:hover { border-color: var(--gold-border); box-shadow: var(--shadow-md); }
+
+  .prof-card-main { padding: 18px 20px; }
+
+  .prof-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+  .prof-name { font-family: 'Instrument Serif', serif; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .prof-courses { font-size: 0.74rem; color: var(--text-3); margin-top: 3px; }
+
+  .prof-scores { display: flex; gap: 12px; }
+  .prof-score {
+    text-align: center; background: var(--off-white); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px; min-width: 64px;
+  }
+  .prof-score-num { font-family: 'Instrument Serif', serif; font-size: 1.4rem; letter-spacing: -0.03em; line-height: 1; }
+  .prof-score-label { font-size: 0.62rem; color: var(--text-3); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .prof-rating-section {
+    background: var(--off-white); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; margin-bottom: 0;
+  }
+  .prof-rating-title { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 12px; }
+
+  .prof-slider-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .prof-slider-label { font-size: 0.76rem; font-weight: 600; color: var(--text-2); width: 90px; flex-shrink: 0; }
+  .prof-slider-val { font-size: 0.74rem; font-weight: 700; color: var(--warn); width: 28px; text-align: right; flex-shrink: 0; }
+
+  .prof-rate-btn {
+    background: var(--gold); color: white; border: none; border-radius: 6px;
+    padding: 6px 16px; font-size: 0.76rem; font-weight: 600; cursor: pointer;
+    font-family: 'Geist', sans-serif; transition: all 0.15s; margin-top: 4px;
+  }
+  .prof-rate-btn:hover { background: var(--gold-hover); }
+  .prof-rate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
   /* TOAST */
   .toast {
     position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
@@ -537,6 +577,7 @@
   <div class="logo" onclick="switchPage('community')"><div class="logo-gem"></div>4.0</div>
   <nav>
     <button class="nav-btn active" onclick="switchPage('community', this)">Community</button>
+    <button class="nav-btn" onclick="switchPage('professors', this)">Professors</button>
     <button class="nav-btn" onclick="switchPage('schedule', this)">Schedule</button>
   </nav>
   <div class="header-right">
@@ -576,6 +617,17 @@
     </div>
   </div>
 </div>
+<div id="page-professors" class="page">
+  <div class="community-page">
+    <div class="page-eyebrow">Memorial University</div>
+    <div class="page-title">Professors</div>
+    <div class="page-sub">Rate your professors and share your experience with other students.</div>
+    <div id="professorsList">
+      <div class="loading-state"><div class="loading-spinner"></div>Loading professors...</div>
+    </div>
+  </div>
+</div>
+
 <div id="page-schedule" class="page">
   <div class="schedule-page">
     <div class="page-eyebrow">Memorial University</div>
@@ -690,6 +742,7 @@
       btn.classList.add('active');
     }
     if (id === 'schedule') loadSchedule();
+    if (id === 'professors') loadProfessors();
   }
 
   // ── HELPERS ──
@@ -955,9 +1008,10 @@
   }
 
   // ── TOGGLE COMMENTS ──
-  function toggleComments(courseId) {
-    const section = document.getElementById('comments-' + courseId);
-    section.classList.toggle('open');
+  function toggleComments(idOrCourseId, isFullId) {
+    const id = isFullId ? idOrCourseId : 'comments-' + idOrCourseId;
+    const section = document.getElementById(id);
+    if (section) section.classList.toggle('open');
   }
 
   // ── POST TIP ──
@@ -1284,6 +1338,225 @@
     if (!hasSchedule) {
       container.innerHTML += `<div class="no-schedule-msg" style="margin-top:12px"><div class="no-schedule-title">No schedule data yet</div><div class="no-schedule-sub">When you create courses, add the class days and times — they'll show up here automatically.</div></div>`;
     }
+  }
+
+  // ── PROFESSORS PAGE ──
+  async function loadProfessors() {
+    const container = document.getElementById('professorsList');
+    container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div>Loading professors...</div>';
+
+    const { data: enrollments } = await db.from('enrollments').select('course_id').eq('user_id', currentUser.id);
+    if (!enrollments || enrollments.length === 0) {
+      container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">No professors yet</div><div class="empty-state-sub">Join courses from the Community tab and your professors will appear here.</div></div>`;
+      return;
+    }
+
+    const courseIds = enrollments.map(e => e.course_id);
+    const { data: courses } = await db.from('courses').select('professor, code, name').in('id', courseIds);
+
+    // Group by professor
+    const profMap = {};
+    (courses || []).forEach(c => {
+      if (!profMap[c.professor]) profMap[c.professor] = [];
+      profMap[c.professor].push(`${c.code}`);
+    });
+
+    const professors = Object.keys(profMap);
+    if (professors.length === 0) {
+      container.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">No professors yet</div><div class="empty-state-sub">Join courses and your professors will appear here.</div></div>`;
+      return;
+    }
+
+    const { data: allRatings } = await db.from('professor_ratings').select('*').eq('university', 'Memorial University of Newfoundland').in('professor', professors);
+    const { data: myRatings } = await db.from('professor_ratings').select('*').eq('user_id', currentUser.id).in('professor', professors);
+    const { data: allComments } = await db.from('professor_comments').select('*').in('professor', professors).order('created_at', { ascending: false });
+
+    container.innerHTML = professors.map(prof => {
+      const ratings = (allRatings || []).filter(r => r.professor === prof);
+      const myRating = (myRatings || []).find(r => r.professor === prof);
+      const comments = (allComments || []).filter(c => c.professor === prof);
+
+      const avg = (field) => ratings.length
+        ? (ratings.reduce((s, r) => s + parseFloat(r[field] || 0), 0) / ratings.filter(r => r[field]).length || 0).toFixed(1)
+        : '—';
+
+      const avgHelp = avg('helpfulness');
+      const avgClarity = avg('clarity');
+      const avgWorkload = avg('workload');
+
+      const myHelp = myRating?.helpfulness || 3.0;
+      const myClarity = myRating?.clarity || 3.0;
+      const myWorkload = myRating?.workload || 3.0;
+
+      const profId = prof.replace(/[^a-z0-9]/gi, '_');
+
+      return `
+        <div class="prof-card">
+          <div class="card-stripe stripe-default"></div>
+          <div class="prof-card-main">
+            <div class="prof-header">
+              <div>
+                <div class="prof-name">${prof}</div>
+                <div class="prof-courses">${profMap[prof].join(', ')}</div>
+              </div>
+              <div class="prof-scores">
+                <div class="prof-score">
+                  <div class="prof-score-num" id="avgHelp-${profId}" style="color:${getDiffColor(avgHelp !== '—' ? parseFloat(avgHelp) : null)}">${avgHelp}</div>
+                  <div class="prof-score-label">Help</div>
+                </div>
+                <div class="prof-score">
+                  <div class="prof-score-num" id="avgClarity-${profId}" style="color:${getDiffColor(avgClarity !== '—' ? parseFloat(avgClarity) : null)}">${avgClarity}</div>
+                  <div class="prof-score-label">Clarity</div>
+                </div>
+                <div class="prof-score">
+                  <div class="prof-score-num" id="avgWorkload-${profId}" style="color:${getDiffColor(avgWorkload !== '—' ? parseFloat(avgWorkload) : null)}">${avgWorkload}</div>
+                  <div class="prof-score-label">Workload</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="prof-rating-section">
+              <div class="prof-rating-title">Rate this Professor</div>
+              <div class="prof-slider-row">
+                <span class="prof-slider-label">Helpfulness</span>
+                <input type="range" min="1" max="5" step="0.1" value="${myHelp}" style="flex:1;--fill:${((myHelp-1)/4*100)}%" oninput="updateProfSlider(this,'profHelp-${profId}')" id="sliderHelp-${profId}">
+                <span class="prof-slider-val" id="profHelp-${profId}">${parseFloat(myHelp).toFixed(1)}</span>
+              </div>
+              <div class="prof-slider-row">
+                <span class="prof-slider-label">Clarity</span>
+                <input type="range" min="1" max="5" step="0.1" value="${myClarity}" style="flex:1;--fill:${((myClarity-1)/4*100)}%" oninput="updateProfSlider(this,'profClarity-${profId}')" id="sliderClarity-${profId}">
+                <span class="prof-slider-val" id="profClarity-${profId}">${parseFloat(myClarity).toFixed(1)}</span>
+              </div>
+              <div class="prof-slider-row">
+                <span class="prof-slider-label">Workload</span>
+                <input type="range" min="1" max="5" step="0.1" value="${myWorkload}" style="flex:1;--fill:${((myWorkload-1)/4*100)}%" oninput="updateProfSlider(this,'profWorkload-${profId}')" id="sliderWorkload-${profId}">
+                <span class="prof-slider-val" id="profWorkload-${profId}">${parseFloat(myWorkload).toFixed(1)}</span>
+              </div>
+              <button class="prof-rate-btn" id="profRateBtn-${profId}" onclick="submitProfRating('${prof}','${profId}')">
+                ${myRating ? 'Update Rating' : 'Submit Rating'}
+              </button>
+            </div>
+          </div>
+
+          <div class="comments-section" id="profComments-${profId}">
+            <div class="comments-toggle" onclick="toggleComments('profComments-${profId}', true)">
+              <div class="comments-toggle-label">
+                Student Comments
+                <span class="comments-count">${comments.length}</span>
+              </div>
+              <span class="toggle-arrow">▼</span>
+            </div>
+            <div class="comments-body">
+              <div>
+                ${comments.length
+                  ? comments.map(c => `
+                    <div class="comment">
+                      <div class="comment-hdr">
+                        <span class="comment-author">${c.author_name || 'anonymous'}</span>
+                        <span class="comment-time">${timeAgo(c.created_at)}</span>
+                      </div>
+                      ${c.content}
+                      <div><button class="upvote-btn" onclick="upvoteProfComment(this,'${c.id}',${c.upvotes})">▲ ${c.upvotes} helpful</button></div>
+                    </div>`).join('')
+                  : '<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 8px;">No comments yet — be the first!</div>'
+                }
+              </div>
+              <div class="add-comment">
+                <div class="anon-row">
+                  <label class="anon-toggle">
+                    <input type="checkbox" id="profAnon-${profId}"> Post anonymously
+                  </label>
+                </div>
+                <div class="comment-input-row">
+                  <textarea class="comment-input" id="profTipInput-${profId}" placeholder="Share your experience with this professor..." rows="1"></textarea>
+                  <button class="post-btn" onclick="postProfComment('${prof}','${profId}')">Post</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function updateProfSlider(input, valId) {
+    const val = parseFloat(input.value);
+    const pct = ((val - 1) / 4) * 100;
+    input.style.setProperty('--fill', pct + '%');
+    document.getElementById(valId).textContent = val.toFixed(1);
+  }
+
+  async function submitProfRating(prof, profId) {
+    const helpfulness = parseFloat(document.getElementById('sliderHelp-' + profId).value);
+    const clarity = parseFloat(document.getElementById('sliderClarity-' + profId).value);
+    const workload = parseFloat(document.getElementById('sliderWorkload-' + profId).value);
+    const btn = document.getElementById('profRateBtn-' + profId);
+
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+
+    const { error } = await db.from('professor_ratings').upsert({
+      user_id: currentUser.id,
+      professor: prof,
+      university: 'Memorial University of Newfoundland',
+      helpfulness,
+      clarity,
+      workload,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id,professor,university' });
+
+    if (!error) {
+      btn.disabled = false;
+      btn.textContent = 'Update Rating';
+      showToast('Professor rating saved!');
+
+      // Update scores instantly
+      const { data: ratings } = await db.from('professor_ratings').select('*').eq('professor', prof).eq('university', 'Memorial University of Newfoundland');
+      if (ratings && ratings.length) {
+        const avgH = (ratings.reduce((s,r) => s + parseFloat(r.helpfulness||0), 0) / ratings.length).toFixed(1);
+        const avgC = (ratings.reduce((s,r) => s + parseFloat(r.clarity||0), 0) / ratings.length).toFixed(1);
+        const avgW = (ratings.reduce((s,r) => s + parseFloat(r.workload||0), 0) / ratings.length).toFixed(1);
+        const hEl = document.getElementById('avgHelp-' + profId);
+        const cEl = document.getElementById('avgClarity-' + profId);
+        const wEl = document.getElementById('avgWorkload-' + profId);
+        if (hEl) { hEl.textContent = avgH; hEl.style.color = getDiffColor(parseFloat(avgH)); }
+        if (cEl) { cEl.textContent = avgC; cEl.style.color = getDiffColor(parseFloat(avgC)); }
+        if (wEl) { wEl.textContent = avgW; wEl.style.color = getDiffColor(parseFloat(avgW)); }
+      }
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit Rating';
+    }
+  }
+
+  async function postProfComment(prof, profId) {
+    const input = document.getElementById('profTipInput-' + profId);
+    const content = input.value.trim();
+    if (!content) return;
+    const isAnon = document.getElementById('profAnon-' + profId).checked;
+    const authorName = isAnon ? 'anonymous' : (currentProfile?.username || 'anonymous');
+
+    const { error } = await db.from('professor_comments').insert({
+      professor: prof,
+      university: 'Memorial University of Newfoundland',
+      user_id: currentUser.id,
+      content,
+      author_name: authorName,
+      upvotes: 0
+    });
+
+    if (!error) {
+      input.value = '';
+      showToast('Comment posted!');
+      loadProfessors();
+    }
+  }
+
+  async function upvoteProfComment(btn, commentId, count) {
+    const n = count + 1;
+    btn.textContent = `▲ ${n} helpful`;
+    btn.style.color = 'var(--warn)';
+    btn.disabled = true;
+    await db.from('professor_comments').update({ upvotes: n }).eq('id', commentId);
   }
 
   init();
