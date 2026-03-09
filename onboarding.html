@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.0 — Welcome</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://ivfvywlzmugnennznqyh.supabase.co'
+  const SUPABASE_KEY = 'sb_publishable_9T6QrjSB4t-V6Qpp4bEEWA_7Hx83k_H'
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+</script>
+<style>
+  :root {
+    --white: #ffffff;
+    --bg: #f4f3ef;
+    --gold: #c9a84c;
+    --gold-hover: #b8943e;
+    --gold-pale: #fdf8ec;
+    --gold-border: #e8d9a8;
+    --text: #1a1916;
+    --text-2: #4a4845;
+    --text-3: #9a9690;
+    --border: #e8e6e0;
+    --danger: #c0392b;
+    --danger-bg: #fef2f2;
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Geist', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.8rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+
+  .logo-gem {
+    width: 9px; height: 9px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  .welcome-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .welcome-sub {
+    font-size: 0.82rem;
+    color: var(--text-3);
+    margin-bottom: 32px;
+    line-height: 1.5;
+  }
+
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+
+  .step {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; font-weight: 700;
+    border: 1.5px solid var(--border);
+    color: var(--text-3);
+    transition: all 0.2s;
+  }
+
+  .step.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: white;
+  }
+
+  .step.done {
+    background: var(--gold-pale);
+    border-color: var(--gold-border);
+    color: var(--gold);
+  }
+
+  .step-line {
+    flex: 1; height: 1px;
+    background: var(--border);
+  }
+
+  .form { display: flex; flex-direction: column; gap: 16px; }
+
+  .field { display: flex; flex-direction: column; gap: 5px; }
+
+  .field label {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--text-2);
+    letter-spacing: 0.01em;
+  }
+
+  .field input, .field select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-family: 'Geist', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .field input:focus, .field select:focus { border-color: var(--gold); background: var(--white); }
+  .field input::placeholder { color: var(--text-3); }
+
+  .field select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a9690' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+  .university-wrap { position: relative; }
+
+  .university-input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-family: 'Geist', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  .university-input:focus { border-color: var(--gold); background: var(--white); }
+  .university-input::placeholder { color: var(--text-3); }
+
+  .submit-btn {
+    background: var(--gold);
+    color: white;
+    border: none;
+    border-radius: 9px;
+    padding: 11px;
+    font-family: 'Geist', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-top: 4px;
+  }
+
+  .submit-btn:hover { background: var(--gold-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(201,168,76,0.3); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .error-msg {
+    background: var(--danger-bg);
+    border: 1px solid #fcd5d5;
+    color: var(--danger);
+    padding: 9px 12px;
+    border-radius: 7px;
+    font-size: 0.79rem;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo"><div class="logo-gem"></div>4.0</div>
+  <div class="welcome-title">Welcome! Let's set up your profile</div>
+  <div class="welcome-sub">This takes 30 seconds. We'll use this to show you the right courses.</div>
+
+  <div class="step-indicator">
+    <div class="step active" id="step1">1</div>
+    <div class="step-line"></div>
+    <div class="step" id="step2">2</div>
+  </div>
+
+  <!-- STEP 1: Name -->
+  <div id="form-step1" class="form">
+    <div class="field">
+      <label>Your Full Name</label>
+      <input type="text" id="fullName" placeholder="Alex Kim" autocomplete="name">
+    </div>
+    <div class="error-msg" id="error1"></div>
+    <button class="submit-btn" onclick="goStep2()">Continue →</button>
+  </div>
+
+  <!-- STEP 2: University -->
+  <div id="form-step2" class="form" style="display:none">
+    <div class="field">
+      <label>Your University</label>
+      <input type="text" id="university" placeholder="e.g. Memorial University of Newfoundland" autocomplete="organization">
+    </div>
+    <div class="error-msg" id="error2"></div>
+    <button class="submit-btn" onclick="saveProfile()">Let's go →</button>
+  </div>
+</div>
+
+<script>
+
+
+  function goStep2() {
+    const name = document.getElementById('fullName').value.trim();
+    const err = document.getElementById('error1');
+
+    if (!name) {
+      err.textContent = 'Please enter your name.';
+      err.style.display = 'block';
+      return;
+    }
+
+    err.style.display = 'none';
+    document.getElementById('form-step1').style.display = 'none';
+    document.getElementById('form-step2').style.display = 'flex';
+    document.getElementById('step1').className = 'step done';
+    document.getElementById('step1').textContent = '✓';
+    document.getElementById('step2').className = 'step active';
+  }
+
+  async function saveProfile() {
+    const name = document.getElementById('fullName').value.trim();
+    const university = document.getElementById('university').value.trim();
+    const err = document.getElementById('error2');
+    const btn = document.querySelector('#form-step2 .submit-btn');
+
+    if (!university) {
+      err.textContent = 'Please enter your university.';
+      err.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
+    err.style.display = 'none';
+
+    const { data: { user } } = await db.auth.getUser();
+
+    const { error } = await db.from('profiles').insert({
+      id: user.id,
+      full_name: name,
+      university: university.trim()
+    });
+
+    if (error) {
+      // Profile might already exist, try update instead
+      const { error: updateError } = await db.from('profiles').update({
+        full_name: name,
+        university: university.trim()
+      }).eq('id', user.id);
+
+      if (updateError) {
+        err.textContent = 'Something went wrong. Please try again.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = "Let's go →";
+        return;
+      }
+    }
+
+    window.location.href = './app.html';
+  }
+</script>
+</body>
+</html>
