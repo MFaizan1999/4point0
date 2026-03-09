@@ -47,7 +47,7 @@
     border-radius: 16px;
     padding: 40px;
     width: 100%;
-    max-width: 440px;
+    max-width: 420px;
     box-shadow: var(--shadow-md);
   }
 
@@ -58,7 +58,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    margin-bottom: 6px;
+    margin-bottom: 24px;
   }
 
   .logo-gem {
@@ -78,46 +78,11 @@
   .welcome-sub {
     font-size: 0.82rem;
     color: var(--text-3);
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     line-height: 1.5;
   }
 
-  .step-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 28px;
-  }
-
-  .step {
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.7rem; font-weight: 700;
-    border: 1.5px solid var(--border);
-    color: var(--text-3);
-    transition: all 0.2s;
-  }
-
-  .step.active {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: white;
-  }
-
-  .step.done {
-    background: var(--gold-pale);
-    border-color: var(--gold-border);
-    color: var(--gold);
-  }
-
-  .step-line {
-    flex: 1; height: 1px;
-    background: var(--border);
-  }
-
   .form { display: flex; flex-direction: column; gap: 16px; }
-
   .field { display: flex; flex-direction: column; gap: 5px; }
 
   .field label {
@@ -127,11 +92,13 @@
     letter-spacing: 0.01em;
   }
 
-  .field input, .field select {
+  .input-wrap { position: relative; }
+
+  .field input {
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 10px 13px;
+    padding: 10px 90px 10px 13px;
     font-family: 'Geist', sans-serif;
     font-size: 0.85rem;
     color: var(--text);
@@ -140,28 +107,33 @@
     width: 100%;
   }
 
-  .field input:focus, .field select:focus { border-color: var(--gold); background: var(--white); }
+  .field input:focus { border-color: var(--gold); background: var(--white); }
   .field input::placeholder { color: var(--text-3); }
 
-  .field select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a9690' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
-
-  .university-wrap { position: relative; }
-
-  .university-input {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 13px;
+  .regenerate-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--gold-pale);
+    border: 1px solid var(--gold-border);
+    color: var(--gold);
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
     font-family: 'Geist', sans-serif;
-    font-size: 0.85rem;
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-    width: 100%;
+    transition: all 0.15s;
   }
 
-  .university-input:focus { border-color: var(--gold); background: var(--white); }
-  .university-input::placeholder { color: var(--text-3); }
+  .regenerate-btn:hover { background: var(--gold-border); }
+
+  .hint {
+    font-size: 0.74rem;
+    color: var(--text-3);
+    margin-top: 2px;
+  }
 
   .submit-btn {
     background: var(--gold);
@@ -195,65 +167,44 @@
 
 <div class="card">
   <div class="logo"><div class="logo-gem"></div>4.0</div>
-  <div class="welcome-title">Welcome! Let's set up your profile</div>
-  <div class="welcome-sub">This takes 30 seconds. We'll use this to show you the right courses.</div>
+  <div class="welcome-title">Pick a username</div>
+  <div class="welcome-sub">This is how you'll appear to other students. You can change it anytime.</div>
 
-  <div class="step-indicator">
-    <div class="step active" id="step1">1</div>
-    <div class="step-line"></div>
-    <div class="step" id="step2">2</div>
-  </div>
-
-  <!-- STEP 1: Name -->
-  <div id="form-step1" class="form">
+  <div class="form">
     <div class="field">
-      <label>Your Full Name</label>
-      <input type="text" id="fullName" placeholder="Alex Kim" autocomplete="name">
+      <label>Username</label>
+      <div class="input-wrap">
+        <input type="text" id="username" placeholder="e.g. falcon_4821" maxlength="30">
+        <button class="regenerate-btn" onclick="generateUsername()">Shuffle ↺</button>
+      </div>
+      <div class="hint">Letters, numbers and underscores only</div>
     </div>
-    <div class="error-msg" id="error1"></div>
-    <button class="submit-btn" onclick="goStep2()">Continue →</button>
-  </div>
-
-  <!-- STEP 2: University -->
-  <div id="form-step2" class="form" style="display:none">
-    <div class="field">
-      <label>Your University</label>
-      <input type="text" id="university" placeholder="e.g. Memorial University of Newfoundland" autocomplete="organization">
-    </div>
-    <div class="error-msg" id="error2"></div>
+    <div class="error-msg" id="error"></div>
     <button class="submit-btn" onclick="saveProfile()">Let's go →</button>
   </div>
 </div>
 
 <script>
+  const animals = ['falcon','wolf','raven','hawk','lynx','bear','fox','eagle','owl','tiger','panda','cobra','viper','moose','bison'];
+  const adjectives = ['swift','dark','bold','quiet','sharp','calm','wild','bright','silent','quick'];
 
-
-  function goStep2() {
-    const name = document.getElementById('fullName').value.trim();
-    const err = document.getElementById('error1');
-
-    if (!name) {
-      err.textContent = 'Please enter your name.';
-      err.style.display = 'block';
-      return;
-    }
-
-    err.style.display = 'none';
-    document.getElementById('form-step1').style.display = 'none';
-    document.getElementById('form-step2').style.display = 'flex';
-    document.getElementById('step1').className = 'step done';
-    document.getElementById('step1').textContent = '✓';
-    document.getElementById('step2').className = 'step active';
+  function generateUsername() {
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const animal = animals[Math.floor(Math.random() * animals.length)];
+    const num = Math.floor(Math.random() * 9000) + 1000;
+    document.getElementById('username').value = `${adj}_${animal}_${num}`;
   }
 
-  async function saveProfile() {
-    const name = document.getElementById('fullName').value.trim();
-    const university = document.getElementById('university').value.trim();
-    const err = document.getElementById('error2');
-    const btn = document.querySelector('#form-step2 .submit-btn');
+  generateUsername();
 
-    if (!university) {
-      err.textContent = 'Please enter your university.';
+  async function saveProfile() {
+    const raw = document.getElementById('username').value.trim();
+    const username = raw.toLowerCase().replace(/[^a-z0-9_]/g, '');
+    const err = document.getElementById('error');
+    const btn = document.querySelector('.submit-btn');
+
+    if (!username || username.length < 3) {
+      err.textContent = 'Username must be at least 3 characters.';
       err.style.display = 'block';
       return;
     }
@@ -264,26 +215,34 @@
 
     const { data: { user } } = await db.auth.getUser();
 
-    const { error } = await db.from('profiles').insert({
+    if (!user) {
+      window.location.href = './index.html';
+      return;
+    }
+
+    // Check username is not taken
+    const { data: existing } = await db.from('profiles').select('id').eq('username', username).maybeSingle();
+    if (existing) {
+      err.textContent = 'That username is taken — try another or shuffle!';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = "Let's go →";
+      return;
+    }
+
+    const { error } = await db.from('profiles').upsert({
       id: user.id,
-      full_name: name,
-      university: university.trim()
+      username: username,
+      university: 'Memorial University of Newfoundland',
+      created_at: new Date().toISOString()
     });
 
     if (error) {
-      // Profile might already exist, try update instead
-      const { error: updateError } = await db.from('profiles').update({
-        full_name: name,
-        university: university.trim()
-      }).eq('id', user.id);
-
-      if (updateError) {
-        err.textContent = 'Something went wrong. Please try again.';
-        err.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = "Let's go →";
-        return;
-      }
+      err.textContent = 'Something went wrong. Please try again.';
+      err.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = "Let's go →";
+      return;
     }
 
     window.location.href = './app.html';
