@@ -647,7 +647,7 @@
       </div>
     </div>
     <div class="support-footer">
-      Questions or issues? Email <a id="supportEmail" href="#" onclick="openSupport()">feedback_4point0@outlook.com</a>
+      Questions or issues? Email <a id="supportEmail" href="#" onclick="openSupport()"><span class="__cf_email__" data-cfemail="21474444454340424a7e15514e484f5511614e54554d4e4e4a0f424e4c">[email&#160;protected]</span></a>
     </div>
   </div>
 </div>
@@ -698,7 +698,86 @@
       </div>
       <div class="modal-field">
         <label>Professor</label>
-        <input type="text" id="newProf" placeholder="e.g. Dr. Smith" autocomplete="off">
+        <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;" id="profInputWrap">
+          <span style="font-size:0.84rem;color:var(--text-2);font-weight:500;flex-shrink:0;">Dr.</span>
+          <input type="text" id="newProf" placeholder="Full Name" autocomplete="off" style="border:none;background:none;outline:none;font-family:'Geist',sans-serif;font-size:0.84rem;color:var(--text);width:100%;" onfocus="document.getElementById('profInputWrap').style.borderColor='var(--gold)'" onblur="document.getElementById('profInputWrap').style.borderColor='var(--border)'">
+        </div>
+      </div>
+      <div class="modal-field">
+        <label>Faculty / Department</label>
+        <select id="newFaculty">
+          <option value="">— Select Faculty —</option>
+          <optgroup label="Faculty of Business Administration">
+            <option>Faculty of Business Administration</option>
+          </optgroup>
+          <optgroup label="Faculty of Education">
+            <option>Faculty of Education</option>
+          </optgroup>
+          <optgroup label="Faculty of Engineering and Applied Science">
+            <option>Civil Engineering</option>
+            <option>Electrical and Computer Engineering</option>
+            <option>Mechanical Engineering</option>
+            <option>Ocean and Naval Architectural Engineering</option>
+            <option>Process Engineering</option>
+          </optgroup>
+          <optgroup label="Faculty of Humanities and Social Sciences">
+            <option>Anthropology</option>
+            <option>Archaeology</option>
+            <option>Classics</option>
+            <option>Communication Studies</option>
+            <option>Economics</option>
+            <option>English</option>
+            <option>Folklore</option>
+            <option>Gender Studies</option>
+            <option>Geography</option>
+            <option>History</option>
+            <option>Humanities</option>
+            <option>Linguistics</option>
+            <option>Medieval and Early Modern Studies</option>
+            <option>Modern Languages, Literatures and Cultures</option>
+            <option>Newfoundland and Labrador Studies</option>
+            <option>Philosophy</option>
+            <option>Police Studies</option>
+            <option>Political Science</option>
+            <option>Psychology</option>
+            <option>Religious Studies</option>
+            <option>Sociology</option>
+          </optgroup>
+          <optgroup label="Faculty of Medicine">
+            <option>Faculty of Medicine</option>
+          </optgroup>
+          <optgroup label="Faculty of Nursing">
+            <option>Faculty of Nursing</option>
+          </optgroup>
+          <optgroup label="Faculty of Science">
+            <option>Biochemistry</option>
+            <option>Biology</option>
+            <option>Chemistry</option>
+            <option>Computer Science</option>
+            <option>Earth Sciences</option>
+            <option>Mathematics and Statistics</option>
+            <option>Ocean Sciences</option>
+            <option>Physics and Physical Oceanography</option>
+          </optgroup>
+          <optgroup label="Marine Institute">
+            <option>School of Fisheries</option>
+            <option>School of Maritime Studies</option>
+            <option>School of Ocean Technology</option>
+          </optgroup>
+          <optgroup label="Other Schools">
+            <option>School of Arctic and Subarctic Studies</option>
+            <option>School of Graduate Studies</option>
+            <option>School of Human Kinetics and Recreation</option>
+            <option>School of Music</option>
+            <option>School of Pharmacy</option>
+            <option>School of Social Work</option>
+          </optgroup>
+          <optgroup label="Grenfell Campus">
+            <option>School of Arts and Social Science</option>
+            <option>School of Fine Arts</option>
+            <option>School of Science and the Environment</option>
+          </optgroup>
+        </select>
       </div>
       <div class="modal-field">
         <label>Class Days</label>
@@ -842,12 +921,12 @@
     <div class="report-modal-icon">⚑</div>
     <div class="report-modal-title">Report an Issue</div>
     <div class="report-modal-sub" id="reportModalSub">If this course has incorrect info or is a duplicate, please reach out to us directly.</div>
-    <div class="report-modal-email" id="reportEmail">feedback_4point0@outlook.com</div>
+    <div class="report-modal-email" id="reportEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91f7f4f4f5f3f0f2facea5e1fef8ffe5a1d1fee4e5fdfefefabff2fefc">[email&#160;protected]</a></div>
     <button class="btn-primary" onclick="document.getElementById('reportModal').classList.remove('open')">Got it</button>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   let currentUser = null;
   let currentProfile = null;
   let searchTimeout = null;
@@ -1208,6 +1287,7 @@
     document.getElementById('newStartTime').value = '';
     document.getElementById('newEndTime').value = '';
     document.getElementById('newYear').value = new Date().getFullYear();
+    document.getElementById('newFaculty').value = '';
     document.getElementById('newSemester').value = 'Fall';
     document.getElementById('modalError').style.display = 'none';
     selectedDays = [];
@@ -1228,13 +1308,18 @@
   async function createCourse() {
     const code = document.getElementById('newCode').value.trim().toUpperCase();
     const name = document.getElementById('newName').value.trim();
-    const prof = document.getElementById('newProf').value.trim();
+    const rawProf = document.getElementById('newProf').value.trim();
+    const faculty = document.getElementById('newFaculty').value;
     const startTime = document.getElementById('newStartTime').value;
     const endTime = document.getElementById('newEndTime').value;
     const year = document.getElementById('newYear').value;
     const semester = document.getElementById('newSemester').value;
     const err = document.getElementById('modalError');
     const btn = document.getElementById('createBtn');
+
+    // Normalize: "Dr. " prefix + title case
+    const toTitleCase = s => s.replace(/\w\S*/g, w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+    const prof = rawProf ? 'Dr. ' + toTitleCase(rawProf.replace(/^dr\.?\s*/i, '')) : '';
 
     if (!code || !name || !prof) {
       err.textContent = 'Please fill in course code, name and professor.';
@@ -1288,6 +1373,7 @@
     await db.from('professors').upsert({
       name: prof,
       university: 'Memorial University of Newfoundland',
+      faculty: faculty || null,
       created_by: currentUser.id
     }, { onConflict: 'name,university' });
 
@@ -1854,19 +1940,4 @@
     if (!error) {
       input.value = '';
       showToast('Comment posted!');
-      loadProfCard(profId);
-    }
-  }
-
-  async function upvoteProfComment(btn, commentId, count) {
-    const n = count + 1;
-    btn.textContent = `▲ ${n} helpful`;
-    btn.style.color = 'var(--warn)';
-    btn.disabled = true;
-    await db.from('professor_comments').update({ upvotes: n }).eq('id', commentId);
-  }
-
-  init();
-</script>
-</body>
-</html>
+      loadP
