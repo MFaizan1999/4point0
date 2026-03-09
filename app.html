@@ -387,12 +387,115 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* SCHEDULE PAGE */
-  .schedule-page { max-width: 720px; margin: 0 auto; padding: 32px 24px; }
-  .coming-soon {
-    text-align: center; padding: 80px 24px; color: var(--text-3);
+  .schedule-page { padding: 32px 24px; max-width: 1000px; margin: 0 auto; }
+
+  .week-grid {
+    display: grid;
+    grid-template-columns: 56px repeat(5, 1fr);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--white);
+    box-shadow: var(--shadow-sm);
   }
-  .coming-soon-title { font-family: 'Instrument Serif', serif; font-size: 1.6rem; color: var(--text-2); margin-bottom: 8px; }
-  .coming-soon-sub { font-size: 0.84rem; line-height: 1.6; }
+
+  .grid-header {
+    background: var(--off-white);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 8px;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .grid-header.today { color: var(--gold); }
+
+  .time-col {
+    border-right: 1px solid var(--border);
+  }
+
+  .time-slot {
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 4px 8px 0 0;
+    font-size: 0.64rem;
+    color: var(--text-3);
+    font-weight: 500;
+  }
+
+  .time-slot:last-child { border-bottom: none; }
+
+  .day-col {
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+
+  .day-col:last-child { border-right: none; }
+
+  .day-cell {
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .day-cell:last-child { border-bottom: none; }
+
+  .course-block {
+    position: absolute;
+    left: 3px; right: 3px;
+    border-radius: 6px;
+    padding: 5px 7px;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 10;
+    transition: opacity 0.15s;
+  }
+
+  .course-block:hover { opacity: 0.85; }
+
+  .block-code {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+
+  .block-name {
+    font-size: 0.7rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+  }
+
+  .block-time {
+    font-size: 0.62rem;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+
+  .no-schedule-msg {
+    text-align: center; padding: 48px 24px; color: var(--text-3);
+    background: var(--white); border: 1px dashed var(--border); border-radius: 12px;
+    margin-top: 16px;
+  }
+  .no-schedule-title { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: var(--text-2); margin-bottom: 6px; }
+  .no-schedule-sub { font-size: 0.8rem; line-height: 1.5; }
+
+  /* LOGOUT */
+  .logout-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-3);
+    padding: 5px 12px; border-radius: 7px; font-size: 0.76rem; font-weight: 500;
+    cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s;
+  }
+  .logout-btn:hover { border-color: var(--danger); color: var(--danger); background: var(--danger-bg); }
 
   /* TOAST */
   .toast {
@@ -415,6 +518,7 @@
   <div class="header-right">
     <div class="username-pill" id="usernamePill">@...</div>
     <div class="avatar" id="userAvatar">?</div>
+    <button class="logout-btn" onclick="logout()">Sign out</button>
   </div>
 </header>
 
@@ -449,12 +553,10 @@
 <!-- SCHEDULE PAGE -->
 <div id="page-schedule" class="page">
   <div class="schedule-page">
-    <div class="page-eyebrow">Coming Soon</div>
-    <div class="page-title">Schedule</div>
-    <div class="coming-soon">
-      <div class="coming-soon-title">Schedule builder is on its way</div>
-      <div class="coming-soon-sub">Join your courses first — your schedule will be built automatically from your enrolled courses.</div>
-    </div>
+    <div class="page-eyebrow">Memorial University</div>
+    <div class="page-title">My Schedule</div>
+    <div class="page-sub">Built from your enrolled courses.</div>
+    <div id="scheduleGrid"></div>
   </div>
 </div>
 
@@ -537,6 +639,7 @@
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
+    if (id === 'schedule') loadSchedule();
   }
 
   // ── HELPERS ──
@@ -932,6 +1035,178 @@
   document.getElementById('createModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
+
+  // ── LOGOUT ──
+  async function logout() {
+    await db.auth.signOut();
+    window.location.href = './index.html';
+  }
+
+  // ── SCHEDULE ──
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri'];
+  const HOURS = ['8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
+  const HOUR_START = 8;
+  const SLOT_H = 52;
+
+  const BLOCK_COLORS = [
+    { bg: '#fdf8ec', border: '#e8d9a8', text: '#b7770d' },
+    { bg: '#eff6ff', border: '#bfdbfe', text: '#2563eb' },
+    { bg: '#f0faf5', border: '#b8e8cf', text: '#2d7d52' },
+    { bg: '#fef2f2', border: '#fcd5d5', text: '#c0392b' },
+    { bg: '#f5f3ff', border: '#ddd6fe', text: '#7c3aed' },
+  ];
+
+  function parseTime(timeStr) {
+    // Handles "9:00am", "10:30pm" etc
+    const m = timeStr.trim().match(/^(\d{1,2}):(\d{2})(am|pm)$/i);
+    if (!m) return null;
+    let h = parseInt(m[1]);
+    const min = parseInt(m[2]);
+    const ampm = m[3].toLowerCase();
+    if (ampm === 'pm' && h !== 12) h += 12;
+    if (ampm === 'am' && h === 12) h = 0;
+    return h + min / 60;
+  }
+
+  function parseSchedule(scheduleStr) {
+    // Format: "Mon/Wed/Fri 9:00am–10:30am"
+    if (!scheduleStr) return null;
+    const parts = scheduleStr.trim().split(' ');
+    if (parts.length < 2) return null;
+    const days = parts[0].split('/');
+    const times = parts[1].split('–');
+    if (times.length < 2) return null;
+    const start = parseTime(times[0]);
+    const end = parseTime(times[1]);
+    if (!start || !end) return null;
+    return { days, start, end };
+  }
+
+  async function loadSchedule() {
+    const container = document.getElementById('scheduleGrid');
+    container.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div>Building your schedule...</div>';
+
+    const { data: enrollments } = await db.from('enrollments').select('course_id').eq('user_id', currentUser.id);
+    if (!enrollments || enrollments.length === 0) {
+      container.innerHTML = `<div class="no-schedule-msg"><div class="no-schedule-title">No courses yet</div><div class="no-schedule-sub">Join courses from the Community tab and they'll appear here automatically.</div></div>`;
+      return;
+    }
+
+    const courseIds = enrollments.map(e => e.course_id);
+    const { data: courses } = await db.from('courses').select('*').in('id', courseIds);
+
+    const today = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date().getDay()];
+
+    // Build grid HTML
+    let html = '<div class="week-grid">';
+
+    // Headers
+    html += '<div class="grid-header"></div>';
+    DAYS.forEach(d => {
+      html += `<div class="grid-header ${d === today ? 'today' : ''}">${d}</div>`;
+    });
+
+    // Time column + day columns
+    for (let i = 0; i < HOURS.length; i++) {
+      html += `<div class="time-col"><div class="time-slot">${HOURS[i]}</div></div>`;
+      DAYS.forEach(d => {
+        html += `<div class="day-col" id="cell-${d}-${i}"><div class="day-cell"></div></div>`;
+      });
+    }
+
+    html += '</div>';
+    container.innerHTML = html;
+
+    // Place course blocks
+    let colorIdx = 0;
+    (courses || []).forEach(course => {
+      if (!course.schedule) return;
+      const parsed = parseSchedule(course.schedule);
+      if (!parsed) return;
+
+      const color = BLOCK_COLORS[colorIdx % BLOCK_COLORS.length];
+      colorIdx++;
+
+      parsed.days.forEach(day => {
+        const dayIdx = DAYS.indexOf(day);
+        if (dayIdx === -1) return;
+
+        const topOffset = (parsed.start - HOUR_START) * SLOT_H;
+        const height = Math.max((parsed.end - parsed.start) * SLOT_H, 32);
+
+        // Find the day column in the grid
+        const cols = document.querySelectorAll('.day-col');
+        // Grid has 6 cols per row (1 time + 5 days), find correct day col
+        // We'll inject absolutely positioned block into first cell of that day
+        const dayCells = document.querySelectorAll(`.day-col`);
+
+        // Build a wrapper per day column
+        const colEl = document.getElementById(`cell-${day}-0`);
+        if (!colEl) return;
+
+        const parentCol = colEl.parentElement || colEl;
+
+        // Create a positioned container over entire day column
+        let posContainer = document.getElementById(`pos-${day}`);
+        if (!posContainer) {
+          // Wrap day cells in a relative container
+          // Instead, place block relative to the grid using the first cell as anchor
+          posContainer = document.createElement('div');
+          posContainer.id = `pos-${day}`;
+          posContainer.style.cssText = `position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;`;
+        }
+
+        const block = document.createElement('div');
+        block.className = 'course-block';
+        block.style.cssText = `
+          top: ${topOffset + 33}px;
+          height: ${height}px;
+          background: ${color.bg};
+          border: 1.5px solid ${color.border};
+          color: ${color.text};
+        `;
+        block.innerHTML = `
+          <div class="block-code">${course.code}</div>
+          ${height > 45 ? `<div class="block-name">${course.name}</div>` : ''}
+          ${height > 65 ? `<div class="block-time">${parsed.days.join('/')} · ${course.schedule.split(' ')[1]}</div>` : ''}
+        `;
+
+        // Find the grid and position relative to it
+        const grid = document.querySelector('.week-grid');
+        const gridRect = grid.getBoundingClientRect();
+
+        // Get the header row height (first row = 33px approx)
+        // Place block in the correct day column
+        // We need to find the x position of this day column
+        const headerCells = grid.querySelectorAll('.grid-header');
+        const dayHeader = headerCells[dayIdx + 1]; // +1 for time col
+        if (!dayHeader) return;
+
+        block.style.position = 'absolute';
+        block.style.pointerEvents = 'auto';
+
+        // Use a relative wrapper on the grid
+        grid.style.position = 'relative';
+
+        const hRect = dayHeader.getBoundingClientRect();
+        const gRect = grid.getBoundingClientRect();
+        const leftPx = hRect.left - gRect.left + 3;
+        const rightPx = gRect.right - hRect.right + 3;
+
+        block.style.left = leftPx + 'px';
+        block.style.right = rightPx + 'px';
+        block.style.width = 'auto';
+
+        grid.appendChild(block);
+      });
+    });
+
+    // Check if any courses had schedule
+    const hasSchedule = (courses || []).some(c => c.schedule && parseSchedule(c.schedule));
+    if (!hasSchedule) {
+      container.innerHTML += `<div class="no-schedule-msg" style="margin-top:12px"><div class="no-schedule-title">No schedule data yet</div><div class="no-schedule-sub">When you create courses, add the class days and times — they'll show up here automatically.</div></div>`;
+    }
+  }
 
   init();
 </script>
