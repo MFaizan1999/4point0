@@ -233,6 +233,7 @@
     const { error } = await db.from('profiles').upsert({
       id: user.id,
       username: username,
+      email: user.email,
       university: 'Memorial University of Newfoundland',
       created_at: new Date().toISOString()
     });
