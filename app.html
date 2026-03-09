@@ -572,7 +572,7 @@
       </div>
     </div>
     <div class="support-footer">
-      Questions or issues? Email <a href="mailto:feedback_4point0@outlook.com">feedback_4point0@outlook.com</a>
+      Questions or issues? Email <a href="/cdn-cgi/l/email-protection#b0d6d5d5d4d2d1d3dbef84c0dfd9dec480f0dfc5c4dcdfdfdb9ed3dfdd"><span class="__cf_email__" data-cfemail="6a0c0f0f0e080b0901355e1a0503041e5a2a051f1e0605050144090507">[email&#160;protected]</span></a>
     </div>
   </div>
 </div>
@@ -654,12 +654,12 @@
     <div class="report-modal-icon">⚑</div>
     <div class="report-modal-title">Report an Issue</div>
     <div class="report-modal-sub" id="reportModalSub">If this course has incorrect info or is a duplicate, please reach out to us directly.</div>
-    <div class="report-modal-email">feedback_4point0@outlook.com</div>
+    <div class="report-modal-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="93f5f6f6f7f1f2f0f8cca7e3fcfafde7a3d3fce6e7fffcfcf8bdf0fcfe">[email&#160;protected]</a></div>
     <button class="btn-primary" onclick="document.getElementById('reportModal').classList.remove('open')">Got it</button>
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   let currentUser = null;
   let currentProfile = null;
   let searchTimeout = null;
@@ -745,7 +745,7 @@
         html += courses.map(c => `
           <div class="search-result-item">
             <div class="result-info">
-              <div class="result-code">${c.code}</div>
+              <div class="result-code">${c.code}${c.semester ? ` · ${c.semester} ${c.year || ''}` : ''}</div>
               <div class="result-name">${c.name}</div>
               <div class="result-meta">Prof. ${c.professor}</div>
             </div>
@@ -938,7 +938,16 @@
       btn.disabled = false;
       btn.textContent = 'Update';
       showToast('Rating saved!');
-      loadMyCourses();
+
+      // Update avg display instantly
+      const { data: ratings } = await db.from('difficulty_ratings').select('rating').eq('course_id', courseId);
+      if (ratings && ratings.length) {
+        const avg = (ratings.reduce((s, r) => s + parseFloat(r.rating), 0) / ratings.length).toFixed(1);
+        const numEl = document.querySelector(`#comments-${courseId}`)?.closest('.course-card')?.querySelector('.difficulty-num');
+        const countEl = document.querySelector(`#comments-${courseId}`)?.closest('.course-card')?.querySelector('.diff-count');
+        if (numEl) { numEl.textContent = avg; numEl.style.color = getDiffColor(parseFloat(avg)); }
+        if (countEl) countEl.textContent = `${ratings.length} student${ratings.length !== 1 ? 's' : ''} rated`;
+      }
     } else {
       btn.disabled = false;
       btn.textContent = 'Submit';
@@ -1271,13 +1280,4 @@
     });
 
     // Check if any courses had schedule
-    const hasSchedule = (courses || []).some(c => c.schedule && parseSchedule(c.schedule));
-    if (!hasSchedule) {
-      container.innerHTML += `<div class="no-schedule-msg" style="margin-top:12px"><div class="no-schedule-title">No schedule data yet</div><div class="no-schedule-sub">When you create courses, add the class days and times — they'll show up here automatically.</div></div>`;
-    }
-  }
-
-  init();
-</script>
-</body>
-</html>
+    const hasSchedule = (courses || []).some(c =
