@@ -932,7 +932,7 @@
       course_id: courseId,
       rating: rating,
       updated_at: new Date().toISOString()
-    });
+    }, { onConflict: 'user_id,course_id' });
 
     if (!error) {
       btn.disabled = false;
