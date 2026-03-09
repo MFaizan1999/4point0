@@ -292,15 +292,74 @@
       btn.disabled = false;
       btn.textContent = 'Create Account';
     } else {
-      // Go straight to onboarding
-      window.location.href = './onboarding.html';
+      // Show "check your email" screen
+      document.querySelector('.card').innerHTML = `
+        <div style="text-align:center;padding:16px 0">
+          <div style="font-size:2.5rem;margin-bottom:16px">📬</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:1.8rem;letter-spacing:-0.03em;margin-bottom:10px">Check your email</div>
+          <div style="color:var(--text-2);font-size:0.88rem;line-height:1.6;margin-bottom:24px">
+            We sent a confirmation link to<br>
+            <strong>${email}</strong><br><br>
+            Click the link in the email to activate your account, then come back here to sign in.
+          </div>
+          <button class="submit-btn" onclick="window.location.href='./index.html'" style="max-width:200px;margin:0 auto">Back to Sign In</button>
+        </div>`;
     }
   }
+
+  // Handle email confirmation redirect (Supabase sends user back with tokens in URL)
+  async function handleEmailConfirmation() {
+    const hash = window.location.hash;
+    const params = new URLSearchParams(window.location.search);
+
+    // Supabase PKCE flow uses ?code= in URL
+    if (params.get('code')) {
+      const { data, error } = await db.auth.exchangeCodeForSession(params.get('code'));
+      if (data?.session) {
+        await redirectAfterAuth(data.session.user.id);
+        return;
+      }
+    }
+
+    // Supabase v2 implicit flow — access_token in hash
+    if (hash && hash.includes('access_token')) {
+      const { data: { session } } = await db.auth.getSession();
+      if (session) {
+        await redirectAfterAuth(session.user.id);
+        return;
+      }
+    }
+
+    // type=recovery or type=signup in hash params
+    if (hash) {
+      const hashParams = new URLSearchParams(hash.replace('#', ''));
+      if (hashParams.get('type') === 'signup' || hashParams.get('type') === 'magiclink') {
+        const { data: { session } } = await db.auth.getSession();
+        if (session) {
+          await redirectAfterAuth(session.user.id);
+          return;
+        }
+      }
+    }
+  }
+
+  // Listen for auth state changes (catches confirmation redirect)
+  db.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      // Only auto-redirect if we're not already showing "check your email"
+      const card = document.querySelector('.card');
+      if (card && card.querySelector('.submit-btn[onclick*="index.html"]')) return;
+      await redirectAfterAuth(session.user.id);
+    }
+  });
 
   // If already logged in, check profile and route
   db.auth.getSession().then(async ({ data: { session } }) => {
     if (session) await redirectAfterAuth(session.user.id);
   });
+
+  // Run on page load to catch confirmation redirects
+  handleEmailConfirmation();
 </script>
 </body>
 </html>
