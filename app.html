@@ -489,7 +489,31 @@
   .no-schedule-title { font-family: 'Instrument Serif', serif; font-size: 1.1rem; color: var(--text-2); margin-bottom: 6px; }
   .no-schedule-sub { font-size: 0.8rem; line-height: 1.5; }
 
-  /* LOGOUT */
+  /* REPORT + SUPPORT */
+  .report-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-3);
+    padding: 3px 9px; border-radius: 5px; font-size: 0.68rem; font-weight: 500;
+    cursor: pointer; font-family: 'Geist', sans-serif; transition: all 0.15s;
+  }
+  .report-btn:hover { border-color: var(--danger-border); color: var(--danger); background: var(--danger-bg); }
+
+  .support-footer {
+    text-align: center; padding: 24px; font-size: 0.74rem; color: var(--text-3);
+    border-top: 1px solid var(--border); margin-top: 32px;
+  }
+  .support-footer a { color: var(--gold); text-decoration: none; }
+  .support-footer a:hover { text-decoration: underline; }
+
+  /* REPORT MODAL */
+  .report-modal {
+    background: var(--white); border-radius: 16px; padding: 28px;
+    width: 100%; max-width: 400px; box-shadow: var(--shadow-lg);
+    animation: modalIn 0.2s ease; text-align: center;
+  }
+  .report-modal-icon { font-size: 2rem; margin-bottom: 12px; }
+  .report-modal-title { font-family: 'Instrument Serif', serif; font-size: 1.2rem; margin-bottom: 8px; }
+  .report-modal-sub { font-size: 0.8rem; color: var(--text-3); line-height: 1.6; margin-bottom: 16px; }
+  .report-modal-email { font-size: 0.85rem; font-weight: 600; color: var(--gold); background: var(--gold-pale); border: 1px solid var(--gold-border); padding: 8px 16px; border-radius: 8px; display: inline-block; margin-bottom: 16px; }
   .logout-btn {
     background: none; border: 1px solid var(--border); color: var(--text-3);
     padding: 5px 12px; border-radius: 7px; font-size: 0.76rem; font-weight: 500;
@@ -547,10 +571,11 @@
         <div class="loading-state"><div class="loading-spinner"></div>Loading your courses...</div>
       </div>
     </div>
+    <div class="support-footer">
+      Questions or issues? Email <a href="mailto:feedback_4point0@outlook.com">feedback_4point0@outlook.com</a>
+    </div>
   </div>
 </div>
-
-<!-- SCHEDULE PAGE -->
 <div id="page-schedule" class="page">
   <div class="schedule-page">
     <div class="page-eyebrow">Memorial University</div>
@@ -598,6 +623,20 @@
           <input type="time" id="newEndTime">
         </div>
       </div>
+      <div class="schedule-grid">
+        <div class="modal-field">
+          <label>Year</label>
+          <input type="number" id="newYear" placeholder="e.g. 2025" min="2020" max="2035" value="${new Date().getFullYear()}">
+        </div>
+        <div class="modal-field">
+          <label>Semester</label>
+          <select id="newSemester">
+            <option value="Fall">Fall</option>
+            <option value="Winter">Winter</option>
+            <option value="Summer">Summer</option>
+          </select>
+        </div>
+      </div>
       <div class="modal-error" id="modalError"></div>
       <div class="modal-actions">
         <button class="btn-secondary" onclick="closeModal()">Cancel</button>
@@ -608,6 +647,17 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- REPORT MODAL -->
+<div class="modal-overlay" id="reportModal">
+  <div class="report-modal">
+    <div class="report-modal-icon">⚑</div>
+    <div class="report-modal-title">Report an Issue</div>
+    <div class="report-modal-sub" id="reportModalSub">If this course has incorrect info or is a duplicate, please reach out to us directly.</div>
+    <div class="report-modal-email">feedback_4point0@outlook.com</div>
+    <button class="btn-primary" onclick="document.getElementById('reportModal').classList.remove('open')">Got it</button>
+  </div>
+</div>
 
 <script>
   let currentUser = null;
@@ -772,7 +822,7 @@
           <div class="card-main">
             <div class="card-header">
               <div class="card-left">
-                <div class="course-code">${course.code}</div>
+                <div class="course-code">${course.code}${course.semester ? ` · ${course.semester} ${course.year || ''}` : ''}</div>
                 <div class="course-name">${course.name}</div>
                 <div class="course-meta">
                   <span class="meta-item">Prof. ${course.professor}</span>
@@ -785,6 +835,7 @@
                   <div class="difficulty-num" style="color:${getDiffColor(avgRating ? parseFloat(avgRating) : null)}">${avgRating || '—'}</div>
                   <div class="difficulty-label">difficulty</div>
                 </div>
+                <button class="report-btn" onclick="reportCourse('${course.code}', '${course.name}')">⚑ Report</button>
               </div>
             </div>
 
@@ -803,15 +854,13 @@
                 value="${sliderVal}"
                 style="--fill: ${fillPct}%"
                 oninput="updateSlider(this)"
-                id="slider-${course.id}"
-                ${myRating ? 'disabled' : ''}>
+                id="slider-${course.id}">
               <div class="your-rating-row">
-                <span class="your-rating-label">${myRating ? 'Your rating' : 'Drag to rate'}</span>
+                <span class="your-rating-label">${myRating ? 'Your rating (drag to update)' : 'Drag to rate'}</span>
                 <div style="display:flex;align-items:center;gap:8px">
-                  <span class="your-rating-val" id="sliderVal-${course.id}">${sliderVal}</span>
-                  <button class="rate-btn ${myRating ? 'rated' : ''}" id="rateBtn-${course.id}"
-                    onclick="${myRating ? '' : `submitRating('${course.id}')`}">
-                    ${myRating ? 'Rated ✓' : 'Submit'}
+                  <span class="your-rating-val" id="sliderVal-${course.id}">${parseFloat(sliderVal).toFixed(1)}</span>
+                  <button class="rate-btn" id="rateBtn-${course.id}" onclick="submitRating('${course.id}')">
+                    ${myRating ? 'Update' : 'Submit'}
                   </button>
                 </div>
               </div>
@@ -873,6 +922,10 @@
   async function submitRating(courseId) {
     const slider = document.getElementById('slider-' + courseId);
     const rating = parseFloat(slider.value);
+    const btn = document.getElementById('rateBtn-' + courseId);
+
+    btn.disabled = true;
+    btn.textContent = 'Saving...';
 
     const { error } = await db.from('difficulty_ratings').upsert({
       user_id: currentUser.id,
@@ -882,13 +935,13 @@
     });
 
     if (!error) {
-      slider.disabled = true;
-      const btn = document.getElementById('rateBtn-' + courseId);
-      btn.textContent = 'Rated ✓';
-      btn.classList.add('rated');
-      btn.onclick = null;
-      showToast('Rating submitted!');
+      btn.disabled = false;
+      btn.textContent = 'Update';
+      showToast('Rating saved!');
       loadMyCourses();
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit';
     }
   }
 
@@ -954,6 +1007,8 @@
     document.getElementById('newProf').value = '';
     document.getElementById('newStartTime').value = '';
     document.getElementById('newEndTime').value = '';
+    document.getElementById('newYear').value = new Date().getFullYear();
+    document.getElementById('newSemester').value = 'Fall';
     document.getElementById('modalError').style.display = 'none';
     selectedDays = [];
     document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('selected'));
@@ -976,6 +1031,8 @@
     const prof = document.getElementById('newProf').value.trim();
     const startTime = document.getElementById('newStartTime').value;
     const endTime = document.getElementById('newEndTime').value;
+    const year = document.getElementById('newYear').value;
+    const semester = document.getElementById('newSemester').value;
     const err = document.getElementById('modalError');
     const btn = document.getElementById('createBtn');
 
@@ -1007,6 +1064,8 @@
       name,
       professor: prof,
       schedule: schedule || null,
+      year: year ? parseInt(year) : null,
+      semester: semester || null,
       created_by: currentUser.id
     }).select().single();
 
@@ -1034,6 +1093,16 @@
   // Close modal on overlay click
   document.getElementById('createModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
+  });
+
+  // ── REPORT COURSE ──
+  function reportCourse(code, name) {
+    document.getElementById('reportModalSub').textContent = `If "${code} — ${name}" has incorrect info or is a duplicate, please reach out to us directly.`;
+    document.getElementById('reportModal').classList.add('open');
+  }
+
+  document.getElementById('reportModal').addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
   });
 
   // ── LOGOUT ──
