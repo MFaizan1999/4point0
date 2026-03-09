@@ -647,7 +647,7 @@
       </div>
     </div>
     <div class="support-footer">
-      Questions or issues? Email <a href="/cdn-cgi/l/email-protection#b0d6d5d5d4d2d1d3dbef84c0dfd9dec480f0dfc5c4dcdfdfdb9ed3dfdd"><span class="__cf_email__" data-cfemail="6a0c0f0f0e080b0901355e1a0503041e5a2a051f1e0605050144090507">[email&#160;protected]</span></a>
+      Questions or issues? Email <a id="supportEmail" href="#" onclick="openSupport()">feedback_4point0@outlook.com</a>
     </div>
   </div>
 </div>
@@ -661,7 +661,8 @@
     <div class="search-section">
       <div class="search-bar">
         <span class="search-icon">🔍</span>
-        <input class="search-input" id="profSearchInput" placeholder="Search professor name..." oninput="onProfSearch(this.value)" autocomplete="off">
+        <span style="font-size:0.85rem;color:var(--text-2);font-weight:500;flex-shrink:0;">Dr.</span>
+        <input class="search-input" id="profSearchInput" placeholder="Full Name" oninput="onProfSearch(this.value)" autocomplete="off">
         <button style="background:none;border:none;cursor:pointer;color:var(--text-3);font-size:0.8rem;" onclick="clearProfSearch()">✕</button>
       </div>
       <div class="search-results" id="profSearchResults"></div>
@@ -742,6 +743,97 @@
   </div>
 </div>
 
+<!-- FACULTY PICKER MODAL -->
+<div class="modal-overlay" id="facultyModal">
+  <div class="modal">
+    <div class="modal-title">Add Professor</div>
+    <div class="modal-sub" id="facultyModalSub">Select their faculty so students can find them easily.</div>
+    <div class="modal-form">
+      <div class="modal-field">
+        <label>Faculty / Department</label>
+        <select id="facultySelect" style="max-height:200px">
+          <option value="">— Select Faculty —</option>
+          <optgroup label="Faculty of Business Administration">
+            <option>Faculty of Business Administration</option>
+          </optgroup>
+          <optgroup label="Faculty of Education">
+            <option>Faculty of Education</option>
+          </optgroup>
+          <optgroup label="Faculty of Engineering and Applied Science">
+            <option>Civil Engineering</option>
+            <option>Electrical and Computer Engineering</option>
+            <option>Mechanical Engineering</option>
+            <option>Ocean and Naval Architectural Engineering</option>
+            <option>Process Engineering</option>
+          </optgroup>
+          <optgroup label="Faculty of Humanities and Social Sciences">
+            <option>Anthropology</option>
+            <option>Archaeology</option>
+            <option>Classics</option>
+            <option>Communication Studies</option>
+            <option>Economics</option>
+            <option>English</option>
+            <option>Folklore</option>
+            <option>Gender Studies</option>
+            <option>Geography</option>
+            <option>History</option>
+            <option>Humanities</option>
+            <option>Linguistics</option>
+            <option>Medieval and Early Modern Studies</option>
+            <option>Modern Languages, Literatures and Cultures</option>
+            <option>Newfoundland and Labrador Studies</option>
+            <option>Philosophy</option>
+            <option>Police Studies</option>
+            <option>Political Science</option>
+            <option>Psychology</option>
+            <option>Religious Studies</option>
+            <option>Sociology</option>
+          </optgroup>
+          <optgroup label="Faculty of Medicine">
+            <option>Faculty of Medicine</option>
+          </optgroup>
+          <optgroup label="Faculty of Nursing">
+            <option>Faculty of Nursing</option>
+          </optgroup>
+          <optgroup label="Faculty of Science">
+            <option>Biochemistry</option>
+            <option>Biology</option>
+            <option>Chemistry</option>
+            <option>Computer Science</option>
+            <option>Earth Sciences</option>
+            <option>Mathematics and Statistics</option>
+            <option>Ocean Sciences</option>
+            <option>Physics and Physical Oceanography</option>
+          </optgroup>
+          <optgroup label="Marine Institute">
+            <option>School of Fisheries</option>
+            <option>School of Maritime Studies</option>
+            <option>School of Ocean Technology</option>
+          </optgroup>
+          <optgroup label="Other Schools">
+            <option>School of Arctic and Subarctic Studies</option>
+            <option>School of Graduate Studies</option>
+            <option>School of Human Kinetics and Recreation</option>
+            <option>School of Music</option>
+            <option>School of Pharmacy</option>
+            <option>School of Social Work</option>
+          </optgroup>
+          <optgroup label="Grenfell Campus">
+            <option>School of Arts and Social Science</option>
+            <option>School of Fine Arts</option>
+            <option>School of Science and the Environment</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="modal-error" id="facultyModalError"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeFacultyModal()">Cancel</button>
+        <button class="btn-primary" onclick="confirmAddProf()">Add Professor</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- REPORT MODAL -->
@@ -750,7 +842,7 @@
     <div class="report-modal-icon">⚑</div>
     <div class="report-modal-title">Report an Issue</div>
     <div class="report-modal-sub" id="reportModalSub">If this course has incorrect info or is a duplicate, please reach out to us directly.</div>
-    <div class="report-modal-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="93f5f6f6f7f1f2f0f8cca7e3fcfafde7a3d3fce6e7fffcfcf8bdf0fcfe">[email&#160;protected]</a></div>
+    <div class="report-modal-email" id="reportEmail">feedback_4point0@outlook.com</div>
     <button class="btn-primary" onclick="document.getElementById('reportModal').classList.remove('open')">Got it</button>
   </div>
 </div>
@@ -1219,6 +1311,20 @@
     if (e.target === this) this.classList.remove('open');
   });
 
+  // ── EMAIL (bypass Cloudflare obfuscation) ──
+  function openSupport() {
+    const e = ['feedback', '_4point0', '@outlook.com'].join('');
+    window.location.href = 'mailto:' + e;
+  }
+  // Set email text via JS
+  window.addEventListener('load', () => {
+    const e = ['feedback', '_4point0', '@outlook.com'].join('');
+    const el = document.getElementById('supportEmail');
+    if (el) { el.textContent = e; el.href = 'mailto:' + e; }
+    const rel = document.getElementById('reportEmail');
+    if (rel) rel.textContent = e;
+  });
+
   // ── LOGOUT ──
   async function logout() {
     await db.auth.signOut();
@@ -1404,6 +1510,7 @@
   let currentProfId = null;
   let selectedRating = null;
   let selectedWTA = null;
+  let pendingProfName = null;
 
   async function onProfSearch(val) {
     clearTimeout(profSearchTimeout);
@@ -1411,10 +1518,11 @@
     if (!val.trim()) { results.style.display = 'none'; return; }
 
     profSearchTimeout = setTimeout(async () => {
+      const searchName = 'Dr. ' + val.trim();
       const { data: profs } = await db.from('professors')
         .select('*')
         .eq('university', 'Memorial University of Newfoundland')
-        .ilike('name', `%${val}%`)
+        .ilike('name', `%${val.trim()}%`)
         .limit(6);
 
       let html = '';
@@ -1423,18 +1531,65 @@
           <div class="search-result-item" onclick="loadProfCard('${p.id}')">
             <div class="result-info">
               <div class="result-name">${p.name}</div>
-              <div class="result-meta">Memorial University</div>
+              <div class="result-meta">${p.faculty || 'Memorial University'}</div>
             </div>
             <span style="font-size:0.72rem;color:var(--gold);font-weight:600;">View →</span>
           </div>`).join('');
       }
-      html += `<div class="create-course-btn" onclick="createAndLoadProf('${val.trim()}')">
-        <span>+</span> Add "${val.trim()}" as a new professor
+      html += `<div class="create-course-btn" onclick="openFacultyModal('Dr. ${val.trim()}')">
+        <span>+</span> Add "Dr. ${val.trim()}" as a new professor
       </div>`;
       results.innerHTML = html;
       results.style.display = 'block';
     }, 300);
   }
+
+  function openFacultyModal(name) {
+    pendingProfName = name;
+    document.getElementById('facultyModalSub').textContent = `Select the faculty for ${name}.`;
+    document.getElementById('facultySelect').value = '';
+    document.getElementById('facultyModalError').style.display = 'none';
+    document.getElementById('profSearchResults').style.display = 'none';
+    document.getElementById('facultyModal').classList.add('open');
+  }
+
+  function closeFacultyModal() {
+    document.getElementById('facultyModal').classList.remove('open');
+    pendingProfName = null;
+  }
+
+  async function confirmAddProf() {
+    const faculty = document.getElementById('facultySelect').value;
+    const err = document.getElementById('facultyModalError');
+    if (!faculty) {
+      err.textContent = 'Please select a faculty.';
+      err.style.display = 'block';
+      return;
+    }
+
+    const { data: existing } = await db.from('professors').select('id').eq('name', pendingProfName).eq('university', 'Memorial University of Newfoundland').maybeSingle();
+    if (existing) {
+      closeFacultyModal();
+      loadProfCard(existing.id);
+      return;
+    }
+
+    const { data: newProf, error } = await db.from('professors').insert({
+      name: pendingProfName,
+      university: 'Memorial University of Newfoundland',
+      faculty,
+      created_by: currentUser.id
+    }).select().single();
+
+    if (!error) {
+      closeFacultyModal();
+      loadProfCard(newProf.id);
+    }
+  }
+
+  document.getElementById('facultyModal').addEventListener('click', function(e) {
+    if (e.target === this) closeFacultyModal();
+  });
 
   function clearProfSearch() {
     document.getElementById('profSearchInput').value = '';
@@ -1443,23 +1598,8 @@
     currentProfId = null;
     selectedRating = null;
     selectedWTA = null;
+    pendingProfName = null;
   }
-
-  async function createAndLoadProf(name) {
-    const { data: existing } = await db.from('professors').select('id').eq('name', name).eq('university', 'Memorial University of Newfoundland').maybeSingle();
-    if (existing) { loadProfCard(existing.id); return; }
-
-    const { data: newProf, error } = await db.from('professors').insert({
-      name, university: 'Memorial University of Newfoundland', created_by: currentUser.id
-    }).select().single();
-
-    if (!error) {
-      document.getElementById('profSearchResults').style.display = 'none';
-      loadProfCard(newProf.id);
-    }
-  }
-
-  async function loadProfCard(profId) {
     document.getElementById('profSearchResults').style.display = 'none';
     currentProfId = profId;
     selectedRating = null;
@@ -1497,7 +1637,7 @@
           <div class="prof-top">
             <div>
               <div class="prof-name">${prof.name}</div>
-              <div class="prof-uni">Memorial University of Newfoundland</div>
+              <div class="prof-uni">${prof.faculty ? prof.faculty + ' · ' : ''}Memorial University of Newfoundland</div>
               <div class="prof-rating-count">${total} rating${total !== 1 ? 's' : ''}</div>
             </div>
             <div class="prof-overall-score">
