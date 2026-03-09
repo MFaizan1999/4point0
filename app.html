@@ -926,7 +926,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   let currentUser = null;
   let currentProfile = null;
   let searchTimeout = null;
@@ -1940,4 +1940,19 @@
     if (!error) {
       input.value = '';
       showToast('Comment posted!');
-      loadP
+      loadProfCard(profId);
+    }
+  }
+
+  async function upvoteProfComment(btn, commentId, count) {
+    const n = count + 1;
+    btn.textContent = `▲ ${n} helpful`;
+    btn.style.color = 'var(--warn)';
+    btn.disabled = true;
+    await db.from('professor_comments').update({ upvotes: n }).eq('id', commentId);
+  }
+
+  init();
+</script>
+</body>
+</html>
