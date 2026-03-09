@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>4.0 — Sign In</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://esm.sh/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://ivfvywlzmugnennznqyh.supabase.co'
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2ZnZ5d2x6bXVnbmVubnpucXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MzMyNDMsImV4cCI6MjA4ODUwOTI0M30.CiePqh53AW-7fmZtsT9T6KHxZgH1Q6rkj4z3IZ_sBt0'
+  const SUPABASE_KEY = 'sb_publishable_9T6QrjSB4t-V6Qpp4bEEWA_7Hx83k_H'
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 </script>
 <style>
@@ -245,28 +245,19 @@
     btn.textContent = 'Signing in...';
     errorEl.style.display = 'none';
 
-    try {
-      const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out. Please try again.')), 30000));
-      const signIn = db.auth.signInWithPassword({ email, password });
-      const { data, error } = await Promise.race([signIn, timeout]);
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
 
-      if (error) {
-        if (error.message.includes('Invalid login') || error.message.includes('invalid_credentials')) {
-          errorEl.textContent = 'Incorrect email or password.';
-        } else {
-          errorEl.textContent = error.message;
-        }
-        errorEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
+    if (error) {
+      if (error.message.includes('Invalid login') || error.message.includes('invalid_credentials')) {
+        errorEl.textContent = 'Incorrect email or password.';
       } else {
-        await redirectAfterAuth(data.user.id);
+        errorEl.textContent = error.message;
       }
-    } catch (e) {
-      errorEl.textContent = e.message || 'Something went wrong. Please try again.';
       errorEl.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Sign In';
+    } else {
+      await redirectAfterAuth(data.user.id);
     }
   }
 
