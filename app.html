@@ -1191,6 +1191,13 @@
     // Auto-join the course
     await db.from('enrollments').insert({ user_id: currentUser.id, course_id: course.id });
 
+    // Auto-create professor if doesn't exist
+    await db.from('professors').upsert({
+      name: prof,
+      university: 'Memorial University of Newfoundland',
+      created_by: currentUser.id
+    }, { onConflict: 'name,university' });
+
     closeModal();
     document.getElementById('searchInput').value = '';
     showToast('Course created and joined!');
