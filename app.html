@@ -470,8 +470,10 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     const {data:allRatings} = await db.from('difficulty_ratings').select('*').in('course_id',courseIds);
     const {data:myRatings} = await db.from('difficulty_ratings').select('*').eq('user_id',currentUser.id).in('course_id',courseIds);
     const {data:allComments} = await db.from('comments').select('*').in('course_id',courseIds).order('created_at',{ascending:false});
-    const {data:myUpvotesData} = await db.from('comment_upvotes').select('comment_id').eq('user_id',currentUser.id);
+    const {data:myUpvotesData, error:upvoteErr} = await db.from('comment_upvotes').select('comment_id').eq('user_id',currentUser.id);
+    console.log('UPVOTES FETCH:', JSON.stringify(myUpvotesData), 'ERROR:', upvoteErr, 'USER:', currentUser.id);
     const upvotedSet=new Set((myUpvotesData||[]).map(u=>u.comment_id));
+    console.log('UPVOTED SET SIZE:', upvotedSet.size);
     container.innerHTML=(courses||[]).map(function(course){
       const ratings=(allRatings||[]).filter(r=>r.course_id===course.id);
       const avgRating=ratings.length?(ratings.reduce((s,r)=>s+parseFloat(r.rating),0)/ratings.length).toFixed(1):null;
