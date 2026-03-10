@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = 'https://ivfvywlzmugnennznqyh.supabase.co'
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2ZnZ5d2x6bXVnbmVubnpucXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MzMyNDMsImV4cCI6MjA4ODUwOTI0M30.CiePqh53AW-7fmZtsT9T6KHxZgH1Q6rkj4z3IZ_sBt0'
+  const SUPABASE_KEY = 'sb_publishable_9T6QrjSB4t-V6Qpp4bEEWA_7Hx83k_H'
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 </script>
 <style>
@@ -233,7 +233,6 @@
     const { error } = await db.from('profiles').upsert({
       id: user.id,
       username: username,
-      email: user.email,
       university: 'Memorial University of Newfoundland',
       created_at: new Date().toISOString()
     });
