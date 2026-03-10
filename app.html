@@ -290,25 +290,20 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
 /* Message groups */
-.msg-group{display:flex;flex-direction:column;margin-bottom:4px;}
+.msg-group{display:flex;flex-direction:column;margin-bottom:4px;align-items:flex-start;}
 .msg-group.mine{align-items:flex-end;}
-.msg-group:not(.mine){align-items:flex-start;}
 .msg-meta{display:flex;align-items:center;gap:5px;margin-bottom:3px;padding:0 4px;}
 .mine .msg-meta{flex-direction:row-reverse;}
 .msg-author{font-size:0.68rem;font-weight:700;color:var(--text-2);}
 .msg-time{font-size:0.62rem;color:var(--text-3);}
 
 /* Bubbles */
-.msg-bubble-wrap{display:flex;flex-direction:column;gap:1px;align-items:flex-start;}
+.msg-bubble-wrap{display:inline-flex;flex-direction:column;gap:1px;align-items:flex-start;max-width:100%;}
 .mine .msg-bubble-wrap{align-items:flex-end;}
 .msg-bubble{
-  position:relative;display:inline-block;max-width:72%;
+  position:relative;display:inline-block;max-width:72%;min-width:0;
   padding:9px 13px;font-size:0.84rem;line-height:1.5;
-  word-break:break-word;cursor:pointer;transition:filter 0.1s;
-  border-radius:18px;
-}
-/* Other person bubbles — white with subtle shadow */
-.msg-bubble{
+  word-break:break-word;white-space:pre-wrap;cursor:pointer;transition:filter 0.1s;
   background:#ffffff;
   color:var(--text);
   box-shadow:0 1px 2px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
