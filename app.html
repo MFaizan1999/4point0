@@ -555,8 +555,8 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       if(error)return;
       btn.classList.add('upvoted');btn.style.color='var(--warn)';btn.style.borderColor='var(--gold-border)';
     }
-    const {count}=await db.from('comment_upvotes').select('*',{count:'exact',head:true}).eq('comment_id',commentId);
-    btn.innerHTML='&#x25B2; '+(count||0)+' helpful';
+    const {data:uvRows}=await db.from('comment_upvotes').select('comment_id').eq('comment_id',commentId);
+    btn.innerHTML='&#x25B2; '+(uvRows?uvRows.length:0)+' helpful';
   }
 
   async function deleteComment(commentId,courseId){
@@ -850,8 +850,8 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       if(ins.error)return;
       btn.classList.add('upvoted');btn.style.color='var(--warn)';btn.style.borderColor='var(--gold-border)';
     }
-    var countRes=await db.from('prof_comment_upvotes').select('*',{count:'exact',head:true}).eq('comment_id',commentId);
-    btn.innerHTML='&#x25B2; '+(countRes.count||0)+' helpful';
+    var uvRows2=await db.from('prof_comment_upvotes').select('comment_id').eq('comment_id',commentId);
+    btn.innerHTML='&#x25B2; '+(uvRows2.data?uvRows2.data.length:0)+' helpful';
   }
 
   async function deleteProfComment(commentId,profId){
