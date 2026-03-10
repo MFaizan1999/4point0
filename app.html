@@ -1106,6 +1106,7 @@
                   <div class="difficulty-label">difficulty</div>
                 </div>
                 <button class="report-btn" onclick="reportCourse('${course.code}', '${course.name}')">⚑ Report</button>
+                <button class="report-btn" style="margin-top:4px" onclick="unjoinCourse('${course.id}', this)">✕ Leave</button>
               </div>
             </div>
 
@@ -1390,6 +1391,20 @@
   });
 
   // ── REPORT COURSE ──
+  async function unjoinCourse(courseId, btn) {
+    if (!confirm('Leave this course? It will be removed from your feed.')) return;
+    btn.disabled = true;
+    btn.textContent = 'Leaving...';
+    const { error } = await db.from('enrollments').delete().eq('course_id', courseId).eq('user_id', currentUser.id);
+    if (!error) {
+      showToast('Left course.');
+      loadMyCourses();
+    } else {
+      btn.disabled = false;
+      btn.textContent = '✕ Leave';
+    }
+  }
+
   function reportCourse(code, name) {
     document.getElementById('reportModalSub').textContent = `If "${code} — ${name}" has incorrect info or is a duplicate, please reach out to us directly.`;
     document.getElementById('reportModal').classList.add('open');
