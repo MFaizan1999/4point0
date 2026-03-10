@@ -275,6 +275,80 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   .search-result-item { padding: 10px 13px; }
 }
 </style>
+<style>
+/* ============ CHAT ============ */
+.course-tabs{display:flex;background:var(--bg);border-radius:8px;padding:3px;margin:0 20px 12px;}
+.course-tab{flex:1;padding:6px;border:none;background:none;border-radius:6px;font-family:'Geist',sans-serif;font-size:0.76rem;font-weight:500;color:var(--text-3);cursor:pointer;transition:all 0.15s;}
+.course-tab.active{background:var(--white);color:var(--text);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.08);}
+.course-tab-content{display:none;}
+.course-tab-content.active{display:block;}
+.chat-window{display:flex;flex-direction:column;height:420px;background:var(--white);}
+.chat-messages{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:2px;scroll-behavior:smooth;}
+.chat-messages::-webkit-scrollbar{width:4px;}
+.chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.msg-group{margin-bottom:10px;}
+.msg-group.mine{align-items:flex-end;}
+.msg-meta{display:flex;align-items:center;gap:6px;margin-bottom:3px;padding:0 4px;}
+.msg-author{font-size:0.7rem;font-weight:600;color:var(--text-2);}
+.msg-time{font-size:0.64rem;color:var(--text-3);}
+.msg-bubble-wrap{display:flex;flex-direction:column;gap:1px;}
+.msg-bubble{position:relative;max-width:75%;padding:8px 12px;border-radius:14px;font-size:0.82rem;line-height:1.5;color:var(--text);background:var(--bg);border:1px solid var(--border);word-break:break-word;cursor:pointer;transition:background 0.1s;}
+.msg-bubble:hover{background:var(--off-white);}
+.mine .msg-bubble{background:var(--gold-pale);border-color:var(--gold-border);color:var(--text);margin-left:auto;}
+.mine .msg-meta{flex-direction:row-reverse;}
+.mine .msg-bubble-wrap{align-items:flex-end;}
+.msg-group{display:flex;flex-direction:column;}
+.reply-preview{background:var(--off-white);border-left:2px solid var(--gold);padding:4px 8px;border-radius:4px;font-size:0.72rem;color:var(--text-3);margin-bottom:3px;max-width:75%;}
+.mine .reply-preview{margin-left:auto;}
+.reply-preview-author{font-weight:600;color:var(--text-2);margin-bottom:1px;}
+.msg-file{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--off-white);border:1px solid var(--border);border-radius:10px;max-width:220px;cursor:pointer;transition:background 0.1s;text-decoration:none;}
+.msg-file:hover{background:var(--gold-pale);border-color:var(--gold-border);}
+.msg-file-icon{font-size:1.4rem;flex-shrink:0;}
+.msg-file-info{flex:1;min-width:0;}
+.msg-file-name{font-size:0.76rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.msg-file-size{font-size:0.66rem;color:var(--text-3);}
+.msg-image{max-width:220px;max-height:200px;border-radius:10px;border:1px solid var(--border);cursor:pointer;display:block;}
+.reactions-bar{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;}
+.reaction-chip{display:flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;background:var(--off-white);border:1px solid var(--border);font-size:0.72rem;cursor:pointer;transition:all 0.15s;font-family:'Geist',sans-serif;}
+.reaction-chip:hover,.reaction-chip.mine-reaction{background:var(--gold-pale);border-color:var(--gold-border);}
+.reaction-count{font-size:0.68rem;font-weight:600;color:var(--text-2);}
+.seen-row{display:flex;justify-content:flex-end;gap:2px;margin-top:2px;padding-right:2px;}
+.seen-avatar{width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--gold-light),var(--gold));display:flex;align-items:center;justify-content:center;font-size:0.45rem;font-weight:700;color:white;flex-shrink:0;}
+/* Reaction picker */
+.reaction-picker{position:absolute;bottom:calc(100% + 4px);left:0;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:6px 8px;display:flex;gap:4px;box-shadow:var(--shadow-md);z-index:100;animation:fadeUp 0.15s ease;}
+.mine .reaction-picker{left:auto;right:0;}
+.reaction-picker-btn{font-size:1.1rem;padding:4px;border:none;background:none;cursor:pointer;border-radius:6px;transition:transform 0.1s;}
+.reaction-picker-btn:hover{transform:scale(1.3);}
+/* Reply bar */
+.reply-bar{display:flex;align-items:center;gap:8px;padding:6px 14px;background:var(--gold-pale);border-top:1px solid var(--gold-border);font-size:0.76rem;color:var(--text-2);}
+.reply-bar-text{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.reply-bar strong{color:var(--warn);}
+.reply-bar-close{background:none;border:none;cursor:pointer;color:var(--text-3);font-size:0.9rem;flex-shrink:0;}
+/* Chat input */
+.chat-input-area{border-top:1px solid var(--border);padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:var(--white);}
+.chat-input-row{display:flex;align-items:flex-end;gap:8px;}
+.chat-input{flex:1;border:1px solid var(--border);border-radius:20px;padding:9px 14px;font-family:'Geist',sans-serif;font-size:0.84rem;color:var(--text);outline:none;resize:none;max-height:100px;overflow-y:auto;background:var(--bg);transition:border-color 0.15s;line-height:1.4;}
+.chat-input:focus{border-color:var(--gold);background:var(--white);}
+.chat-input::placeholder{color:var(--text-3);}
+.chat-send-btn{width:36px;height:36px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;color:white;font-size:0.9rem;}
+.chat-send-btn:hover{background:var(--gold-hover);transform:scale(1.05);}
+.chat-send-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none;}
+.chat-attach-btn{width:34px;height:34px;border-radius:50%;background:none;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;color:var(--text-3);font-size:0.9rem;}
+.chat-attach-btn:hover{border-color:var(--gold);color:var(--gold);}
+.chat-empty{text-align:center;padding:32px 16px;color:var(--text-3);font-size:0.8rem;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+.chat-empty-icon{font-size:1.8rem;}
+.chat-date-divider{text-align:center;font-size:0.66rem;color:var(--text-3);margin:8px 0;position:relative;}
+.chat-date-divider::before,.chat-date-divider::after{content:'';position:absolute;top:50%;width:calc(50% - 40px);height:1px;background:var(--border);}
+.chat-date-divider::before{left:0;}.chat-date-divider::after{right:0;}
+/* Mobile chat */
+@media(max-width:640px){
+  .chat-window{height:360px;}
+  .msg-bubble{max-width:85%;}
+  .reply-preview{max-width:85%;}
+  .msg-image{max-width:180px;}
+  .course-tabs{margin:0 14px 12px;}
+}
+</style>
 <header>
   <div class="logo" onclick="switchPage('community')"><div class="logo-gem"></div>4.0</div>
   <nav>
@@ -459,7 +533,10 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 <script>
   // v3.0 - safe onclick, persistent upvotes
   let currentUser=null,currentProfile=null,searchTimeout=null;
-  const _courses={};  // global store to avoid inline data in onclick
+  const _courses={};
+  const _chatSubs={};       // active realtime subscriptions per course
+  const _chatReplying={};   // replyTo state per course
+  const _msgReactions={};   // reactions cache  // global store to avoid inline data in onclick
 
   async function init(){
     const {data:{user}} = await db.auth.getUser();
@@ -556,16 +633,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       const avgRating=ratings.length?(ratings.reduce((s,r)=>s+parseFloat(r.rating),0)/ratings.length).toFixed(1):null;
       const myRating=(myRatings||[]).find(r=>r.course_id===course.id);
       const comments=(allComments||[]).filter(c=>c.course_id===course.id);
-      const sliderVal=myRating?myRating.rating:3.0;
-      const fillPct=((sliderVal-1)/4)*100;
-      const scheduleHTML=course.schedule?'<div class="schedule-display">'+course.schedule.split(',').map(s=>'<span class="schedule-chip">'+s.trim()+'</span>').join('')+'</div>':'';
-      const commentsHTML=comments.length?comments.map(function(c){
-        const isUpvoted=upvotedSet.has(c.id);
-        const isMine=c.user_id===currentUser.id;
-        const liveCount=countMap[c.id]||0;
-        return '<div class="comment"><div class="comment-hdr"><span class="comment-author">'+(c.author_name||'anonymous')+'</span><span class="comment-time">'+timeAgo(c.created_at)+'</span></div>'+c.content+'<div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="upvote-btn'+(isUpvoted?' upvoted':'')+'" style="'+(isUpvoted?'color:var(--warn);border-color:var(--gold-border);':'')+'" onclick="upvote(this,\''+c.id+'\')">&#x25B2; '+liveCount+' helpful</button>'+(isMine?'<button class="upvote-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="deleteComment(\''+c.id+'\',\''+course.id+'\')">Delete</button>':'')+'</div></div>';
-      }).join(''):'<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 8px;">No tips yet &mdash; be the first!</div>';
-      return '<div class="course-card"><div class="card-stripe '+getStripe(avgRating?parseFloat(avgRating):null)+'"></div><div class="card-main"><div class="card-header"><div class="card-left"><div class="course-code">'+course.code+(course.semester?' &middot; '+course.semester+' '+(course.year||''):'')+'</div><div class="course-name">'+course.name+'</div><div class="course-meta"><span class="meta-item">Prof. '+course.professor+'</span><span class="meta-item">'+ratings.length+' rating'+(ratings.length!==1?'s':'')+'</span><span class="meta-item">'+comments.length+' tip'+(comments.length!==1?'s':'')+'</span></div></div><div class="card-right"><div class="difficulty-display"><div class="difficulty-num" id="avgNum-'+course.id+'" style="color:'+getDiffColor(avgRating?parseFloat(avgRating):null)+'">'+(avgRating||'&mdash;')+'</div><div class="difficulty-label">live difficulty</div></div><button class="report-btn" onclick="reportCourse(\''+course.id+'\')">&#x2691; Report</button><button class="report-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="leaveCourse(\''+course.id+'\')">&#x2715; Leave</button></div></div>'+scheduleHTML+'<div class="difficulty-section"><div class="diff-section-header"><div class="diff-section-title">Difficulty Rating</div><div class="diff-count" id="ratingCount-'+course.id+'">'+ratings.length+' student'+(ratings.length!==1?'s':'')+' rated</div></div><div class="diff-labels"><span class="diff-label-text">Easy</span><span class="diff-label-text">Hard</span></div><input type="range" min="1" max="5" step="0.1" value="'+sliderVal+'" style="--fill:'+fillPct+'%" oninput="updateSlider(this)" id="slider-'+course.id+'"><div class="your-rating-row"><span class="your-rating-label">'+(myRating?'Your rating (drag to update)':'Drag to rate')+'</span><div style="display:flex;align-items:center;gap:8px"><span class="your-rating-val" id="sliderVal-'+course.id+'">'+parseFloat(sliderVal).toFixed(1)+'</span><button class="rate-btn" id="rateBtn-'+course.id+'" onclick="submitRating(\''+course.id+'\')">'+(myRating?'Update':'Submit')+'</button></div></div></div></div><div class="comments-section" id="comments-'+course.id+'"><div class="comments-toggle" onclick="toggleComments(\''+course.id+'\')"><div class="comments-toggle-label">Student Tips<span class="comments-count">'+comments.length+'</span></div><span class="toggle-arrow">&#x25BC;</span></div><div class="comments-body"><div id="commentsList-'+course.id+'">'+commentsHTML+'</div><div class="add-comment"><div class="anon-row"><label class="anon-toggle"><input type="checkbox" id="anon-'+course.id+'"> Post anonymously</label></div><div class="comment-input-row"><textarea class="comment-input" id="tipInput-'+course.id+'" placeholder="Share a tip, past exam info, or study advice..." rows="1"></textarea><button class="post-btn" onclick="postTip(\''+course.id+'\')">Post</button></div></div></div></div></div>';
+      return buildCardHTML(course,ratings,avgRating,myRating,comments,upvotedSet,countMap);
     }).join('');
   }
 
@@ -925,7 +993,370 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     }
   });
 
+  // ─── BUILD CARD HTML (template literal, no escaping hell) ───────────────────
+  function buildCardHTML(course, ratings, avgRating, myRating, comments, upvotedSet, countMap) {
+    const sliderVal = myRating ? myRating.rating : 3.0;
+    const fillPct = ((sliderVal - 1) / 4) * 100;
+    const scheduleHTML = course.schedule ? `<div class="schedule-display">${course.schedule.split(',').map(s=>`<span class="schedule-chip">${s.trim()}</span>`).join('')}</div>` : '';
+    const commentsHTML = comments.length ? comments.map(c => {
+      const isUpvoted = upvotedSet.has(c.id);
+      const isMine = c.user_id === currentUser.id;
+      const liveCount = countMap[c.id] || 0;
+      return `<div class="comment"><div class="comment-hdr"><span class="comment-author">${c.author_name||'anonymous'}</span><span class="comment-time">${timeAgo(c.created_at)}</span></div>${c.content}<div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="upvote-btn${isUpvoted?' upvoted':''}" style="${isUpvoted?'color:var(--warn);border-color:var(--gold-border);':''}" onclick="upvote(this,'${c.id}')">&#x25B2; ${liveCount} helpful</button>${isMine?`<button class="upvote-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="deleteComment('${c.id}','${course.id}')">Delete</button>`:''}</div></div>`;
+    }).join('') : '<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 8px;">No tips yet &mdash; be the first!</div>';
+
+    return `
+    <div class="course-card">
+      <div class="card-stripe ${getStripe(avgRating?parseFloat(avgRating):null)}"></div>
+      <div class="card-main">
+        <div class="card-header">
+          <div class="card-left">
+            <div class="course-code">${course.code}${course.semester?' &middot; '+course.semester+' '+(course.year||''):''}</div>
+            <div class="course-name">${course.name}</div>
+            <div class="course-meta">
+              <span class="meta-item">Prof. ${course.professor}</span>
+              <span class="meta-item">${ratings.length} rating${ratings.length!==1?'s':''}</span>
+              <span class="meta-item">${comments.length} tip${comments.length!==1?'s':''}</span>
+            </div>
+          </div>
+          <div class="card-right">
+            <div class="difficulty-display">
+              <div class="difficulty-num" id="avgNum-${course.id}" style="color:${getDiffColor(avgRating?parseFloat(avgRating):null)}">${avgRating||'&mdash;'}</div>
+              <div class="difficulty-label">live difficulty</div>
+            </div>
+            <button class="report-btn" onclick="reportCourse('${course.id}')">&#x2691; Report</button>
+            <button class="report-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="leaveCourse('${course.id}')">&#x2715; Leave</button>
+          </div>
+        </div>
+        ${scheduleHTML}
+        <div class="difficulty-section">
+          <div class="diff-section-header">
+            <div class="diff-section-title">Difficulty Rating</div>
+            <div class="diff-count" id="ratingCount-${course.id}">${ratings.length} student${ratings.length!==1?'s':''} rated</div>
+          </div>
+          <div class="diff-labels"><span class="diff-label-text">Easy</span><span class="diff-label-text">Hard</span></div>
+          <input type="range" min="1" max="5" step="0.1" value="${sliderVal}" style="--fill:${fillPct}%" oninput="updateSlider(this)" id="slider-${course.id}">
+          <div class="your-rating-row">
+            <span class="your-rating-label">${myRating?'Your rating (drag to update)':'Drag to rate'}</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="your-rating-val" id="sliderVal-${course.id}">${parseFloat(sliderVal).toFixed(1)}</span>
+              <button class="rate-btn" id="rateBtn-${course.id}" onclick="submitRating('${course.id}')">${myRating?'Update':'Submit'}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="course-tabs">
+        <button class="course-tab active" onclick="switchCourseTab('tips',this,'${course.id}')">&#x1F4AC; Tips</button>
+        <button class="course-tab" onclick="switchCourseTab('chat',this,'${course.id}')">&#x1F4E8; Chat</button>
+      </div>
+      <div class="course-tab-content active" id="courseTab-tips-${course.id}">
+        <div class="comments-section" id="comments-${course.id}">
+          <div class="comments-toggle" onclick="toggleComments('${course.id}')">
+            <div class="comments-toggle-label">Student Tips<span class="comments-count">${comments.length}</span></div>
+            <span class="toggle-arrow">&#x25BC;</span>
+          </div>
+          <div class="comments-body">
+            <div id="commentsList-${course.id}">${commentsHTML}</div>
+            <div class="add-comment">
+              <div class="anon-row"><label class="anon-toggle"><input type="checkbox" id="anon-${course.id}"> Post anonymously</label></div>
+              <div class="comment-input-row">
+                <textarea class="comment-input" id="tipInput-${course.id}" placeholder="Share a tip, past exam info, or study advice..." rows="1"></textarea>
+                <button class="post-btn" onclick="postTip('${course.id}')">Post</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="course-tab-content" id="courseTab-chat-${course.id}">
+        <div class="chat-window" id="chatWindow-${course.id}">
+          <div class="chat-messages" id="chatMessages-${course.id}">
+            <div class="chat-empty"><div class="chat-empty-icon">&#x1F4AC;</div><div>Open chat to start messaging</div></div>
+          </div>
+          <div class="chat-input-area">
+            <div class="reply-bar" id="replyBar-${course.id}" style="display:none">
+              <span class="reply-bar-text" id="replyBarText-${course.id}"></span>
+              <button class="reply-bar-close" onclick="cancelReply('${course.id}')">&#x2715;</button>
+            </div>
+            <div class="chat-input-row">
+              <button class="chat-attach-btn" onclick="triggerFileUpload('${course.id}')">&#x1F4CE;</button>
+              <textarea class="chat-input" id="chatInput-${course.id}" placeholder="Message #${course.code}..." rows="1" oninput="autoResizeChatInput(this)" onkeydown="chatKeydown(event,'${course.id}')"></textarea>
+              <button class="chat-send-btn" id="chatSendBtn-${course.id}" onclick="sendMessage('${course.id}')">&#x27A4;</button>
+            </div>
+            <input type="file" id="fileInput-${course.id}" style="display:none" accept="image/jpeg,image/png,image/webp,image/gif,application/pdf" onchange="handleFileUpload(this,'${course.id}')">
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // ─── COURSE TABS ────────────────────────────────────────────────────────────
+  function switchCourseTab(tab, btn, courseId) {
+    const card = btn.closest('.course-card');
+    card.querySelectorAll('.course-tab').forEach(b => b.classList.remove('active'));
+    card.querySelectorAll('.course-tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('courseTab-' + tab + '-' + courseId).classList.add('active');
+    if (tab === 'chat') loadChat(courseId);
+  }
+
+  // ─── CHAT LOAD & REALTIME ───────────────────────────────────────────────────
+  async function loadChat(courseId) {
+    const container = document.getElementById('chatMessages-' + courseId);
+    if (!container) return;
+    container.innerHTML = '<div class="chat-empty"><div class="loading-spinner"></div></div>';
+
+    // Load messages + reactions + seen
+    const {data: messages} = await db.from('messages').select('*').eq('course_id', courseId).order('created_at', {ascending: true}).limit(100);
+    const msgIds = (messages||[]).map(m => m.id);
+    const {data: reactions} = msgIds.length ? await db.from('message_reactions').select('*').in('message_id', msgIds) : {data: []};
+    const {data: seen} = msgIds.length ? await db.from('message_seen').select('*').in('message_id', msgIds) : {data: []};
+
+    renderMessages(courseId, messages||[], reactions||[], seen||[]);
+    scrollChatBottom(courseId);
+    markAllSeen(courseId, messages||[]);
+
+    // Realtime subscription
+    if (_chatSubs[courseId]) _chatSubs[courseId].unsubscribe();
+    _chatSubs[courseId] = db.channel('chat-' + courseId)
+      .on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'messages', filter: 'course_id=eq.' + courseId}, async (payload) => {
+        const msg = payload.new;
+        // Fetch reactions for this new message (none yet)
+        appendMessage(courseId, msg, [], seen||[]);
+        scrollChatBottom(courseId);
+        await db.from('message_seen').upsert({message_id: msg.id, user_id: currentUser.id}, {onConflict: 'message_id,user_id'});
+      })
+      .on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'message_reactions'}, () => {
+        refreshReactions(courseId);
+      })
+      .on('postgres_changes', {event: 'DELETE', schema: 'public', table: 'message_reactions'}, () => {
+        refreshReactions(courseId);
+      })
+      .subscribe();
+  }
+
+  async function refreshReactions(courseId) {
+    const container = document.getElementById('chatMessages-' + courseId);
+    if (!container) return;
+    const msgIds = [...container.querySelectorAll('.msg-bubble')].map(b => b.dataset.msgId).filter(Boolean);
+    if (!msgIds.length) return;
+    const {data: reactions} = await db.from('message_reactions').select('*').in('message_id', msgIds);
+    (reactions||[]).forEach(r => {
+      if (!_msgReactions[r.message_id]) _msgReactions[r.message_id] = [];
+    });
+    // Re-render reaction bars
+    msgIds.forEach(msgId => {
+      const bar = document.getElementById('reactBar-' + msgId);
+      if (!bar) return;
+      const msgReactions = (reactions||[]).filter(r => r.message_id === msgId);
+      bar.innerHTML = buildReactionsHTML(msgId, msgReactions);
+    });
+  }
+
+  function renderMessages(courseId, messages, reactions, seen) {
+    const container = document.getElementById('chatMessages-' + courseId);
+    if (!container) return;
+    if (!messages.length) {
+      container.innerHTML = '<div class="chat-empty"><div class="chat-empty-icon">&#x1F4AC;</div><div>No messages yet. Say hello!</div></div>';
+      return;
+    }
+    let html = '';
+    let lastDate = '';
+    let lastUserId = null;
+    messages.forEach((msg, i) => {
+      const msgDate = new Date(msg.created_at).toLocaleDateString();
+      if (msgDate !== lastDate) {
+        html += `<div class="chat-date-divider">${msgDate === new Date().toLocaleDateString() ? 'Today' : msgDate}</div>`;
+        lastDate = msgDate;
+        lastUserId = null;
+      }
+      const isMine = msg.user_id === currentUser.id;
+      const showMeta = lastUserId !== msg.user_id;
+      lastUserId = msg.user_id;
+      const msgReactions = reactions.filter(r => r.message_id === msg.id);
+      const seenBy = seen.filter(s => s.message_id === msg.id && s.user_id !== msg.user_id);
+      const isLast = i === messages.length - 1;
+      html += buildMsgHTML(msg, isMine, showMeta, msgReactions, seenBy, isLast, messages);
+    });
+    container.innerHTML = html;
+  }
+
+  function appendMessage(courseId, msg, reactions, seen) {
+    const container = document.getElementById('chatMessages-' + courseId);
+    if (!container) return;
+    // Remove empty state
+    const empty = container.querySelector('.chat-empty');
+    if (empty) empty.remove();
+    const isMine = msg.user_id === currentUser.id;
+    const div = document.createElement('div');
+    div.innerHTML = buildMsgHTML(msg, isMine, true, reactions, [], true, []);
+    container.appendChild(div.firstElementChild);
+  }
+
+  function buildMsgHTML(msg, isMine, showMeta, reactions, seenBy, isLast, allMessages) {
+    const replyMsg = msg.reply_to ? allMessages.find(m => m.id === msg.reply_to) : null;
+    const replyHTML = replyMsg ? `<div class="reply-preview"><div class="reply-preview-author">${replyMsg.author_name||'anonymous'}</div>${replyMsg.content||'📎 File'}</div>` : '';
+    const seenHTML = (isMine && isLast && seenBy.length) ? `<div class="seen-row">${seenBy.slice(0,5).map(s=>`<div class="seen-avatar" title="Seen">${(s.user_id||'?').slice(0,2).toUpperCase()}</div>`).join('')}</div>` : '';
+    const contentHTML = msg.file_url ? buildFileHTML(msg) : `<div class="msg-bubble${isMine?' mine':''}" data-msg-id="${msg.id}" onclick="showReactionPicker(event,'${msg.id}','${isMine}')">${msg.content}</div>`;
+
+    return `<div class="msg-group${isMine?' mine':''}">
+      ${showMeta && !isMine ? `<div class="msg-meta"><span class="msg-author">${msg.author_name||'anonymous'}</span><span class="msg-time">${timeAgo(msg.created_at)}</span></div>` : ''}
+      ${replyHTML}
+      <div class="msg-bubble-wrap">
+        ${contentHTML}
+        <div class="reactions-bar" id="reactBar-${msg.id}">${buildReactionsHTML(msg.id, reactions)}</div>
+      </div>
+      ${seenHTML}
+    </div>`;
+  }
+
+  function buildFileHTML(msg) {
+    const isImage = msg.file_url && /\.(jpg|jpeg|png|webp|gif)$/i.test(msg.file_url);
+    if (isImage) return `<img class="msg-image" src="${msg.file_url}" alt="${msg.file_name||'image'}" onclick="window.open('${msg.file_url}','_blank')">`;
+    return `<a class="msg-file" href="${msg.file_url}" target="_blank"><div class="msg-file-icon">&#x1F4C4;</div><div class="msg-file-info"><div class="msg-file-name">${msg.file_name||'File'}</div><div class="msg-file-size">Tap to open</div></div></a>`;
+  }
+
+  function buildReactionsHTML(msgId, reactions) {
+    if (!reactions.length) return '';
+    const grouped = {};
+    reactions.forEach(r => {
+      if (!grouped[r.emoji]) grouped[r.emoji] = [];
+      grouped[r.emoji].push(r.user_id);
+    });
+    return Object.entries(grouped).map(([emoji, users]) => {
+      const isMine = users.includes(currentUser.id);
+      return `<span class="reaction-chip${isMine?' mine-reaction':''}" onclick="toggleReaction('${msgId}','${emoji}')">${emoji}<span class="reaction-count">${users.length}</span></span>`;
+    }).join('');
+  }
+
+  function scrollChatBottom(courseId) {
+    const el = document.getElementById('chatMessages-' + courseId);
+    if (el) setTimeout(() => el.scrollTop = el.scrollHeight, 50);
+  }
+
+  async function markAllSeen(courseId, messages) {
+    if (!messages.length) return;
+    const unseen = messages.filter(m => m.user_id !== currentUser.id);
+    if (!unseen.length) return;
+    await db.from('message_seen').upsert(
+      unseen.map(m => ({message_id: m.id, user_id: currentUser.id})),
+      {onConflict: 'message_id,user_id', ignoreDuplicates: true}
+    );
+  }
+
+  // ─── SEND MESSAGE ───────────────────────────────────────────────────────────
+  async function sendMessage(courseId) {
+    const input = document.getElementById('chatInput-' + courseId);
+    const content = input.value.trim();
+    if (!content) return;
+    const btn = document.getElementById('chatSendBtn-' + courseId);
+    btn.disabled = true;
+    const replyTo = _chatReplying[courseId] || null;
+    const authorName = currentProfile && currentProfile.username ? currentProfile.username : 'anonymous';
+    const {error} = await db.from('messages').insert({course_id: courseId, user_id: currentUser.id, author_name: authorName, content, reply_to: replyTo});
+    if (!error) {
+      input.value = '';
+      input.style.height = 'auto';
+      cancelReply(courseId);
+    }
+    btn.disabled = false;
+  }
+
+  function chatKeydown(e, courseId) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(courseId); }
+  }
+
+  function autoResizeChatInput(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 100) + 'px';
+  }
+
+  // ─── REPLY ──────────────────────────────────────────────────────────────────
+  function setReply(courseId, msgId, authorName, content) {
+    _chatReplying[courseId] = msgId;
+    const bar = document.getElementById('replyBar-' + courseId);
+    const txt = document.getElementById('replyBarText-' + courseId);
+    txt.innerHTML = `Replying to <strong>${authorName}</strong>: ${content.slice(0,60)}${content.length>60?'...':''}`;
+    bar.style.display = 'flex';
+    document.getElementById('chatInput-' + courseId).focus();
+  }
+
+  function cancelReply(courseId) {
+    _chatReplying[courseId] = null;
+    const bar = document.getElementById('replyBar-' + courseId);
+    if (bar) bar.style.display = 'none';
+  }
+
+  // ─── REACTIONS ──────────────────────────────────────────────────────────────
+  const EMOJIS = ['👍','❤️','😂','😮','🔥','💯'];
+  let _pickerMsgId = null;
+
+  function showReactionPicker(e, msgId, isMine) {
+    e.stopPropagation();
+    // Remove any existing picker
+    document.querySelectorAll('.reaction-picker').forEach(p => p.remove());
+    _pickerMsgId = msgId;
+    const bubble = e.currentTarget;
+    const picker = document.createElement('div');
+    picker.className = 'reaction-picker';
+    picker.innerHTML = EMOJIS.map(em => `<button class="reaction-picker-btn" onclick="toggleReaction('${msgId}','${em}');this.closest('.reaction-picker').remove();">${em}</button>`).join('') +
+      `<button class="reaction-picker-btn" style="font-size:0.7rem;color:var(--text-3);" onclick="showReplyFromPicker('${msgId}');this.closest('.reaction-picker').remove();">↩️</button>`;
+    bubble.style.position = 'relative';
+    bubble.appendChild(picker);
+    setTimeout(() => document.addEventListener('click', removePicker, {once: true}), 10);
+  }
+
+  function removePicker() { document.querySelectorAll('.reaction-picker').forEach(p => p.remove()); }
+
+  async function showReplyFromPicker(msgId) {
+    // Find the message in the DOM to get author/content
+    const bubble = document.querySelector(`[data-msg-id="${msgId}"]`);
+    if (!bubble) return;
+    const group = bubble.closest('.msg-group');
+    const author = group.querySelector('.msg-author')?.textContent || 'anonymous';
+    const content = bubble.textContent || '';
+    // Find which courseId this belongs to
+    const chatMessages = bubble.closest('.chat-messages');
+    const courseId = chatMessages?.id?.replace('chatMessages-', '');
+    if (courseId) setReply(courseId, msgId, author, content);
+  }
+
+  async function toggleReaction(msgId, emoji) {
+    const {data: existing} = await db.from('message_reactions').select('*').eq('message_id', msgId).eq('user_id', currentUser.id).eq('emoji', emoji).maybeSingle();
+    if (existing) {
+      await db.from('message_reactions').delete().eq('message_id', msgId).eq('user_id', currentUser.id).eq('emoji', emoji);
+    } else {
+      await db.from('message_reactions').upsert({message_id: msgId, user_id: currentUser.id, emoji}, {onConflict: 'message_id,user_id'});
+    }
+  }
+
+  // ─── FILE UPLOAD ─────────────────────────────────────────────────────────────
+  function triggerFileUpload(courseId) {
+    document.getElementById('fileInput-' + courseId).click();
+  }
+
+  async function handleFileUpload(input, courseId) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 7340032) { showToast('File too large. Max 7MB.'); return; }
+    const btn = document.getElementById('chatSendBtn-' + courseId);
+    btn.disabled = true;
+    showToast('Uploading...');
+    const ext = file.name.split('.').pop();
+    const path = `${courseId}/${Date.now()}.${ext}`;
+    const {data, error} = await db.storage.from('course-files').upload(path, file, {contentType: file.type});
+    if (error) { showToast('Upload failed.'); btn.disabled = false; return; }
+    const {data: urlData} = db.storage.from('course-files').getPublicUrl(path);
+    const authorName = currentProfile && currentProfile.username ? currentProfile.username : 'anonymous';
+    await db.from('messages').insert({course_id: courseId, user_id: currentUser.id, author_name: authorName, content: '', file_url: urlData.publicUrl, file_name: file.name, reply_to: _chatReplying[courseId]||null});
+    cancelReply(courseId);
+    btn.disabled = false;
+    input.value = '';
+    showToast('File shared!');
+  }
+
   init();
 </script>
+</body>
+</html>
 </body>
 </html>
