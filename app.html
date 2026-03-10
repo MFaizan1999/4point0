@@ -288,9 +288,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       <div class="modal-field"><label>Course Name</label><input type="text" id="newName" placeholder="e.g. Data Structures and Algorithms" autocomplete="off"></div>
       <div class="modal-field">
         <label>Professor</label>
-        <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:9px 12px;" id="profInputWrap">
-          <span style="font-size:0.84rem;color:var(--text-2);font-weight:500;flex-shrink:0;">Dr.</span>
-          <input type="text" id="newProf" placeholder="Full Name" autocomplete="off" style="border:none;background:none;outline:none;font-family:'Geist',sans-serif;font-size:0.84rem;color:var(--text);width:100%;" onfocus="document.getElementById('profInputWrap').style.borderColor='var(--gold)'" onblur="document.getElementById('profInputWrap').style.borderColor='var(--border)'">
+        <div class="schedule-grid" style="gap:8px;">
+          <input type="text" id="newProfFirst" placeholder="First name" autocomplete="off">
+          <input type="text" id="newProfLast" placeholder="Last name" autocomplete="off">
         </div>
       </div>
       <div class="modal-field">
@@ -346,8 +346,15 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 <div class="modal-overlay" id="facultyModal">
   <div class="modal">
     <div class="modal-title">Add Professor</div>
-    <div class="modal-sub" id="facultyModalSub">Select their faculty so students can find them easily.</div>
+    <div class="modal-sub" id="facultyModalSub">Add a professor so students can find and rate them.</div>
     <div class="modal-form">
+      <div class="modal-field">
+        <label>Professor Name</label>
+        <div class="schedule-grid" style="gap:8px;">
+          <input type="text" id="profFirstName" placeholder="First name" autocomplete="off">
+          <input type="text" id="profLastName" placeholder="Last name" autocomplete="off">
+        </div>
+      </div>
       <div class="modal-field">
         <label>Faculty / Department</label>
         <select id="facultySelect">
@@ -392,8 +399,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   </div>
 </div>
 <script>
-  // v2.1 - persistent upvotes
+  // v3.0 - safe onclick, persistent upvotes
   let currentUser=null,currentProfile=null,searchTimeout=null;
+  const _courses={};  // global store to avoid inline data in onclick
 
   async function init(){
     const {data:{user}} = await db.auth.getUser();
@@ -431,8 +439,12 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     setTimeout(()=>t.classList.remove('show'),2500);
   }
 
+  // Store last search val globally so openModal can access it safely
+  let _lastSearchVal='';
+
   async function onSearch(val){
     clearTimeout(searchTimeout);
+    _lastSearchVal=val;
     const results=document.getElementById('searchResults');
     if(!val.trim()){results.style.display='none';return;}
     searchTimeout=setTimeout(async()=>{
@@ -443,7 +455,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       if(courses&&courses.length>0){
         html+=courses.map(c=>'<div class="search-result-item"><div class="result-info"><div class="result-code">'+c.code+(c.semester?' &middot; '+c.semester+' '+(c.year||''):'')+'</div><div class="result-name">'+c.name+'</div><div class="result-meta">Prof. '+c.professor+'</div></div>'+(enrolledIds.has(c.id)?'<button class="join-btn joined">Joined &#x2713;</button>':'<button class="join-btn" onclick="joinCourse(\''+c.id+'\')">+ Join</button>')+'</div>').join('');
       }
-      html+='<div class="create-course-btn" onclick="openModal(\''+val.replace(/'/g,"\\'")+'\'"><span>+</span> Create "'+val+'" as a new course</div>';
+      html+='<div class="create-course-btn" onclick="openModal()"><span>+</span> Create "'+val+'" as a new course</div>';
       results.innerHTML=html;results.style.display='block';
     },300);
   }
@@ -477,6 +489,10 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     const {data:upvoteCounts} = allCommentIds.length ? await db.from('comment_upvotes').select('comment_id').in('comment_id',allCommentIds) : {data:[]};
     const countMap={};
     (upvoteCounts||[]).forEach(u=>{countMap[u.comment_id]=(countMap[u.comment_id]||0)+1;});
+
+    // Store course data globally for safe onclick access
+    (courses||[]).forEach(c=>{_courses[c.id]=c;});
+
     container.innerHTML=(courses||[]).map(function(course){
       const ratings=(allRatings||[]).filter(r=>r.course_id===course.id);
       const avgRating=ratings.length?(ratings.reduce((s,r)=>s+parseFloat(r.rating),0)/ratings.length).toFixed(1):null;
@@ -491,7 +507,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
         const liveCount=countMap[c.id]||0;
         return '<div class="comment"><div class="comment-hdr"><span class="comment-author">'+(c.author_name||'anonymous')+'</span><span class="comment-time">'+timeAgo(c.created_at)+'</span></div>'+c.content+'<div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="upvote-btn'+(isUpvoted?' upvoted':'')+'" style="'+(isUpvoted?'color:var(--warn);border-color:var(--gold-border);':'')+'" onclick="upvote(this,\''+c.id+'\')">&#x25B2; '+liveCount+' helpful</button>'+(isMine?'<button class="upvote-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="deleteComment(\''+c.id+'\',\''+course.id+'\')">Delete</button>':'')+'</div></div>';
       }).join(''):'<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 8px;">No tips yet &mdash; be the first!</div>';
-      return '<div class="course-card"><div class="card-stripe '+getStripe(avgRating?parseFloat(avgRating):null)+'"></div><div class="card-main"><div class="card-header"><div class="card-left"><div class="course-code">'+course.code+(course.semester?' &middot; '+course.semester+' '+(course.year||''):'')+'</div><div class="course-name">'+course.name+'</div><div class="course-meta"><span class="meta-item">Prof. '+course.professor+'</span><span class="meta-item">'+ratings.length+' rating'+(ratings.length!==1?'s':'')+'</span><span class="meta-item">'+comments.length+' tip'+(comments.length!==1?'s':'')+'</span></div></div><div class="card-right"><div class="difficulty-display"><div class="difficulty-num" id="avgNum-'+course.id+'" style="color:'+getDiffColor(avgRating?parseFloat(avgRating):null)+'">'+(avgRating||'&mdash;')+'</div><div class="difficulty-label">live difficulty</div></div><button class="report-btn" onclick="reportCourse(\''+course.code+'\',\''+course.name.replace(/'/g,"\\'")+'\'">&#x2691; Report</button><button class="report-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="leaveCourse(\''+course.id+'\')">&#x2715; Leave</button></div></div>'+scheduleHTML+'<div class="difficulty-section"><div class="diff-section-header"><div class="diff-section-title">Difficulty Rating</div><div class="diff-count" id="ratingCount-'+course.id+'">'+ratings.length+' student'+(ratings.length!==1?'s':'')+' rated</div></div><div class="diff-labels"><span class="diff-label-text">Easy</span><span class="diff-label-text">Hard</span></div><input type="range" min="1" max="5" step="0.1" value="'+sliderVal+'" style="--fill:'+fillPct+'%" oninput="updateSlider(this)" id="slider-'+course.id+'"><div class="your-rating-row"><span class="your-rating-label">'+(myRating?'Your rating (drag to update)':'Drag to rate')+'</span><div style="display:flex;align-items:center;gap:8px"><span class="your-rating-val" id="sliderVal-'+course.id+'">'+parseFloat(sliderVal).toFixed(1)+'</span><button class="rate-btn" id="rateBtn-'+course.id+'" onclick="submitRating(\''+course.id+'\')"> '+(myRating?'Update':'Submit')+'</button></div></div></div></div><div class="comments-section" id="comments-'+course.id+'"><div class="comments-toggle" onclick="toggleComments(\''+course.id+'\')"><div class="comments-toggle-label">Student Tips<span class="comments-count">'+comments.length+'</span></div><span class="toggle-arrow">&#x25BC;</span></div><div class="comments-body"><div id="commentsList-'+course.id+'">'+commentsHTML+'</div><div class="add-comment"><div class="anon-row"><label class="anon-toggle"><input type="checkbox" id="anon-'+course.id+'"> Post anonymously</label></div><div class="comment-input-row"><textarea class="comment-input" id="tipInput-'+course.id+'" placeholder="Share a tip, past exam info, or study advice..." rows="1"></textarea><button class="post-btn" onclick="postTip(\''+course.id+'\')">Post</button></div></div></div></div></div>';
+      return '<div class="course-card"><div class="card-stripe '+getStripe(avgRating?parseFloat(avgRating):null)+'"></div><div class="card-main"><div class="card-header"><div class="card-left"><div class="course-code">'+course.code+(course.semester?' &middot; '+course.semester+' '+(course.year||''):'')+'</div><div class="course-name">'+course.name+'</div><div class="course-meta"><span class="meta-item">Prof. '+course.professor+'</span><span class="meta-item">'+ratings.length+' rating'+(ratings.length!==1?'s':'')+'</span><span class="meta-item">'+comments.length+' tip'+(comments.length!==1?'s':'')+'</span></div></div><div class="card-right"><div class="difficulty-display"><div class="difficulty-num" id="avgNum-'+course.id+'" style="color:'+getDiffColor(avgRating?parseFloat(avgRating):null)+'">'+(avgRating||'&mdash;')+'</div><div class="difficulty-label">live difficulty</div></div><button class="report-btn" onclick="reportCourse(\''+course.id+'\')">&#x2691; Report</button><button class="report-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="leaveCourse(\''+course.id+'\')">&#x2715; Leave</button></div></div>'+scheduleHTML+'<div class="difficulty-section"><div class="diff-section-header"><div class="diff-section-title">Difficulty Rating</div><div class="diff-count" id="ratingCount-'+course.id+'">'+ratings.length+' student'+(ratings.length!==1?'s':'')+' rated</div></div><div class="diff-labels"><span class="diff-label-text">Easy</span><span class="diff-label-text">Hard</span></div><input type="range" min="1" max="5" step="0.1" value="'+sliderVal+'" style="--fill:'+fillPct+'%" oninput="updateSlider(this)" id="slider-'+course.id+'"><div class="your-rating-row"><span class="your-rating-label">'+(myRating?'Your rating (drag to update)':'Drag to rate')+'</span><div style="display:flex;align-items:center;gap:8px"><span class="your-rating-val" id="sliderVal-'+course.id+'">'+parseFloat(sliderVal).toFixed(1)+'</span><button class="rate-btn" id="rateBtn-'+course.id+'" onclick="submitRating(\''+course.id+'\')">'+(myRating?'Update':'Submit')+'</button></div></div></div></div><div class="comments-section" id="comments-'+course.id+'"><div class="comments-toggle" onclick="toggleComments(\''+course.id+'\')"><div class="comments-toggle-label">Student Tips<span class="comments-count">'+comments.length+'</span></div><span class="toggle-arrow">&#x25BC;</span></div><div class="comments-body"><div id="commentsList-'+course.id+'">'+commentsHTML+'</div><div class="add-comment"><div class="anon-row"><label class="anon-toggle"><input type="checkbox" id="anon-'+course.id+'"> Post anonymously</label></div><div class="comment-input-row"><textarea class="comment-input" id="tipInput-'+course.id+'" placeholder="Share a tip, past exam info, or study advice..." rows="1"></textarea><button class="post-btn" onclick="postTip(\''+course.id+'\')">Post</button></div></div></div></div></div>';
     }).join('');
   }
 
@@ -549,15 +565,27 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     showToast('Tip deleted.');loadMyCourses();
   }
 
+  // reportCourse now uses global _courses store - no string data in onclick
+  function reportCourse(courseId){
+    const course=_courses[courseId]||{};
+    document.getElementById('reportModalSub').textContent='If "'+( course.code||'')+' \u2014 '+(course.name||'')+'" has incorrect info or is a duplicate, please reach out to us directly.';
+    document.getElementById('reportModal').classList.add('open');
+  }
+  document.getElementById('reportModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
+
   let selectedDays=[];
-  function openModal(prefill){
+  function openModal(){
     document.getElementById('searchResults').style.display='none';
-    if(prefill){const p=prefill.trim().split(' ');document.getElementById('newCode').value=(p.length>=2?p.slice(0,2).join(' '):prefill).toUpperCase();}
+    const val=_lastSearchVal.trim();
+    if(val){
+      const p=val.split(' ');
+      document.getElementById('newCode').value=(p.length>=2?p.slice(0,2).join(' '):val).toUpperCase();
+    }
     document.getElementById('createModal').classList.add('open');
   }
   function closeModal(){
     document.getElementById('createModal').classList.remove('open');
-    ['newCode','newName','newProf','newStartTime','newEndTime'].forEach(id=>document.getElementById(id).value='');
+    ['newCode','newName','newProfFirst','newProfLast','newStartTime','newEndTime'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('newYear').value=new Date().getFullYear();
     document.getElementById('newFaculty').value='';document.getElementById('newSemester').value='Fall';
     document.getElementById('modalError').style.display='none';
@@ -572,7 +600,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   async function createCourse(){
     const code=document.getElementById('newCode').value.trim().toUpperCase();
     const name=document.getElementById('newName').value.trim();
-    const rawProf=document.getElementById('newProf').value.trim();
+    const rawFirst=document.getElementById('newProfFirst').value.trim();
+    const rawLast=document.getElementById('newProfLast').value.trim();
+    const rawProf=(rawFirst+' '+rawLast).trim();
     const faculty=document.getElementById('newFaculty').value;
     const startTime=document.getElementById('newStartTime').value,endTime=document.getElementById('newEndTime').value;
     const year=document.getElementById('newYear').value,semester=document.getElementById('newSemester').value;
@@ -593,12 +623,6 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     closeModal();document.getElementById('searchInput').value='';showToast('Course created and joined!');loadMyCourses();
   }
   document.getElementById('createModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-
-  function reportCourse(code,name){
-    document.getElementById('reportModalSub').textContent='If "'+code+' \u2014 '+name+'" has incorrect info or is a duplicate, please reach out to us directly.';
-    document.getElementById('reportModal').classList.add('open');
-  }
-  document.getElementById('reportModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('open');});
 
   async function logout(){await db.auth.signOut();window.location.href='./index.html';}
 
@@ -671,25 +695,37 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       var {data:profs} = await db.from('professors').select('*').eq('university','Memorial University of Newfoundland').ilike('name','%'+val.trim()+'%').limit(6);
       var html='';
       if(profs&&profs.length>0)html+=profs.map(p=>'<div class="search-result-item" onclick="loadProfCard(\''+p.id+'\')"><div class="result-info"><div class="result-name">'+p.name+'</div><div class="result-meta">'+(p.faculty||'Memorial University')+'</div></div><span style="font-size:0.72rem;color:var(--gold);font-weight:600;">View &rarr;</span></div>').join('');
-      html+='<div class="create-course-btn" onclick="openFacultyModal(\'Dr. '+val.trim().replace(/'/g,"\\'")+'\')"><span>+</span> Add "Dr. '+val.trim()+'" as a new professor</div>';
+      html+='<div class="create-course-btn" onclick="openFacultyModal()"><span>+</span> Add "Dr. '+val.trim()+'" as a new professor</div>';
       results.innerHTML=html;results.style.display='block';
+      _lastProfSearchVal=val.trim();
     },300);
   }
 
-  function openFacultyModal(name){
-    pendingProfName=name;
-    document.getElementById('facultyModalSub').textContent='Select the faculty for '+name+'.';
-    document.getElementById('facultySelect').value='';document.getElementById('facultyModalError').style.display='none';
-    document.getElementById('profSearchResults').style.display='none';document.getElementById('facultyModal').classList.add('open');
+  var _lastProfSearchVal='';
+
+  function openFacultyModal(){
+    // Clear name fields and open modal - user fills them in
+    document.getElementById('profFirstName').value='';
+    document.getElementById('profLastName').value='';
+    document.getElementById('facultySelect').value='';
+    document.getElementById('facultyModalError').style.display='none';
+    document.getElementById('profSearchResults').style.display='none';
+    document.getElementById('facultyModal').classList.add('open');
   }
   function closeFacultyModal(){document.getElementById('facultyModal').classList.remove('open');pendingProfName=null;}
 
   async function confirmAddProf(){
-    var faculty=document.getElementById('facultySelect').value,err=document.getElementById('facultyModalError');
+    var err=document.getElementById('facultyModalError');
+    var first=document.getElementById('profFirstName').value.trim();
+    var last=document.getElementById('profLastName').value.trim();
+    var faculty=document.getElementById('facultySelect').value;
+    if(!first||!last){err.textContent='Please enter first and last name.';err.style.display='block';return;}
     if(!faculty){err.textContent='Please select a faculty.';err.style.display='block';return;}
-    var {data:existing} = await db.from('professors').select('id').eq('name',pendingProfName).eq('university','Memorial University of Newfoundland').maybeSingle();
+    function toTitleCase(s){return s.replace(/\w\S*/g,function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();});}
+    var profName='Dr. '+toTitleCase(first)+' '+toTitleCase(last);
+    var {data:existing} = await db.from('professors').select('id').eq('name',profName).eq('university','Memorial University of Newfoundland').maybeSingle();
     if(existing){closeFacultyModal();loadProfCard(existing.id);return;}
-    var {data:newProf,error} = await db.from('professors').insert({name:pendingProfName,university:'Memorial University of Newfoundland',faculty:faculty,created_by:currentUser.id}).select().single();
+    var {data:newProf,error} = await db.from('professors').insert({name:profName,university:'Memorial University of Newfoundland',faculty:faculty,created_by:currentUser.id}).select().single();
     if(!error){closeFacultyModal();loadProfCard(newProf.id);}
   }
   document.getElementById('facultyModal').addEventListener('click',function(e){if(e.target===this)closeFacultyModal();});
@@ -709,6 +745,12 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     var {data:ratings} = await db.from('professor_ratings').select('*').eq('professor_id',profId);
     var {data:myRating} = await db.from('professor_ratings').select('*').eq('professor_id',profId).eq('user_id',currentUser.id).maybeSingle();
     var {data:comments} = await db.from('professor_comments').select('*').eq('professor_id',profId).order('created_at',{ascending:false});
+    var myProfUpvotesRes=await db.from('prof_comment_upvotes').select('comment_id').eq('user_id',currentUser.id);
+    var profUpvotedSet=new Set((myProfUpvotesRes.data||[]).map(u=>u.comment_id));
+    var profCommentIds=(comments||[]).map(c=>c.id);
+    var profCountRes=profCommentIds.length?await db.from('prof_comment_upvotes').select('comment_id').in('comment_id',profCommentIds):{data:[]};
+    var profCountMap={};
+    (profCountRes.data||[]).forEach(function(u){profCountMap[u.comment_id]=(profCountMap[u.comment_id]||0)+1;});
     var total=ratings?ratings.length:0;
     var wtaCount=ratings?ratings.filter(r=>r.would_take_again===true).length:0;
     var wtaPct=total?Math.round((wtaCount/total)*100):null;
@@ -724,12 +766,11 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       chartsHTML='<div class="charts-row"><div class="chart-box"><div class="chart-title">Rating Distribution</div><canvas id="'+canvasId+'" width="120" height="120"></canvas><div class="chart-legend">'+distribLegend+'</div></div><div class="chart-box"><div class="chart-title">Would Take Again</div><canvas id="'+wtaCanvasId+'" width="120" height="120"></canvas><div style="margin-top:8px"><div class="wta-display" style="color:'+(wtaPct>=60?'var(--success)':wtaPct>=40?'var(--warn)':'var(--danger)')+'">'+wtaPct+'%</div><div class="wta-sub">'+wtaCount+' of '+total+' students</div></div></div></div>';
     }
     var ratingOptionsHTML=RATING_OPTIONS.map(o=>'<div class="rating-option '+(myRating&&myRating.rating===o.label?'selected':'')+'" onclick="selectRating(this,\''+o.label+'\',\''+profId+'\')" data-rating="'+o.label+'"><div class="rating-dot" style="background:'+o.color+'"></div>'+o.label+'</div>').join('');
-    var myProfUpvotesRes=await db.from('prof_comment_upvotes').select('comment_id').eq('user_id',currentUser.id);
-    var profUpvotedSet=new Set((myProfUpvotesRes.data||[]).map(u=>u.comment_id));
     var commentsHTML=comments&&comments.length?comments.map(function(c){
       var isUpvoted=profUpvotedSet.has(c.id);
       var isMine=c.user_id===currentUser.id;
-      return '<div class="comment"><div class="comment-hdr"><span class="comment-author">'+(c.author_name||'anonymous')+'</span><span class="comment-time">'+timeAgo(c.created_at)+'</span></div>'+c.content+'<div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="upvote-btn'+(isUpvoted?' upvoted':'')+'" style="'+(isUpvoted?'color:var(--warn);border-color:var(--gold-border);':'')+'" onclick="upvoteProfComment(this,\''+c.id+'\')">&#x25B2; '+c.upvotes+' helpful</button>'+(isMine?'<button class="upvote-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="deleteProfComment(\''+c.id+'\',\''+profId+'\')">Delete</button>':'')+'</div></div>';
+      var profLiveCount=profCountMap[c.id]||0;
+      return '<div class="comment"><div class="comment-hdr"><span class="comment-author">'+(c.author_name||'anonymous')+'</span><span class="comment-time">'+timeAgo(c.created_at)+'</span></div>'+c.content+'<div style="display:flex;gap:6px;margin-top:6px;align-items:center"><button class="upvote-btn'+(isUpvoted?' upvoted':'')+'" style="'+(isUpvoted?'color:var(--warn);border-color:var(--gold-border);':'')+'" onclick="upvoteProfComment(this,\''+c.id+'\')">&#x25B2; '+profLiveCount+' helpful</button>'+(isMine?'<button class="upvote-btn" style="color:var(--danger);border-color:var(--danger-border);" onclick="deleteProfComment(\''+c.id+'\',\''+profId+'\')">Delete</button>':'')+'</div></div>';
     }).join(''):'<div style="color:var(--text-3);font-size:0.79rem;padding:4px 0 12px;">No comments yet &mdash; be the first!</div>';
     display.innerHTML='<div class="prof-card"><div class="card-stripe stripe-default"></div><div class="prof-card-main"><div class="prof-top"><div><div class="prof-name">'+prof.name+'</div><div class="prof-uni">'+(prof.faculty?prof.faculty+' &middot; ':'')+'Memorial University of Newfoundland</div><div class="prof-rating-count">'+total+' rating'+(total!==1?'s':'')+'</div></div><div class="prof-overall-score"><div class="prof-overall-num" style="color:'+(total?RATING_OPTIONS[Math.max(0,5-Math.round(avgScore))].color:'var(--text-3)')+'">'+avgScore+'</div><div class="prof-overall-label">'+(total?avgLabel:'No ratings')+'</div></div></div>'+chartsHTML+'<div class="prof-tabs"><button class="prof-tab active" onclick="switchProfTab(\'rate\',this,\''+profId+'\')">Rate</button><button class="prof-tab" onclick="switchProfTab(\'comments\',this,\''+profId+'\')">Comments ('+(comments?comments.length:0)+')</button><button class="prof-tab" onclick="switchProfTab(\'ai\',this,\''+profId+'\')">AI Summary</button></div><div class="prof-tab-content active" id="profTab-rate-'+profId+'"><div style="font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:10px;">Overall Rating</div><div class="rating-options">'+ratingOptionsHTML+'</div><div style="font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:8px;">Would you take this professor again?</div><div class="would-take-row"><button class="wta-btn '+(myRating&&myRating.would_take_again===true?'selected-yes':'')+'" id="wtaYes-'+profId+'" onclick="selectWTA(true,\''+profId+'\')">&#x1F44D; Yes</button><button class="wta-btn '+(myRating&&myRating.would_take_again===false?'selected-no':'')+'" id="wtaNo-'+profId+'" onclick="selectWTA(false,\''+profId+'\')">&#x1F44E; No</button></div><button class="btn-primary" id="profSubmitBtn-'+profId+'" onclick="submitProfRating(\''+profId+'\')">'+(myRating?'Update Rating':'Submit Rating')+'</button></div><div class="prof-tab-content" id="profTab-comments-'+profId+'"><div style="margin-bottom:12px">'+commentsHTML+'</div><div class="add-comment"><div class="anon-row"><label class="anon-toggle"><input type="checkbox" id="profAnon-'+profId+'"> Post anonymously</label></div><div class="comment-input-row"><textarea class="comment-input" id="profTipInput-'+profId+'" placeholder="Share your experience with this professor..." rows="1"></textarea><button class="post-btn" onclick="postProfComment(\''+profId+'\')">Post</button></div></div></div><div class="prof-tab-content" id="profTab-ai-'+profId+'"><div style="text-align:center;padding:32px 16px;color:var(--text-3)"><div style="font-size:1.8rem;margin-bottom:10px">&#x1F916;</div><div style="font-family:\'Instrument Serif\',serif;font-size:1.1rem;color:var(--text-2);margin-bottom:6px">AI Professor Summary</div><div style="font-size:0.8rem;line-height:1.6">Coming soon &mdash; AI will summarize all student reviews into a concise professor profile.</div></div></div></div></div>';
     if(myRating){selectedRating=myRating.rating;selectedWTA=myRating.would_take_again;}
