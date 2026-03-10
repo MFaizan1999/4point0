@@ -290,30 +290,32 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
 /* Message groups */
-.msg-group{display:block;margin-bottom:8px;clear:both;}
-.msg-group.mine{text-align:right;}
-.msg-group:not(.mine){text-align:left;}
+.msg-group{display:flex;flex-direction:column;align-items:flex-start;margin-bottom:8px;}
+.msg-group.mine{align-items:flex-end;}
 .msg-meta{display:flex;align-items:center;gap:5px;margin-bottom:3px;padding:0 4px;text-align:left;}
 .msg-group.mine .msg-meta{flex-direction:row-reverse;justify-content:flex-end;}
 .msg-author{font-size:0.68rem;font-weight:700;color:var(--text-2);}
 .msg-time{font-size:0.62rem;color:var(--text-3);}
 
 /* Bubbles */
-.msg-bubble-wrap{display:inline-block;text-align:left;max-width:72%;vertical-align:bottom;}
+.msg-bubble-wrap{display:block;text-align:left;max-width:72%;}
+.msg-group.mine .msg-bubble-wrap{margin-left:auto;}
 .msg-bubble{
-  display:inline-block;
+  display:table;
   padding:9px 13px;font-size:0.84rem;line-height:1.5;
-  word-break:break-word;cursor:pointer;transition:filter 0.1s;
+  word-break:break-word;overflow-wrap:break-word;
+  cursor:pointer;transition:filter 0.1s;
   background:#ffffff;color:var(--text);
   box-shadow:0 1px 2px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
   border-radius:4px 18px 18px 18px;
-  max-width:100%;
+  max-width:72%;
   text-align:left;
+  box-sizing:border-box;
 }
 .msg-bubble:hover{filter:brightness(0.97);}
 
 /* Mine — gold gradient like iMessage blue */
-.msg-bubble.mine{
+.msg-bubble.mine{display:table;
   background:linear-gradient(135deg,#d4a840 0%,#c9a84c 40%,#b8943e 100%);
   color:#fff;
   box-shadow:0 2px 8px rgba(185,140,50,0.4),0 1px 2px rgba(0,0,0,0.1);
@@ -1300,7 +1302,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     const replyMsg = msg.reply_to ? allMessages.find(m => m.id === msg.reply_to) : null;
     const replyHTML = replyMsg ? `<div class="reply-preview"><div class="reply-preview-author">${replyMsg.author_name||'anonymous'}</div>${replyMsg.content||'📎 File'}</div>` : '';
     const seenHTML = (isMine && isLast && seenBy.length) ? `<div class="seen-row">${seenBy.slice(0,5).map(s=>`<div class="seen-avatar" title="Seen">${(s.user_id||'?').slice(0,2).toUpperCase()}</div>`).join('')}</div>` : '';
-    const contentHTML = msg.file_url ? buildFileHTML(msg) : `<div class="msg-bubble${isMine?' mine':''}" data-msg-id="${msg.id}" onclick="showReactionPicker(event,'${msg.id}','${isMine}')">${msg.content}</div>`;
+    const contentHTML = msg.file_url ? buildFileHTML(msg) : `<div class="msg-bubble${isMine?' mine':''}" data-msg-id="${msg.id}" style="display:inline-block;white-space:normal;min-width:0;width:auto;" onclick="showReactionPicker(event,'${msg.id}','${isMine}')">${msg.content}</div>`;
 
     return `<div class="msg-group${isMine?' mine':''}">
       ${showMeta && !isMine ? `<div class="msg-meta"><span class="msg-author">${msg.author_name||'anonymous'}</span><span class="msg-time">${timeAgo(msg.created_at)}</span></div>` : ''}
