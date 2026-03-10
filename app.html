@@ -217,6 +217,64 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 </style>
 </head>
 <body>
+<style>
+/* ============ MOBILE ============ */
+@media (max-width: 640px) {
+  /* Header */
+  header { padding: 0 14px; gap: 0; height: 52px; }
+  .username-pill { display: none; }
+  nav { gap: 0; justify-content: center; flex: 1; }
+  .nav-btn { padding: 5px 10px; font-size: 0.78rem; }
+  .nav-btn.active::after { bottom: -15px; }
+  .header-right { gap: 6px; }
+
+  /* Pages */
+  .community-page { padding: 20px 14px; }
+  .schedule-page { padding: 20px 14px; }
+  .page-title { font-size: 1.5rem; }
+
+  /* Course cards */
+  .card-main { padding: 13px 14px; }
+  .card-header { gap: 8px; }
+  .difficulty-num { font-size: 1.5rem; }
+  .course-name { font-size: 1rem; }
+  .card-right { gap: 4px; }
+  .report-btn { font-size: 0.64rem; padding: 2px 7px; }
+  .comments-toggle { padding: 10px 14px; }
+  .comments-body { padding: 0 14px 14px; }
+
+  /* Modals */
+  .modal-overlay { padding: 12px; align-items: flex-end; }
+  .modal {
+    border-radius: 16px 16px 12px 12px;
+    padding: 24px 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .schedule-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  /* Professor page */
+  .prof-card-main { padding: 14px; }
+  .prof-name { font-size: 1.1rem; }
+  .prof-overall-num { font-size: 1.8rem; }
+  .charts-row { gap: 10px; }
+  .chart-box { min-width: 120px; padding: 10px; }
+
+  /* Schedule grid — horizontal scroll */
+  .schedule-page { padding: 20px 0; }
+  .schedule-page .page-title,
+  .schedule-page .page-eyebrow,
+  .schedule-page .page-sub { padding: 0 14px; }
+  .week-grid-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0 14px 14px; }
+  .week-grid { min-width: 520px; }
+
+  /* Toast higher on mobile (above browser chrome) */
+  .toast { bottom: 80px; font-size: 0.78rem; padding: 9px 16px; max-width: 85vw; text-align: center; }
+
+  /* Search results */
+  .search-result-item { padding: 10px 13px; }
+}
+</style>
 <header>
   <div class="logo" onclick="switchPage('community')"><div class="logo-gem"></div>4.0</div>
   <nav>
@@ -274,7 +332,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     <div class="page-eyebrow">Memorial University</div>
     <div class="page-title">My Schedule</div>
     <div class="page-sub">Built from your enrolled courses.</div>
-    <div id="scheduleGrid"></div>
+    <div class="week-grid-wrapper"><div id="scheduleGrid"></div></div>
   </div>
 </div>
 
