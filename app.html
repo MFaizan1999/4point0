@@ -290,38 +290,37 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .chat-messages::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
 /* Message groups */
-.msg-group{display:flex;flex-direction:column;margin-bottom:4px;align-items:flex-start;}
-.msg-group.mine{align-items:flex-end;}
-.msg-meta{display:flex;align-items:center;gap:5px;margin-bottom:3px;padding:0 4px;}
-.mine .msg-meta{flex-direction:row-reverse;}
+.msg-group{display:block;margin-bottom:8px;clear:both;}
+.msg-group.mine{text-align:right;}
+.msg-group:not(.mine){text-align:left;}
+.msg-meta{display:flex;align-items:center;gap:5px;margin-bottom:3px;padding:0 4px;text-align:left;}
+.msg-group.mine .msg-meta{flex-direction:row-reverse;justify-content:flex-end;}
 .msg-author{font-size:0.68rem;font-weight:700;color:var(--text-2);}
 .msg-time{font-size:0.62rem;color:var(--text-3);}
 
 /* Bubbles */
-.msg-bubble-wrap{display:flex;flex-direction:column;gap:1px;align-items:flex-start;}
-.mine .msg-bubble-wrap{align-items:flex-end;}
+.msg-bubble-wrap{display:inline-block;text-align:left;max-width:72%;vertical-align:bottom;}
 .msg-bubble{
-  position:relative;
-  max-width:72%;
-  width:fit-content;
+  display:inline-block;
   padding:9px 13px;font-size:0.84rem;line-height:1.5;
   word-break:break-word;cursor:pointer;transition:filter 0.1s;
-  background:#ffffff;
-  color:var(--text);
+  background:#ffffff;color:var(--text);
   box-shadow:0 1px 2px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
   border-radius:4px 18px 18px 18px;
+  max-width:100%;
+  text-align:left;
 }
 .msg-bubble:hover{filter:brightness(0.97);}
 
 /* Mine — gold gradient like iMessage blue */
-.mine .msg-bubble{
+.msg-bubble.mine{
   background:linear-gradient(135deg,#d4a840 0%,#c9a84c 40%,#b8943e 100%);
   color:#fff;
   box-shadow:0 2px 8px rgba(185,140,50,0.4),0 1px 2px rgba(0,0,0,0.1);
   border-radius:18px 4px 18px 18px;
   border:none;
 }
-.mine .msg-bubble:hover{filter:brightness(1.05);}
+.msg-bubble.mine:hover{filter:brightness(1.05);}
 
 /* Reply preview */
 .reply-preview{
@@ -333,7 +332,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   margin-bottom:4px;max-width:72%;
   box-shadow:0 1px 3px rgba(0,0,0,0.06);
 }
-.mine .reply-preview{margin-left:auto;border-left:none;border-right:3px solid rgba(255,255,255,0.7);}
+.msg-group.mine .reply-preview{margin-left:auto;border-left:none;border-right:3px solid rgba(255,255,255,0.7);}
 .reply-preview-author{font-weight:700;color:var(--text-2);margin-bottom:1px;}
 
 /* Files */
