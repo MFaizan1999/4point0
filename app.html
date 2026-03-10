@@ -1206,6 +1206,15 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   }
 
   // ─── CHAT LOAD & REALTIME ───────────────────────────────────────────────────
+  async function reloadChatMessages(courseId) {
+    const {data: messages} = await db.from('messages').select('*').eq('course_id', courseId).order('created_at', {ascending: true}).limit(100);
+    const msgIds = (messages||[]).map(m => m.id);
+    const {data: reactions} = msgIds.length ? await db.from('message_reactions').select('*').in('message_id', msgIds) : {data: []};
+    const {data: seen} = msgIds.length ? await db.from('message_seen').select('*').in('message_id', msgIds) : {data: []};
+    renderMessages(courseId, messages||[], reactions||[], seen||[]);
+    await markAllSeen(courseId, messages||[]);
+  }
+
   async function loadChat(courseId) {
     const container = document.getElementById('chatMessages-' + courseId);
     if (!container) return;
@@ -1225,11 +1234,8 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     if (_chatSubs[courseId]) _chatSubs[courseId].unsubscribe();
     _chatSubs[courseId] = db.channel('chat-' + courseId)
       .on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'messages', filter: 'course_id=eq.' + courseId}, async (payload) => {
-        const msg = payload.new;
-        // Fetch reactions for this new message (none yet)
-        appendMessage(courseId, msg, [], seen||[]);
+        await reloadChatMessages(courseId);
         scrollChatBottom(courseId);
-        await db.from('message_seen').upsert({message_id: msg.id, user_id: currentUser.id}, {onConflict: 'message_id,user_id'});
       })
       .on('postgres_changes', {event: 'INSERT', schema: 'public', table: 'message_reactions'}, () => {
         refreshReactions(courseId);
