@@ -1498,8 +1498,8 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     const bubble = e.currentTarget;
     const picker = document.createElement('div');
     picker.className = 'reaction-picker';
-    picker.innerHTML = EMOJIS.map(em => `<button class="reaction-picker-btn" onclick="toggleReaction('${msgId}','${em}');this.closest('.reaction-picker').remove();">${em}</button>`).join('') +
-      `<button class="reaction-picker-btn" style="font-size:0.7rem;color:var(--text-3);" onclick="showReplyFromPicker('${msgId}');this.closest('.reaction-picker').remove();">↩️</button>`;
+    picker.innerHTML = EMOJIS.map(em => `<button class="reaction-picker-btn" onclick="event.stopPropagation();toggleReaction('${msgId}','${em}');this.closest('.reaction-picker').remove();">${em}</button>`).join('') +
+      `<button class="reaction-picker-btn" style="font-size:0.7rem;color:var(--text-3);" onclick="event.stopPropagation();showReplyFromPicker('${msgId}');this.closest('.reaction-picker').remove();">↩️</button>`;
     bubble.style.position = 'relative';
     bubble.appendChild(picker);
     setTimeout(() => document.addEventListener('click', removePicker, {once: true}), 10);
