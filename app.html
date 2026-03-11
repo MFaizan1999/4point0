@@ -1528,11 +1528,12 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   }
 
   async function handleFileUpload(input, courseId) {
-    if (courseId === 'panel') courseId = _panelCourseId;
+    const isPanel = courseId === 'panel';
+    if (isPanel) courseId = _panelCourseId;
     const file = input.files[0];
     if (!file) return;
     if (file.size > 7340032) { showToast('File too large. Max 7MB.'); return; }
-    const btn = document.getElementById('chatSendBtn-' + courseId);
+    const btn = document.getElementById(isPanel ? 'chatSendBtn-panel' : 'chatSendBtn-' + courseId);
     btn.disabled = true;
     showToast('Uploading...');
     const ext = file.name.split('.').pop();
