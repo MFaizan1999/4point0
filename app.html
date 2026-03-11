@@ -1522,11 +1522,20 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   }
 
   async function toggleReaction(msgId, emoji) {
-    const {data: existing} = await db.from('message_reactions').select('*').eq('message_id', msgId).eq('user_id', currentUser.id).eq('emoji', emoji).maybeSingle();
+    // Check if user already has ANY reaction on this message
+    const {data: existing} = await db.from('message_reactions').select('*').eq('message_id', msgId).eq('user_id', currentUser.id).maybeSingle();
     if (existing) {
-      await db.from('message_reactions').delete().eq('message_id', msgId).eq('user_id', currentUser.id).eq('emoji', emoji);
+      if (existing.emoji === emoji) {
+        // Same emoji — remove it (toggle off)
+        await db.from('message_reactions').delete().eq('message_id', msgId).eq('user_id', currentUser.id);
+      } else {
+        // Different emoji — delete old, insert new
+        await db.from('message_reactions').delete().eq('message_id', msgId).eq('user_id', currentUser.id);
+        await db.from('message_reactions').insert({message_id: msgId, user_id: currentUser.id, emoji});
+      }
     } else {
-      await db.from('message_reactions').upsert({message_id: msgId, user_id: currentUser.id, emoji}, {onConflict: 'message_id,user_id'});
+      // No reaction yet — insert
+      await db.from('message_reactions').insert({message_id: msgId, user_id: currentUser.id, emoji});
     }
     if (_panelCourseId) reloadPanelMessages(_panelCourseId);
   }
