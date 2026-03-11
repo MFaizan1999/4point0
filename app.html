@@ -1516,7 +1516,8 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     const content = bubble.textContent || '';
     // Find which courseId this belongs to
     const chatMessages = bubble.closest('.chat-messages');
-    const courseId = chatMessages?.id?.replace('chatMessages-', '');
+    const panelMessages = bubble.closest('.chat-panel-messages');
+    let courseId = chatMessages?.id?.replace('chatMessages-', '') || (_panelCourseId ? 'panel' : null);
     if (courseId) setReply(courseId, msgId, author, content);
   }
 
@@ -1527,6 +1528,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     } else {
       await db.from('message_reactions').upsert({message_id: msgId, user_id: currentUser.id, emoji}, {onConflict: 'message_id,user_id'});
     }
+    if (_panelCourseId) reloadPanelMessages(_panelCourseId);
   }
 
   // ─── FILE UPLOAD ─────────────────────────────────────────────────────────────
