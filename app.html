@@ -220,6 +220,35 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .wta-sub{font-size:0.72rem;color:var(--text-3);}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--text);color:white;padding:10px 20px;border-radius:8px;font-size:0.82rem;font-weight:500;z-index:1000;transition:transform 0.3s ease;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);}
+/* ============ BOTTOM NAV (mobile) ============ */
+@media(max-width:640px){
+  nav{display:none;}
+  .username-pill{display:none;}
+  body{padding-bottom:64px;}
+  .bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;
+    height:64px;
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--border);
+    z-index:300;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .bottom-nav-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:3px;border:none;background:none;
+    cursor:pointer;color:var(--text-3);transition:color 0.15s;
+    font-family:'Geist',sans-serif;padding:8px 0;
+  }
+  .bottom-nav-btn.active{color:var(--gold);}
+  .bottom-nav-icon{font-size:1.3rem;line-height:1;}
+  .bottom-nav-label{font-size:0.62rem;font-weight:600;letter-spacing:0.01em;}
+  .bottom-nav-btn.active .bottom-nav-label{color:var(--gold);}
+}
+@media(min-width:641px){
+  .bottom-nav{display:none;}
+}
 </style>
 <script>
   if ('serviceWorker' in navigator) {
@@ -640,6 +669,26 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 
 <div class="toast" id="toast"></div>
 
+<!-- BOTTOM NAV (mobile only) -->
+<nav class="bottom-nav">
+  <button class="bottom-nav-btn active" onclick="switchPage('community',this);syncBottomNav(this)" id="bnav-community">
+    <span class="bottom-nav-icon">&#x1F4DA;</span>
+    <span class="bottom-nav-label">Community</span>
+  </button>
+  <button class="bottom-nav-btn" onclick="switchPage('professors',this);syncBottomNav(this)" id="bnav-professors">
+    <span class="bottom-nav-icon">&#x1F393;</span>
+    <span class="bottom-nav-label">Professors</span>
+  </button>
+  <button class="bottom-nav-btn" onclick="switchPage('schedule',this);syncBottomNav(this)" id="bnav-schedule">
+    <span class="bottom-nav-icon">&#x1F4C5;</span>
+    <span class="bottom-nav-label">Schedule</span>
+  </button>
+  <button class="bottom-nav-btn ai-nav-btn" onclick="switchPage('ai',this);syncBottomNav(this)" id="bnav-ai">
+    <span class="bottom-nav-icon">&#x2728;</span>
+    <span class="bottom-nav-label">4.0 AI</span>
+  </button>
+</nav>
+
 <!-- REPORT MODAL -->
 <div class="modal-overlay" id="reportModal">
   <div class="report-modal">
@@ -676,8 +725,17 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
     document.getElementById('page-'+id).classList.add('active');
     if(btn){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+    // sync bottom nav
+    document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+    const bnav = document.getElementById('bnav-'+id);
+    if(bnav) bnav.classList.add('active');
     if(id==='schedule')loadSchedule();
     if(id==='professors')document.getElementById('profCardDisplay').innerHTML='';
+  }
+
+  function syncBottomNav(btn){
+    document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
   }
 
   function timeAgo(d){
