@@ -224,27 +224,31 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 @media(max-width:640px){
   nav{display:none;}
   .username-pill{display:none;}
-  body{padding-bottom:64px;}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom));}
   .bottom-nav{
     display:flex;position:fixed;bottom:0;left:0;right:0;
-    height:64px;
-    background:rgba(255,255,255,0.95);
+    background:rgba(255,255,255,0.97);
     backdrop-filter:blur(12px);
     -webkit-backdrop-filter:blur(12px);
     border-top:1px solid var(--border);
     z-index:300;
     padding-bottom:env(safe-area-inset-bottom);
+    padding-top:4px;
   }
   .bottom-nav-btn{
     flex:1;display:flex;flex-direction:column;align-items:center;
     justify-content:center;gap:3px;border:none;background:none;
     cursor:pointer;color:var(--text-3);transition:color 0.15s;
-    font-family:'Geist',sans-serif;padding:8px 0;
+    font-family:'Geist',sans-serif;padding:6px 0 8px;
+    min-height:52px;
   }
   .bottom-nav-btn.active{color:var(--gold);}
   .bottom-nav-icon{font-size:1.3rem;line-height:1;}
   .bottom-nav-label{font-size:0.62rem;font-weight:600;letter-spacing:0.01em;}
   .bottom-nav-btn.active .bottom-nav-label{color:var(--gold);}
+  /* Give pages enough bottom clearance */
+  .community-page{padding-bottom:24px;}
+  .schedule-page{padding-bottom:24px;}
 }
 @media(min-width:641px){
   .bottom-nav{display:none;}
