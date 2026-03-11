@@ -411,10 +411,15 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .ai-feature-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;font-size:0.82rem;color:var(--text-2);font-weight:500;}
 
 /* ============ AI NAV BTN ============ */
-.ai-nav-btn{background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.04));border:1px solid rgba(201,168,76,0.2)!important;color:var(--warn)!important;border-radius:8px!important;}
-.ai-nav-btn:hover{background:var(--gold-pale)!important;border-color:var(--gold-border)!important;}
-.ai-nav-btn.active{background:var(--gold-pale)!important;color:var(--warn)!important;font-weight:700!important;}
+.ai-nav-btn{color:var(--warn)!important;}
+.ai-nav-btn:hover{background:var(--gold-pale)!important;}
+.ai-nav-btn.active{color:var(--warn)!important;font-weight:700!important;}
 .ai-nav-btn.active::after{background:var(--gold)!important;}
+@media(min-width:641px){
+  .ai-nav-btn{background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.04));border:1px solid rgba(201,168,76,0.2)!important;border-radius:8px!important;}
+  .ai-nav-btn:hover{border-color:var(--gold-border)!important;}
+  .ai-nav-btn.active{background:var(--gold-pale)!important;}
+}
 </style>
 <header>
   <div class="logo" onclick="switchPage('community')"><div class="logo-gem"></div>4.0</div>
