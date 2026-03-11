@@ -317,6 +317,11 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   color:var(--text);
   cursor:pointer;
   vertical-align:top;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+  min-width:0;
+  -webkit-hyphens:none;
+  hyphens:none;
 }
 .msg-bubble.mine{
   background:var(--gold);
@@ -324,9 +329,9 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   border:none;
 }
 /* Wrapper handles alignment, not the bubble */
-.msg-group{display:flex;flex-direction:column;align-items:flex-start;gap:2px;}
+.msg-group{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:flex-start;align-items:flex-start;gap:2px;}
 .msg-group.mine{align-items:flex-end;}
-.msg-bubble-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:1px;max-width:70%;}
+.msg-bubble-wrap{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:flex-start;align-items:flex-start;gap:1px;max-width:70%;}
 .msg-group.mine .msg-bubble-wrap{align-items:flex-end;}
 .reply-preview{background:var(--off-white);border-left:2px solid var(--gold);padding:4px 8px;border-radius:4px;font-size:0.72rem;color:var(--text-3);margin-bottom:3px;max-width:70%;word-wrap:break-word;}
 .reply-preview-author{font-weight:600;color:var(--text-2);margin-bottom:1px;}
@@ -1370,7 +1375,8 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   function buildMsgHTML(msg, isMine, showMeta, reactions, seenBy, isLast, allMessages) {
     const replyMsg = msg.reply_to ? allMessages.find(m => m.id === msg.reply_to) : null;
     const replyHTML = replyMsg ? `<div class="reply-preview"><div class="reply-preview-author">${replyMsg.author_name||'anonymous'}</div>${replyMsg.content||'📎 File'}</div>` : '';
-    const seenHTML = (isMine && isLast && seenBy.length) ? `<div class="seen-row">${seenBy.slice(0,5).map(s=>`<div class="seen-avatar" title="Seen">${(s.user_id||'?').slice(0,2).toUpperCase()}</div>`).join('')}</div>` : '';
+    const msgSeen = (seenBy||[]).filter(s => s.message_id === msg.id && s.user_id !== currentUser.id);
+    const seenHTML = (isMine && isLast && msgSeen.length) ? `<div class="seen-row">${msgSeen.slice(0,5).map(s=>`<div class="seen-avatar" title="Seen by ${s.user_id.slice(0,4)}">&#x2713;</div>`).join('')}</div>` : '';
     const contentHTML = msg.file_url ? buildFileHTML(msg) : `<div class="msg-bubble${isMine?' mine':''}" data-msg-id="${msg.id}" onclick="showReactionPicker(event,'${msg.id}','${isMine}')">${msg.content}</div>`;
 
     return `<div class="msg-group${isMine?' mine':''}">
