@@ -1421,12 +1421,15 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 
   // ─── SEND MESSAGE ───────────────────────────────────────────────────────────
   async function sendMessage(courseId) {
-    if (courseId === 'panel') courseId = _panelCourseId;
+    const isPanel = courseId === 'panel';
+    if (isPanel) courseId = _panelCourseId;
     if (!courseId) return;
-    const input = document.getElementById('chatInput-' + courseId);
+    const inputId = isPanel ? 'chatInput-panel' : 'chatInput-' + courseId;
+    const btnId = isPanel ? 'chatSendBtn-panel' : 'chatSendBtn-' + courseId;
+    const input = document.getElementById(inputId);
     const content = input.value.trim();
     if (!content) return;
-    const btn = document.getElementById('chatSendBtn-' + courseId);
+    const btn = document.getElementById(btnId);
     btn.disabled = true;
     const replyTo = _chatReplying[courseId] || null;
     const authorName = currentProfile && currentProfile.username ? currentProfile.username : 'anonymous';
