@@ -1521,8 +1521,10 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 
   // ─── FILE UPLOAD ─────────────────────────────────────────────────────────────
   function triggerFileUpload(courseId) {
-    if (courseId === 'panel') courseId = _panelCourseId;
-    document.getElementById('fileInput-' + courseId).click();
+    const isPanel = courseId === 'panel';
+    if (isPanel) courseId = _panelCourseId;
+    const inputId = isPanel ? 'fileInput-panel' : 'fileInput-' + courseId;
+    document.getElementById(inputId).click();
   }
 
   async function handleFileUpload(input, courseId) {
