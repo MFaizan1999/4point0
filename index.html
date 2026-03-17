@@ -1,423 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>4.0 — The student platform that works like you do</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4.0 — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const WAITLIST_URL = '#waitlist';
-  const LOGIN_URL    = './login.html';
-  const DEMO_URL     = './labs_mockup.html';
+  const SUPABASE_URL = 'https://ivfvywlzmugnennznqyh.supabase.co'
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2ZnZ5d2x6bXVnbmVubnpucXloIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI5MzMyNDMsImV4cCI6MjA4ODUwOTI0M30.CiePqh53AW-7fmZtsT9T6KHxZgH1Q6rkj4z3IZ_sBt0'
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
 <style>
-:root {
-  --bg: #0d0d0b;
-  --surface: #141410;
-  --surface2: #1c1c17;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --gold: #c9a84c;
-  --gold-h: #e8c96a;
-  --gold-pale: rgba(201,168,76,0.08);
-  --gold-border: rgba(201,168,76,0.2);
-  --text: #f0ede6;
-  --text2: #a8a49c;
-  --text3: #5a5750;
-}
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  :root {
+    --white: #ffffff;
+    --bg: #f4f3ef;
+    --gold: #c9a84c;
+    --gold-hover: #b8943e;
+    --gold-pale: #fdf8ec;
+    --gold-border: #e8d9a8;
+    --text: #1a1916;
+    --text-2: #4a4845;
+    --text-3: #9a9690;
+    --border: #e8e6e0;
+    --danger: #c0392b;
+    --danger-bg: #fef2f2;
+    --shadow-md: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Geist', sans-serif;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    padding: 16px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: var(--shadow-md);
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .logo {
+    font-family: 'Instrument Serif', serif;
+    font-size: 1.8rem;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+  .logo-gem {
+    width: 9px; height: 9px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    animation: gemPulse 3s ease-in-out infinite;
+  }
+  @keyframes gemPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+    50% { box-shadow: 0 0 0 5px rgba(201,168,76,0.15); }
+  }
+  .tagline { font-size: 0.82rem; color: var(--text-3); margin-bottom: 32px; }
+  .tabs {
+    display: flex;
+    background: var(--bg);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 24px;
+  }
+  .tab {
+    flex: 1; padding: 8px; border: none; background: none; border-radius: 8px;
+    font-family: 'Geist', sans-serif; font-size: 0.82rem; font-weight: 500;
+    color: var(--text-3); cursor: pointer; transition: all 0.2s;
+  }
+  .tab.active {
+    background: var(--white); color: var(--text); font-weight: 600;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+  .form { display: flex; flex-direction: column; gap: 14px; animation: fadeUp 0.25s ease both; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 0.76rem; font-weight: 600; color: var(--text-2); letter-spacing: 0.01em; }
+  .field input {
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 11px 14px; font-family: 'Geist', sans-serif; font-size: 0.85rem;
+    color: var(--text); outline: none; transition: all 0.2s;
+    -webkit-appearance: none;
+  }
+  .field input:focus {
+    border-color: var(--gold); background: var(--white);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+  }
+  .field input::placeholder { color: var(--text-3); }
+  .submit-btn {
+    background: var(--gold); color: white; border: none; border-radius: 10px;
+    padding: 12px; font-family: 'Geist', sans-serif; font-size: 0.87rem;
+    font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 4px;
+    letter-spacing: 0.01em;
+  }
+  .submit-btn:hover:not(:disabled) {
+    background: var(--gold-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(201,168,76,0.35);
+  }
+  .submit-btn:active:not(:disabled) { transform: translateY(0); box-shadow: none; }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .error-msg {
+    background: var(--danger-bg); border: 1px solid #fcd5d5; color: var(--danger);
+    padding: 9px 12px; border-radius: 8px; font-size: 0.79rem; display: none;
+    animation: fadeUp 0.2s ease both;
+  }
+  .footer-text { text-align: center; font-size: 0.74rem; color: var(--text-3); margin-top: 20px; }
 
-/* NAV */
-nav { position:fixed; top:0; left:0; right:0; z-index:100; height:60px; display:flex; align-items:center; justify-content:space-between; padding:0 40px; border-bottom:1px solid var(--border); background:rgba(13,13,11,0.88); backdrop-filter:blur(20px); }
-.nav-logo { font-family:'Instrument Serif',serif; font-size:1.5rem; letter-spacing:-0.03em; color:var(--text); display:flex; align-items:center; gap:8px; text-decoration:none; }
-.nav-gem { width:8px; height:8px; background:var(--gold); transform:rotate(45deg); animation:gempulse 3s ease-in-out infinite; }
-@keyframes gempulse { 0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,0);}50%{box-shadow:0 0 0 5px rgba(201,168,76,0.15);} }
-.nav-links { display:flex; align-items:center; gap:32px; list-style:none; }
-.nav-links a { font-size:0.84rem; color:var(--text2); text-decoration:none; transition:color 0.15s; }
-.nav-links a:hover { color:var(--text); }
-.nav-right { display:flex; align-items:center; gap:12px; }
-.btn-ghost { background:none; border:1px solid var(--border2); color:var(--text2); border-radius:8px; padding:8px 18px; font-family:'DM Sans',sans-serif; font-size:0.83rem; cursor:pointer; transition:all 0.15s; text-decoration:none; display:inline-flex; align-items:center; }
-.btn-ghost:hover { border-color:var(--gold-border); color:var(--text); }
-.btn-primary { background:var(--gold); color:#0d0d0b; border:none; border-radius:8px; padding:8px 20px; font-family:'DM Sans',sans-serif; font-size:0.83rem; font-weight:600; cursor:pointer; transition:all 0.15s; text-decoration:none; display:inline-flex; align-items:center; }
-.btn-primary:hover { background:var(--gold-h); transform:translateY(-1px); box-shadow:0 6px 20px rgba(201,168,76,0.25); }
-
-/* ANN BAR */
-.ann-bar { margin-top:60px; background:var(--gold-pale); border-bottom:1px solid var(--gold-border); text-align:center; padding:10px 20px; font-size:0.8rem; color:var(--gold-h); display:flex; align-items:center; justify-content:center; gap:8px; }
-.ann-bar a { color:var(--gold-h); font-weight:600; text-decoration:underline; text-underline-offset:3px; }
-
-/* HERO */
-.hero { min-height:88vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:80px 24px 60px; position:relative; overflow:hidden; }
-.hero-glow { position:absolute; top:-10%; left:50%; transform:translateX(-50%); width:800px; height:400px; background:radial-gradient(ellipse at center, rgba(201,168,76,0.1) 0%, transparent 70%); pointer-events:none; }
-.hero-badge { display:inline-flex; align-items:center; gap:7px; background:var(--gold-pale); border:1px solid var(--gold-border); border-radius:20px; padding:5px 14px; font-size:0.73rem; font-weight:500; color:var(--gold-h); letter-spacing:0.04em; text-transform:uppercase; margin-bottom:28px; animation:fadeup 0.7s ease both; }
-.badge-dot { width:6px; height:6px; background:var(--gold); border-radius:50%; animation:blink 2s ease-in-out infinite; }
-@keyframes blink { 0%,100%{opacity:1;}50%{opacity:0.3;} }
-.hero h1 { font-family:'Instrument Serif',serif; font-size:clamp(2.8rem,7vw,5rem); letter-spacing:-0.04em; line-height:1.05; max-width:800px; margin-bottom:20px; animation:fadeup 0.7s 0.1s ease both; }
-.hero h1 em { font-style:italic; color:var(--gold); }
-.hero-sub { font-size:1.05rem; font-weight:300; color:var(--text2); max-width:520px; line-height:1.65; margin-bottom:36px; animation:fadeup 0.7s 0.2s ease both; }
-.hero-ctas { display:flex; gap:12px; flex-wrap:wrap; justify-content:center; animation:fadeup 0.7s 0.3s ease both; }
-.btn-hero { background:var(--gold); color:#0d0d0b; border:none; border-radius:10px; padding:14px 28px; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.2s; text-decoration:none; }
-.btn-hero:hover { background:var(--gold-h); transform:translateY(-2px); box-shadow:0 8px 28px rgba(201,168,76,0.3); }
-.btn-hero-ghost { background:transparent; color:var(--text2); border:1px solid var(--border2); border-radius:10px; padding:14px 28px; font-family:'DM Sans',sans-serif; font-size:0.95rem; font-weight:400; cursor:pointer; transition:all 0.2s; text-decoration:none; }
-.btn-hero-ghost:hover { color:var(--text); border-color:var(--gold-border); }
-@keyframes fadeup { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);} }
-
-/* APP PREVIEW */
-.preview-wrap { padding:0 24px 80px; display:flex; justify-content:center; }
-.preview-frame { width:100%; max-width:960px; background:var(--surface); border:1px solid var(--border2); border-radius:16px; overflow:hidden; box-shadow:0 0 0 1px var(--border),0 40px 80px rgba(0,0,0,0.6); animation:fadeup 0.7s 0.4s ease both; }
-.preview-bar { background:var(--surface2); border-bottom:1px solid var(--border); padding:12px 16px; display:flex; align-items:center; gap:8px; }
-.pbar-dot { width:10px; height:10px; border-radius:50%; }
-.preview-body { padding:24px 28px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
-.pcard { background:var(--bg); border:1px solid var(--border); border-radius:12px; padding:16px; }
-.pcard-label { font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text3); margin-bottom:7px; }
-.pcard-title { font-size:0.87rem; font-weight:500; margin-bottom:10px; }
-.pbar-track { background:rgba(255,255,255,0.06); border-radius:20px; height:5px; overflow:hidden; margin-bottom:6px; }
-.pbar-fill { height:100%; border-radius:20px; background:var(--gold); }
-.pcard-pct { font-size:0.73rem; color:var(--text3); display:flex; justify-content:space-between; }
-.pfb { border-radius:8px; padding:10px 12px; font-size:0.73rem; color:#6ecf9a; line-height:1.5; margin-top:8px; background:rgba(45,125,82,0.1); border:1px solid rgba(45,125,82,0.2); }
-.pfb.warn { background:rgba(183,119,13,0.1); border-color:rgba(183,119,13,0.2); color:#e8b84a; }
-.pfb-label { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; opacity:0.7; }
-.pteam { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
-.pav { width:28px; height:28px; border-radius:50%; background:var(--gold-pale); border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; font-size:0.6rem; font-weight:700; color:var(--gold-h); }
-
-/* LOGOS */
-.logos-section { padding:44px 40px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); text-align:center; }
-.logos-label { font-size:0.73rem; color:var(--text3); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:24px; }
-.logos-row { display:flex; align-items:center; justify-content:center; gap:40px; flex-wrap:wrap; }
-.logo-pill { font-family:'Instrument Serif',serif; font-size:1.1rem; color:var(--text3); letter-spacing:-0.02em; opacity:0.55; transition:opacity 0.2s; }
-.logo-pill:hover { opacity:1; }
-
-/* STATS */
-.stats-outer { border-bottom:1px solid var(--border); }
-.stats-section { padding:72px 40px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; max-width:1100px; margin:0 auto; }
-.stat-cell { padding:28px 24px; border-right:1px solid var(--border); }
-.stat-cell:last-child { border-right:none; }
-.stat-num { font-family:'Instrument Serif',serif; font-size:2.8rem; letter-spacing:-0.04em; color:var(--gold); line-height:1; margin-bottom:8px; }
-.stat-desc { font-size:0.82rem; color:var(--text2); line-height:1.55; }
-
-/* SECTION COMMONS */
-.section-eyebrow { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.12em; color:var(--gold); margin-bottom:14px; }
-.section-h2 { font-family:'Instrument Serif',serif; font-size:clamp(1.9rem,4vw,2.9rem); letter-spacing:-0.03em; line-height:1.15; margin-bottom:48px; }
-.section-h2 em { font-style:italic; color:var(--text2); }
-
-/* PROBLEM */
-.problem-section { padding:96px 40px; max-width:1040px; margin:0 auto; }
-.problems-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-.problem-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:24px; transition:border-color 0.2s; }
-.problem-card:hover { border-color:var(--gold-border); }
-.prob-icon { font-size:1.4rem; margin-bottom:14px; }
-.prob-title { font-size:0.95rem; font-weight:600; margin-bottom:8px; line-height:1.35; }
-.prob-desc { font-size:0.82rem; color:var(--text2); line-height:1.65; }
-
-/* FEATURES */
-.features-section { padding:96px 40px; max-width:1100px; margin:0 auto; }
-.features-grid { display:grid; grid-template-columns:1fr 1fr; gap:56px 80px; }
-.feature-num { font-family:'Instrument Serif',serif; font-size:3rem; color:var(--text3); letter-spacing:-0.05em; line-height:1; margin-bottom:16px; opacity:0.25; }
-.feature-title { font-size:1.15rem; font-weight:600; margin-bottom:10px; letter-spacing:-0.02em; }
-.feature-desc { font-size:0.85rem; color:var(--text2); line-height:1.7; }
-.feature-tag { display:inline-block; margin-top:14px; font-size:0.69rem; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--gold); background:var(--gold-pale); border:1px solid var(--gold-border); border-radius:6px; padding:3px 10px; }
-
-/* HOW IT WORKS */
-.how-section { padding:96px 40px; background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-.how-inner { max-width:1040px; margin:0 auto; }
-.how-steps { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:36px; margin-top:56px; }
-.step-num { width:34px; height:34px; border-radius:50%; border:1px solid var(--gold-border); display:flex; align-items:center; justify-content:center; font-size:0.76rem; font-weight:600; color:var(--gold); margin-bottom:14px; }
-.step-title { font-size:0.95rem; font-weight:600; margin-bottom:8px; }
-.step-desc { font-size:0.81rem; color:var(--text2); line-height:1.6; }
-
-/* LABS */
-.labs-section { padding:96px 40px; max-width:1040px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
-.labs-badge { display:inline-flex; align-items:center; gap:6px; background:var(--gold-pale); border:1px solid var(--gold-border); border-radius:20px; padding:4px 12px; font-size:0.69rem; font-weight:600; color:var(--gold); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:20px; }
-.labs-h2 { font-family:'Instrument Serif',serif; font-size:2.4rem; letter-spacing:-0.03em; line-height:1.15; margin-bottom:16px; }
-.labs-desc { font-size:0.87rem; color:var(--text2); line-height:1.7; margin-bottom:28px; }
-.labs-right { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:28px; }
-.labs-preview-row { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
-.lp-check { width:20px; height:20px; flex-shrink:0; background:rgba(45,125,82,0.12); border:1px solid rgba(45,125,82,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.63rem; color:#6ecf9a; }
-.lp-text { font-size:0.84rem; color:var(--text2); }
-
-/* TESTIMONIAL */
-.testimonial-section { padding:96px 40px; background:var(--surface); border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
-.test-inner { max-width:680px; margin:0 auto; text-align:center; }
-.test-quote { font-family:'Instrument Serif',serif; font-size:1.65rem; letter-spacing:-0.02em; line-height:1.4; color:var(--text); margin-bottom:28px; }
-.test-quote em { font-style:italic; color:var(--gold); }
-.test-author { font-size:0.81rem; color:var(--text3); }
-.test-author strong { color:var(--text2); }
-
-/* CTA */
-.cta-section { padding:120px 40px; text-align:center; position:relative; overflow:hidden; }
-.cta-glow { position:absolute; bottom:-20%; left:50%; transform:translateX(-50%); width:600px; height:300px; background:radial-gradient(ellipse, rgba(201,168,76,0.08) 0%, transparent 70%); pointer-events:none; }
-.cta-h2 { font-family:'Instrument Serif',serif; font-size:clamp(2.2rem,5vw,3.6rem); letter-spacing:-0.04em; line-height:1.1; max-width:600px; margin:0 auto 20px; }
-.cta-sub { font-size:1rem; color:var(--text2); margin-bottom:36px; }
-.cta-note { font-size:0.76rem; color:var(--text3); margin-top:14px; }
-
-/* FOOTER */
-footer { border-top:1px solid var(--border); padding:44px 40px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; }
-.footer-logo { font-family:'Instrument Serif',serif; font-size:1.2rem; letter-spacing:-0.02em; color:var(--text3); display:flex; align-items:center; gap:6px; text-decoration:none; }
-.footer-links { display:flex; gap:24px; }
-.footer-links a { font-size:0.79rem; color:var(--text3); text-decoration:none; transition:color 0.15s; }
-.footer-links a:hover { color:var(--text2); }
-.footer-copy { font-size:0.76rem; color:var(--text3); }
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  nav{padding:0 20px;}
-  .nav-links{display:none;}
-  .stats-section{grid-template-columns:1fr 1fr;}
-  .stat-cell{border-right:none;border-bottom:1px solid var(--border);}
-  .features-grid{grid-template-columns:1fr;gap:36px;}
-  .how-steps{grid-template-columns:1fr 1fr;}
-  .labs-section{grid-template-columns:1fr;}
-  .problems-grid{grid-template-columns:1fr;}
-  .preview-body{grid-template-columns:1fr;}
-  footer{flex-direction:column;align-items:flex-start;}
-}
+  /* Mobile */
+  @media (max-width: 480px) {
+    body { align-items: flex-end; padding: 0; background: var(--white); }
+    .card {
+      border-radius: 24px 24px 0 0;
+      padding: 32px 24px 40px;
+      box-shadow: 0 -4px 32px rgba(0,0,0,0.08);
+      border-bottom: none;
+      animation: slideUp 0.4s ease both;
+      max-width: 100%;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .field input { font-size: 16px; /* prevents iOS zoom */ }
+  }
 </style>
 </head>
 <body>
+<div class="card">
+  <div class="logo"><div class="logo-gem"></div>4.0</div>
+  <div class="tagline">Study smarter, together.</div>
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#">
-    <div class="nav-gem"></div>4.0
-  </a>
-  <ul class="nav-links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#labs">4.0 Labs</a></li>
-  </ul>
-  <div class="nav-right">
-    <a class="btn-ghost" href="./login.html">Log in</a>
-    <a class="btn-primary" href="./login.html">Get started free</a>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('login', this)">Sign In</button>
+    <button class="tab" onclick="switchTab('signup', this)">Create Account</button>
   </div>
-</nav>
 
-<!-- ANN BAR -->
-<div class="ann-bar">
-  🎓 Now live at Memorial University &mdash; <a href="./labs_mockup.html">Try the demo &rarr;</a>
+  <!-- LOGIN FORM -->
+  <div id="login-form" class="form">
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="you@domain.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    </div>
+    <div class="error-msg" id="login-error"></div>
+    <button class="submit-btn" onclick="login()">Sign In</button>
+  </div>
+
+  <!-- SIGNUP FORM -->
+  <div id="signup-form" class="form" style="display:none">
+    <div class="field">
+      <label>Name</label>
+      <input type="text" id="signup-name" placeholder="Alex Kim" autocomplete="name">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="signup-email" placeholder="you@domain.com" autocomplete="email">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="signup-password" placeholder="Min. 6 characters" autocomplete="new-password">
+    </div>
+    <div class="error-msg" id="signup-error"></div>
+    <button class="submit-btn" onclick="signup()">Create Account</button>
+  </div>
+
+  <div class="footer-text">By continuing you agree to 4.0's Terms of Service</div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-badge">
-    <div class="badge-dot"></div>
-    Student-built &middot; MUN Launch
-  </div>
-  <h1>
-    The platform built for<br/>
-    <em>how students actually work</em>
-  </h1>
-  <p class="hero-sub">
-    Rate courses. Find professors. Ship better group projects with AI that checks your work before you submit — not after.
-  </p>
-  <div class="hero-ctas">
-    <a class="btn-hero" href="./login.html">Get started free</a>
-    <a class="btn-hero-ghost" href="./labs_mockup.html">Try the demo &rarr;</a>
-  </div>
-</section>
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('login-form').style.display = tab === 'login' ? 'flex' : 'none';
+    document.getElementById('signup-form').style.display = tab === 'signup' ? 'flex' : 'none';
+  }
 
-<!-- APP PREVIEW -->
-<div class="preview-wrap">
-  <div class="preview-frame">
-    <div class="preview-bar">
-      <div class="pbar-dot" style="background:#ff5f57"></div>
-      <div class="pbar-dot" style="background:#febc2e"></div>
-      <div class="pbar-dot" style="background:#28c840"></div>
-      <span style="margin-left:10px;font-size:0.72rem;color:var(--text3);">4.0 Labs &mdash; Lab 3: Fluid Mechanics Report</span>
-    </div>
-    <div class="preview-body">
-      <div class="pcard">
-        <div class="pcard-label">Milestone 1</div>
-        <div class="pcard-title">Title Page &amp; Abstract</div>
-        <div class="pbar-track"><div class="pbar-fill" style="width:88%"></div></div>
-        <div class="pcard-pct"><span>faiz_demo</span><span>88%</span></div>
-        <div class="pfb">
-          <div class="pfb-label">AI Feedback</div>
-          Strong abstract. Add key quantitative results to make it more impactful.
-        </div>
-      </div>
-      <div class="pcard">
-        <div class="pcard-label">Milestone 2</div>
-        <div class="pcard-title">Introduction</div>
-        <div class="pbar-track"><div class="pbar-fill" style="width:71%;background:#c9a84c"></div></div>
-        <div class="pcard-pct"><span>adam_k</span><span>71%</span></div>
-        <div class="pfb warn">
-          <div class="pfb-label">Missing</div>
-          Literature review light &mdash; 2 sources found, rubric requires 4&ndash;6.
-        </div>
-      </div>
-      <div class="pcard">
-        <div class="pcard-label">Team</div>
-        <div class="pcard-title">Project Members</div>
-        <div class="pteam">
-          <div class="pav">FZ</div>
-          <div class="pav">AK</div>
-          <div class="pav">JT</div>
-          <div class="pav">SM</div>
-        </div>
-        <div style="margin-top:12px;font-size:0.73rem;color:var(--text3);">4 members &middot; 7 milestones assigned</div>
-        <div style="margin-top:6px;font-size:0.73rem;color:var(--gold);">Overall: 68% complete</div>
-      </div>
-    </div>
-  </div>
-</div>
+  async function redirectAfterAuth(userId) {
+    const { data: profile } = await db.from('profiles').select('id').eq('id', userId).single();
+    window.location.href = profile ? './app.html' : './onboarding.html';
+  }
 
-<!-- LOGOS -->
-<div class="logos-section">
-  <div class="logos-label">Trusted by students at</div>
-  <div class="logos-row">
-    <div class="logo-pill">Memorial University</div>
-    <div class="logo-pill">&middot; &middot; &middot;</div>
-    <div class="logo-pill">Your campus next</div>
-  </div>
-</div>
+  async function login() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const errorEl = document.getElementById('login-error');
+    const btn = document.querySelector('#login-form .submit-btn');
+    if (!email || !password) { errorEl.textContent = 'Please fill in all fields.'; errorEl.style.display = 'block'; return; }
+    btn.disabled = true; btn.textContent = 'Signing in...'; errorEl.style.display = 'none';
+    const { data, error } = await db.auth.signInWithPassword({ email, password });
+    if (error) {
+      errorEl.textContent = (error.message.toLowerCase().includes('invalid login') || error.message.toLowerCase().includes('invalid credentials'))
+        ? 'Incorrect email or password.' : error.message;
+      errorEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Sign In';
+    } else {
+      await redirectAfterAuth(data.user.id);
+    }
+  }
 
+  async function signup() {
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const errorEl = document.getElementById('signup-error');
+    const btn = document.querySelector('#signup-form .submit-btn');
+    if (!name || !email || !password) { errorEl.textContent = 'Please fill in all fields.'; errorEl.style.display = 'block'; return; }
+    if (password.length < 6) { errorEl.textContent = 'Password must be at least 6 characters.'; errorEl.style.display = 'block'; return; }
+    btn.disabled = true; btn.textContent = 'Creating account...'; errorEl.style.display = 'none';
+    const { data, error } = await db.auth.signUp({ email, password, options: { data: { full_name: name } } });
+    if (error) {
+      errorEl.textContent = error.message; errorEl.style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Create Account';
+    } else {
+      await redirectAfterAuth(data.user.id);
+    }
+  }
 
-
-<!-- PROBLEM -->
-<section class="problem-section" id="features">
-  <div class="section-eyebrow">The problem</div>
-  <h2 class="section-h2">Student tools are broken.<br/><em>We're fixing them.</em></h2>
-  <div class="problems-grid">
-    <div class="problem-card">
-      <div class="prob-icon">📋</div>
-      <div class="prob-title">Course decisions made blind</div>
-      <div class="prob-desc">RateMyProfessors hasn't changed since 2001. Students deserve real, structured data — difficulty ratings, workload breakdowns, and tips from people who just took the same section.</div>
-    </div>
-    <div class="problem-card">
-      <div class="prob-icon">🔄</div>
-      <div class="prob-title">Group projects run on chaos</div>
-      <div class="prob-desc">WhatsApp threads, Google Docs nobody updates, and zero visibility into who's done what. Teams fall apart because coordination is broken — not talent.</div>
-    </div>
-    <div class="problem-card">
-      <div class="prob-icon">⏱️</div>
-      <div class="prob-title">Feedback arrives too late</div>
-      <div class="prob-desc">You submit, get it back two weeks later with a mark but no real direction. By then, the next deadline has passed. AI can fix this — before you submit.</div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section class="features-section">
-  <div class="section-eyebrow">What 4.0 does</div>
-  <h2 class="section-h2">Everything students actually need.<br/><em>Nothing they don't.</em></h2>
-  <div class="features-grid">
-    <div>
-      <div class="feature-num">01</div>
-      <div class="feature-title">Course &amp; professor ratings</div>
-      <div class="feature-desc">Structured difficulty ratings, tips from students who took the exact same section, and professor feedback that goes deeper than a star. All from verified university accounts.</div>
-      <span class="feature-tag">Community</span>
-    </div>
-    <div>
-      <div class="feature-num">02</div>
-      <div class="feature-title">Weekly schedule builder</div>
-      <div class="feature-desc">Visualize your semester before you enroll. See how your full course load fits across the week, then save and share your schedule with teammates.</div>
-      <span class="feature-tag">Planning</span>
-    </div>
-    <div>
-      <div class="feature-num">03</div>
-      <div class="feature-title">AI-powered project tracking</div>
-      <div class="feature-desc">4.0 Labs turns your assignment brief into a milestone plan automatically. Submit drafts, get AI feedback on what's missing, and track your team's progress in real time.</div>
-      <span class="feature-tag">Labs &middot; New</span>
-    </div>
-    <div>
-      <div class="feature-num">04</div>
-      <div class="feature-title">Team coordination that works</div>
-      <div class="feature-desc">Invite teammates by username, assign sections, and see at a glance who's submitted their draft and who hasn't. One source of truth for the whole group.</div>
-      <span class="feature-tag">Collaboration</span>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how-section" id="how">
-  <div class="how-inner">
-    <div class="section-eyebrow">How it works</div>
-    <h2 class="section-h2">From brief to feedback<br/><em>in minutes, not days.</em></h2>
-    <div class="how-steps">
-      <div>
-        <div class="step-num">1</div>
-        <div class="step-title">Upload your brief</div>
-        <div class="step-desc">Paste or upload your assignment instructions. AI reads it and generates a milestone plan — one card per section of your report.</div>
-      </div>
-      <div>
-        <div class="step-num">2</div>
-        <div class="step-title">Invite your team</div>
-        <div class="step-desc">Add teammates by their 4.0 username or share an invite link. Assign sections so everyone knows exactly what they own.</div>
-      </div>
-      <div>
-        <div class="step-num">3</div>
-        <div class="step-title">Submit drafts</div>
-        <div class="step-desc">Each teammate pastes or uploads their section draft. No digging through group chats or 12 versions of the same file.</div>
-      </div>
-      <div>
-        <div class="step-num">4</div>
-        <div class="step-title">Get AI feedback</div>
-        <div class="step-desc">Hit Analyze. AI checks each section against your rubric, flags what's missing, and gives a completion score — before you submit.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- LABS -->
-<section class="labs-section" id="labs">
-  <div class="labs-left">
-    <div class="labs-badge">&#10022; New product</div>
-    <h2 class="labs-h2">Introducing<br/>4.0 Labs</h2>
-    <p class="labs-desc">The AI layer that gives your group project a real fighting chance. Upload your brief once, and Labs handles milestones, assignments, progress tracking, and AI feedback — all in one place.</p>
-    <a class="btn-primary" href="./labs_mockup.html" style="border-radius:10px;padding:12px 24px;font-size:0.9rem;">Try the demo &rarr;</a>
-  </div>
-  <div class="labs-right">
-    <div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:16px;">What Labs checks for</div>
-    <div class="labs-preview-row">
-      <div class="lp-check">&#10003;</div>
-      <div class="lp-text">Completeness against your rubric or marking scheme</div>
-    </div>
-    <div class="labs-preview-row">
-      <div class="lp-check">&#10003;</div>
-      <div class="lp-text">Missing sections, figures, calculations, or citations</div>
-    </div>
-    <div class="labs-preview-row">
-      <div class="lp-check">&#10003;</div>
-      <div class="lp-text">Per-section progress as each teammate submits their draft</div>
-    </div>
-    <div class="labs-preview-row">
-      <div class="lp-check">&#10003;</div>
-      <div class="lp-text">Specific, actionable feedback &mdash; not just "needs improvement"</div>
-    </div>
-    <div class="labs-preview-row">
-      <div class="lp-check">&#10003;</div>
-      <div class="lp-text">Overall project completion score so nothing slips through</div>
-    </div>
-  </div>
-</section>
-
-
-
-<!-- FINAL CTA -->
-<section class="cta-section">
-  <div class="cta-glow"></div>
-  <div class="section-eyebrow">Get started</div>
-  <h2 class="cta-h2">Your GPA called.<br/>It wants better tools.</h2>
-  <p class="cta-sub">Be among the first students at MUN to get access — and help shape where it goes next.</p>
-  <a class="btn-hero" href="./login.html">Get started free &rarr;</a>
-  <div class="cta-note">Free. No credit card. Just a @mun.ca email to get started.</div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <a class="footer-logo" href="#">
-    <div class="nav-gem" style="animation:none;background:var(--text3);"></div>4.0
-  </a>
-  <div class="footer-links">
-    <a href="#features">Features</a>
-    <a href="#labs">Labs</a>
-    <a href="#how">How it works</a>
-    <a href="https://4point0.vercel.app">App</a>
-  </div>
-  <div class="footer-copy">&copy; 2026 4.0. Built at MUN.</div>
-</footer>
-
+  db.auth.getSession().then(async ({ data: { session } }) => {
+    if (session) await redirectAfterAuth(session.user.id);
+  });
+</script>
 </body>
 </html>
