@@ -415,6 +415,89 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .ai-nav-btn:hover{background:var(--gold-pale)!important;border-color:var(--gold-border)!important;}
 .ai-nav-btn.active{background:var(--gold-pale)!important;color:var(--warn)!important;font-weight:700!important;}
 .ai-nav-btn.active::after{background:var(--gold)!important;}
+
+/* ============ LABS PAGE ============ */
+.labs-wrap{max-width:800px;margin:0 auto;padding:28px 20px;}
+.labs-eyebrow{font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;}
+.labs-title{font-family:'Instrument Serif',serif;font-size:1.9rem;letter-spacing:-0.03em;margin-bottom:4px;}
+.labs-sub{font-size:0.8rem;color:var(--text-3);margin-bottom:24px;}
+/* Course grid */
+.labs-course-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:600px){.labs-course-grid{grid-template-columns:1fr;}}
+.labs-course-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all 0.18s;box-shadow:var(--shadow-sm);}
+.labs-course-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--border-strong);}
+.labs-course-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.labs-course-icon{width:38px;height:38px;border-radius:10px;border:1px solid;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.labs-course-code{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:3px 8px;}
+.labs-course-name{font-size:0.97rem;font-weight:600;margin-bottom:3px;}
+.labs-course-meta{font-size:0.73rem;color:var(--text-3);margin-bottom:10px;}
+.labs-course-bar-wrap{background:var(--bg);border-radius:20px;height:5px;overflow:hidden;margin-bottom:8px;}
+.labs-course-bar{height:100%;border-radius:20px;transition:width 0.6s ease;}
+.labs-course-footer{display:flex;align-items:center;justify-content:space-between;}
+.labs-course-pct{font-size:0.8rem;font-weight:700;}
+.labs-course-due{font-size:0.72rem;color:var(--text-3);}
+/* Items list */
+.labs-items-list{display:flex;flex-direction:column;gap:8px;}
+.labs-item-row{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;justify-content:space-between;transition:all 0.15s;box-shadow:var(--shadow-sm);}
+.labs-item-row.clickable{cursor:pointer;}
+.labs-item-row.clickable:hover{border-color:var(--gold-border);box-shadow:var(--shadow-md);transform:translateY(-1px);}
+.labs-item-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.labs-type-badge{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;padding:3px 8px;border-radius:6px;border:1px solid;white-space:nowrap;flex-shrink:0;}
+.labs-item-title{font-size:0.87rem;font-weight:500;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.labs-item-meta{font-size:0.71rem;color:var(--text-3);display:flex;align-items:center;gap:6px;}
+.labs-mini-av{width:18px;height:18px;border-radius:50%;background:var(--gold-pale);border:1px solid var(--gold-border);display:inline-flex;align-items:center;justify-content:center;font-size:0.5rem;font-weight:700;color:var(--warn);}
+.labs-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;min-width:72px;}
+.labs-item-pct{font-size:0.8rem;font-weight:700;}
+.labs-item-bar-wrap{background:var(--bg);border-radius:20px;height:5px;width:72px;overflow:hidden;}
+.labs-item-bar{height:100%;border-radius:20px;}
+.labs-item-hint{font-size:0.67rem;color:var(--gold);font-weight:600;}
+/* Milestone view */
+.labs-back{background:none;border:none;color:var(--text-3);font-family:'Geist',sans-serif;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;gap:4px;margin-bottom:18px;padding:0;}
+.labs-back:hover{color:var(--text);}
+.labs-detail-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
+.labs-detail-title{font-family:'Instrument Serif',serif;font-size:1.6rem;letter-spacing:-0.02em;margin-bottom:3px;}
+.labs-detail-meta{font-size:0.76rem;color:var(--text-3);}
+.labs-overall{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow-sm);}
+.labs-overall-bar-wrap{background:var(--bg);border-radius:20px;height:8px;overflow:hidden;margin:8px 0 5px;}
+.labs-overall-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:20px;transition:width 0.8s ease;}
+.labs-analyze-bar{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:var(--shadow-sm);}
+.labs-analyze-info{font-size:0.78rem;color:var(--text-3);}
+.labs-analyze-btn{background:var(--gold);color:#fff;border:none;border-radius:10px;padding:9px 18px;font-family:'Geist',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all 0.15s;flex-shrink:0;}
+.labs-analyze-btn:hover{background:var(--gold-hover);}
+.labs-analyze-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.labs-tabs{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid var(--border);}
+.labs-tab{background:none;border:none;border-bottom:2px solid transparent;padding:7px 14px;font-family:'Geist',sans-serif;font-size:0.82rem;font-weight:500;color:var(--text-3);cursor:pointer;margin-bottom:-1px;transition:all 0.15s;}
+.labs-tab.active{color:var(--text);border-bottom-color:var(--gold);}
+.labs-tab-panel{display:none;}.labs-tab-panel.active{display:block;}
+.labs-mc{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:8px;box-shadow:var(--shadow-sm);}
+.labs-mc-title{font-size:0.88rem;font-weight:600;margin-bottom:3px;}
+.labs-mc-desc{font-size:0.74rem;color:var(--text-3);line-height:1.4;margin-bottom:10px;}
+.labs-mc-bar-wrap{background:var(--bg);border-radius:20px;height:5px;overflow:hidden;margin-bottom:7px;}
+.labs-mc-bar{height:100%;border-radius:20px;transition:width 0.7s ease;}
+.labs-mc-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.labs-mc-pct{font-size:0.73rem;font-weight:600;color:var(--text-2);}
+.labs-mc-actions{display:flex;gap:6px;}
+.labs-assign-btn{background:var(--bg);border:1px solid var(--border);color:var(--text-2);border-radius:7px;padding:4px 10px;font-family:'Geist',sans-serif;font-size:0.71rem;cursor:pointer;}
+.labs-draft-btn{background:var(--gold-pale);border:1px solid var(--gold-border);color:var(--warn);border-radius:7px;padding:4px 10px;font-family:'Geist',sans-serif;font-size:0.71rem;font-weight:600;cursor:pointer;}
+.labs-fb{border-radius:8px;padding:9px 11px;margin-top:7px;font-size:0.74rem;line-height:1.5;}
+.labs-fb.success{background:var(--success-bg);border:1px solid var(--success-border);color:var(--success);}
+.labs-fb.warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn);}
+.labs-fb.danger{background:var(--danger-bg);border:1px solid var(--danger-border);color:var(--danger);}
+.labs-fb-label{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:3px;}
+.labs-spinner{width:13px;height:13px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.labs-team-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--off-white);border:1px solid var(--border);border-radius:10px;margin-bottom:6px;}
+.labs-av{width:30px;height:30px;border-radius:50%;background:var(--gold-pale);border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:var(--warn);}
+/* Modal for draft/assign within labs */
+.labs-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);display:none;align-items:center;justify-content:center;z-index:600;padding:20px;}
+.labs-modal-overlay.open{display:flex;}
+.labs-modal{background:var(--white);border-radius:16px;padding:26px;width:100%;max-width:500px;box-shadow:0 12px 40px rgba(0,0,0,0.14);max-height:90vh;overflow-y:auto;}
+.labs-modal-title{font-family:'Instrument Serif',serif;font-size:1.3rem;letter-spacing:-0.02em;margin-bottom:4px;}
+.labs-modal-sub{font-size:0.78rem;color:var(--text-3);margin-bottom:20px;}
+.labs-field label{display:block;font-size:0.74rem;font-weight:600;color:var(--text-2);margin-bottom:5px;}
+.labs-field textarea,.labs-field select{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-family:'Geist',sans-serif;font-size:0.83rem;background:var(--white);outline:none;color:var(--text);margin-bottom:14px;resize:vertical;}
+.labs-field textarea:focus,.labs-field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
+.labs-modal-actions{display:flex;gap:10px;justify-content:flex-end;}
 </style>
 <header>
   <div class="logo" onclick="switchPage('community')"><div class="logo-gem"></div>4.0</div>
@@ -447,7 +530,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       <div class="section-header"><div class="section-title">My Courses</div></div>
       <div id="myCourses"><div class="loading-state"><div class="loading-spinner"></div>Loading your courses...</div></div>
     </div>
-    <div class="support-footer">Questions or issues? Email <a href="mailto:feedback_4point0@outlook.com">feedback_4point0@outlook.com</a></div>
+    <div class="support-footer">Questions or issues? Email <a href="/cdn-cgi/l/email-protection#dabcbfbfbeb8bbb9b185eeaab5b3b4aeea9ab5afaeb6b5b5b1f4b9b5b7"><span class="__cf_email__" data-cfemail="ef898a8a8b8d8e8c84b0db9f8086819bdfaf809a9b83808084c18c8082">[email&#160;protected]</span></a></div>
   </div>
 </div>
 
@@ -479,20 +562,31 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 </div>
 
 <div id="page-ai" class="page">
-  <div class="community-page ai-page">
-    <div class="ai-coming-soon">
-      <div class="ai-icon-wrap">
-        <div class="ai-gem-large"></div>
-      </div>
-      <div class="ai-coming-title">4.0 AI</div>
-      <div class="ai-coming-sub">Your personal study buddy is on its way.<br>Ask questions, summarize notes, generate practice problems — all powered by AI.</div>
-      <div class="ai-coming-badge">Under Development</div>
-      <div class="ai-coming-features">
-        <div class="ai-feature-item">&#x1F4AC; Ask any study question</div>
-        <div class="ai-feature-item">&#x1F4C4; Talk to your uploaded notes</div>
-        <div class="ai-feature-item">&#x2753; Generate practice questions</div>
-        <div class="ai-feature-item">&#x1F4DD; Summarize course content</div>
-      </div>
+  <div class="labs-wrap" id="labsMain"></div>
+</div>
+
+<!-- LABS DRAFT MODAL -->
+<div class="labs-modal-overlay" id="labsDraftModal">
+  <div class="labs-modal">
+    <div class="labs-modal-title" id="labsDraftTitle">Submit draft</div>
+    <div class="labs-modal-sub">Paste your work for this section. Hit Analyze after to get AI feedback.</div>
+    <div class="labs-field"><label>Draft text</label><textarea id="labsDraftText" rows="6" placeholder="Paste your section draft here..."></textarea></div>
+    <div class="labs-modal-actions">
+      <button class="btn-outline" onclick="closeLabsModal('labsDraftModal')">Cancel</button>
+      <button class="btn-gold" onclick="labsSaveDraft()">Save draft</button>
+    </div>
+  </div>
+</div>
+
+<!-- LABS ASSIGN MODAL -->
+<div class="labs-modal-overlay" id="labsAssignModal">
+  <div class="labs-modal">
+    <div class="labs-modal-title">Assign milestone</div>
+    <div class="labs-modal-sub" id="labsAssignSub"></div>
+    <div class="labs-field"><label>Assign to</label><select id="labsAssignSelect"></select></div>
+    <div class="labs-modal-actions">
+      <button class="btn-outline" onclick="closeLabsModal('labsAssignModal')">Cancel</button>
+      <button class="btn-gold" onclick="labsConfirmAssign()">Assign</button>
     </div>
   </div>
 </div>
@@ -639,11 +733,11 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     <div class="report-modal-icon">&#x2691;</div>
     <div class="report-modal-title">Report an Issue</div>
     <div class="report-modal-sub" id="reportModalSub">If this course has incorrect info or is a duplicate, please reach out to us directly.</div>
-    <div class="report-modal-email">feedback_4point0@outlook.com</div>
+    <div class="report-modal-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="385e5d5d5c5a595b53670c485751564c0878574d4c54575753165b5755">[email&#160;protected]</a></div>
     <button class="btn-primary" onclick="document.getElementById('reportModal').classList.remove('open')">Got it</button>
   </div>
 </div>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // v3.0 - safe onclick, persistent upvotes
   let currentUser=null,currentProfile=null,searchTimeout=null;
   const _courses={};
@@ -674,7 +768,283 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     if(bnav) bnav.classList.add('active');
     if(id==='schedule')loadSchedule();
     if(id==='professors')document.getElementById('profCardDisplay').innerHTML='';
+    if(id==='ai')labsRenderCourseGrid();
   }
+
+  // ─── LABS DATA ───────────────────────────────────────────────────────────────
+  const LABS_COURSES = [
+    { id:'c1', code:'ENGI 4420', name:'Fluid Mechanics', color:'#4a7fa5', emoji:'💧',
+      items:[
+        {id:'i1',type:'Lab',       title:'Lab 3 — Pipe Flow Analysis',            due:'Mar 22',members:['FZ','AK','JT','SM'],pct:68, projectId:'demo-1'},
+        {id:'i2',type:'Assignment',title:'Problem Set 4 — Bernoulli Applications', due:'Mar 25',members:['FZ'],              pct:40, projectId:null},
+        {id:'i3',type:'Project',   title:'Final Design Report',                    due:'Apr 10',members:['FZ','AK'],          pct:12, projectId:null},
+      ]
+    },
+    { id:'c2', code:'ENGI 3424', name:'Thermodynamics II', color:'#c0663a', emoji:'🔥',
+      items:[
+        {id:'i4',type:'Lab',       title:'Lab 2 — Rankine Cycle Efficiency',       due:'Mar 20',members:['FZ','JT'],          pct:90, projectId:null},
+        {id:'i5',type:'Assignment',title:'Problem Set 6 — Entropy Generation',     due:'Mar 28',members:['FZ'],              pct:0,  projectId:null},
+      ]
+    },
+    { id:'c3', code:'ENGI 3891', name:'Engineering Economics', color:'#5a7a4a', emoji:'📊',
+      items:[
+        {id:'i6',type:'Project',   title:'NPV Analysis — Offshore Wind Farm',      due:'Apr 4', members:['FZ','SM','AK'],    pct:55, projectId:null},
+        {id:'i7',type:'Other',     title:'Case Study Presentation',                due:'Mar 24',members:['FZ'],              pct:20, projectId:null},
+      ]
+    },
+    { id:'c4', code:'ENGI 4250', name:'Machine Design', color:'#7a5a9a', emoji:'⚙️',
+      items:[
+        {id:'i8', type:'Assignment',title:'Gear Train Analysis — Problem Set 3',   due:'Mar 21',members:['FZ'],              pct:100,projectId:null},
+        {id:'i9', type:'Lab',       title:'Lab 4 — Fatigue Testing',               due:'Apr 1', members:['FZ','JT','SM'],    pct:5,  projectId:null},
+        {id:'i10',type:'Project',   title:'Shaft & Bearing Design Report',         due:'Apr 15',members:['FZ','AK','JT'],    pct:0,  projectId:null},
+      ]
+    },
+  ];
+
+  const LABS_DEMO_PROJECT = {
+    id:'demo-1', name:'Lab 3 — Pipe Flow Analysis',
+    members:['FZ','AK','JT','SM'],
+    milestones:[
+      {id:'m1',title:'Title Page & Abstract',desc:'Title, authors, date, 150-200 word abstract.',assigned:'FZ',draft:true,pct:0,feedback:null},
+      {id:'m2',title:'Introduction',desc:'Background theory, objectives, relevance.',assigned:'AK',draft:true,pct:0,feedback:null},
+      {id:'m3',title:'Methodology',desc:'Setup, equipment, procedure, safety.',assigned:'AK',draft:true,pct:0,feedback:null},
+      {id:'m4',title:'Results',desc:'Data tables, graphs, calculations, error analysis.',assigned:'JT',draft:true,pct:0,feedback:null},
+      {id:'m5',title:'Discussion',desc:'Analysis, comparison with theory, error sources.',assigned:'JT',draft:true,pct:0,feedback:null},
+      {id:'m6',title:'Conclusion',desc:'Summary, objectives met, future recommendations.',assigned:'FZ',draft:false,pct:0,feedback:null},
+      {id:'m7',title:'References',desc:'All cited sources in APA/IEEE format.',assigned:'SM',draft:true,pct:0,feedback:null},
+    ]
+  };
+
+  const LABS_FEEDBACK = {
+    'm1':{pct:88,fb:"Strong abstract hitting the 150-200 word target. Add key quantitative results to make it more impactful.",missing:""},
+    'm2':{pct:71,fb:"Solid background on Bernoulli's principle. Literature review light — 2 sources found, rubric expects 4-6.",missing:"2-4 additional peer-reviewed sources."},
+    'm3':{pct:83,fb:"Thorough and well-organized. Equipment list complete. Move flow meter uncertainty spec here from Results.",missing:"Uncertainty specification for flow meter."},
+    'm4':{pct:58,fb:"Data tables present and labelled. Graph is missing error bars. Sample calculations shown for only 1 trial — rubric requires 3.",missing:"Error bars on graphs. Sample calcs for 2 more trials. Summary table of Re and friction factor."},
+    'm5':{pct:0, fb:"No draft submitted yet. Discussion is typically the highest-weighted section — don't leave it last.",missing:"Full discussion: theory vs experiment, error sources, implications, lab manual questions (pp.14-15)."},
+    'm6':{pct:74,fb:"Conclusion restates objectives well. Future recommendations paragraph is one sentence — expand to 2-3 specific suggestions.",missing:"Expanded future recommendations. Quantitative summary of key results."},
+    'm7':{pct:47,fb:"4 of 6 required references present in APA 7th. References 2 and 5 missing DOIs. White (2011) cited in text but not in list.",missing:"2 more references needed. DOIs for refs 2 and 5. White (2011) entry."},
+  };
+
+  const TYPE_STYLE = {
+    'Lab':        {bg:'rgba(74,127,165,0.1)',color:'#4a7fa5',border:'rgba(74,127,165,0.25)'},
+    'Assignment': {bg:'rgba(183,119,13,0.08)',color:'var(--warn)',border:'rgba(183,119,13,0.2)'},
+    'Project':    {bg:'rgba(201,168,76,0.08)',color:'var(--gold)',border:'var(--gold-border)'},
+    'Other':      {bg:'var(--bg)',color:'var(--text-3)',border:'var(--border)'},
+  };
+
+  let _labsCurrentCourse = null;
+  let _labsProject = JSON.parse(JSON.stringify(LABS_DEMO_PROJECT));
+  let _labsActiveDraftMil = null;
+  let _labsActiveAssignMil = null;
+
+  function labsRenderCourseGrid() {
+    _labsCurrentCourse = null;
+    const main = document.getElementById('labsMain');
+    main.innerHTML = `
+      <div class="labs-eyebrow">4.0 Labs</div>
+      <div class="labs-title">My Courses</div>
+      <div class="labs-sub">Select a course to see open work and track progress.</div>
+      <div class="labs-course-grid">
+        ${LABS_COURSES.map(c => {
+          const avgPct = Math.round(c.items.reduce((a,i)=>a+i.pct,0)/c.items.length);
+          const urgent = c.items.filter(i=>i.pct<100)[0];
+          return `
+          <div class="labs-course-card" onclick="labsOpenCourse('${c.id}')">
+            <div class="labs-course-top">
+              <div class="labs-course-icon" style="background:${c.color}22;border-color:${c.color}44;">${c.emoji}</div>
+              <span class="labs-course-code">${c.code}</span>
+            </div>
+            <div class="labs-course-name">${c.name}</div>
+            <div class="labs-course-meta">${c.items.length} items open</div>
+            <div class="labs-course-bar-wrap"><div class="labs-course-bar" style="width:${avgPct}%;background:${c.color};"></div></div>
+            <div class="labs-course-footer">
+              <span class="labs-course-pct" style="color:${c.color};">${avgPct}%</span>
+              <span class="labs-course-due">${urgent?'Next due '+urgent.due:'All done ✓'}</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  function labsOpenCourse(id) {
+    _labsCurrentCourse = LABS_COURSES.find(c=>c.id===id);
+    labsRenderCourse();
+  }
+
+  function labsRenderCourse() {
+    const c = _labsCurrentCourse;
+    const main = document.getElementById('labsMain');
+    main.innerHTML = `
+      <button class="labs-back" onclick="labsRenderCourseGrid()">← My Courses</button>
+      <div class="labs-detail-header">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <div class="labs-course-icon" style="width:28px;height:28px;font-size:0.85rem;background:${c.color}22;border-color:${c.color}44;border:1px solid;">${c.emoji}</div>
+            <span class="labs-course-code">${c.code}</span>
+          </div>
+          <div class="labs-detail-title">${c.name}</div>
+          <div class="labs-detail-meta">${c.items.length} open items</div>
+        </div>
+      </div>
+      <div class="labs-items-list">
+        ${c.items.map(item=>{
+          const ts = TYPE_STYLE[item.type]||TYPE_STYLE['Other'];
+          const barColor = item.pct>=80?'var(--success)':item.pct>=40?'var(--gold)':'#d4d0c8';
+          const isDemo = item.projectId==='demo-1';
+          return `
+          <div class="labs-item-row${isDemo?' clickable':''}" ${isDemo?`onclick="labsOpenProject()"`:''}">
+            <div class="labs-item-left">
+              <span class="labs-type-badge" style="background:${ts.bg};color:${ts.color};border-color:${ts.border};">${item.type}</span>
+              <div style="min-width:0;">
+                <div class="labs-item-title">${item.title}</div>
+                <div class="labs-item-meta">Due ${item.due} · ${item.members.map(u=>`<span class="labs-mini-av">${u}</span>`).join('')}</div>
+              </div>
+            </div>
+            <div class="labs-item-right">
+              <div class="labs-item-pct" style="color:${item.pct===100?'var(--success)':item.pct>0?'var(--gold)':'var(--text-3)'};">${item.pct}%</div>
+              <div class="labs-item-bar-wrap"><div class="labs-item-bar" style="width:${item.pct}%;background:${barColor};"></div></div>
+              ${isDemo?`<span class="labs-item-hint">Open →</span>`:''}
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`;
+  }
+
+  function labsOpenProject() {
+    const p = _labsProject;
+    const analyzed = p.milestones.filter(m=>m.feedback);
+    const totalPct = analyzed.length ? Math.round(p.milestones.reduce((a,m)=>a+m.pct,0)/p.milestones.length) : 0;
+    const main = document.getElementById('labsMain');
+
+    main.innerHTML = `
+      <button class="labs-back" onclick="${_labsCurrentCourse?'labsRenderCourse()':'labsRenderCourseGrid()'}">← Back</button>
+      <div class="labs-detail-header">
+        <div>
+          <div class="labs-detail-title">${p.name}</div>
+          <div class="labs-detail-meta">${p.members.length} members · Demo project</div>
+        </div>
+      </div>
+      <div class="labs-overall">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);">Overall progress</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--gold);">${totalPct}%</div>
+        </div>
+        <div class="labs-overall-bar-wrap"><div class="labs-overall-bar" style="width:${totalPct}%;"></div></div>
+        <div style="font-size:0.73rem;color:var(--text-3);">${p.milestones.length} milestones · ${analyzed.length} analyzed</div>
+      </div>
+      <div class="labs-analyze-bar">
+        <div class="labs-analyze-info"><strong>AI Analysis</strong> — Submit drafts then hit Analyze.</div>
+        <button class="labs-analyze-btn" id="labsAnalyzeBtn" onclick="labsDoAnalyze()">✦ Analyze</button>
+      </div>
+      <div class="labs-tabs">
+        <button class="labs-tab active" onclick="labsSwitchTab('milestones',this)">Milestones</button>
+        <button class="labs-tab" onclick="labsSwitchTab('team',this)">Team</button>
+      </div>
+      <div class="labs-tab-panel active" id="labsTab-milestones">
+        ${p.milestones.map(m=>{
+          const fb = m.feedback;
+          const barColor = m.pct>=80?'var(--success)':m.pct>=40?'var(--gold)':'#d4d0c8';
+          return `<div class="labs-mc">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px;">
+              <div style="flex:1;">
+                <div class="labs-mc-title">${m.title}</div>
+                <div class="labs-mc-desc">${m.desc}</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+                ${m.assigned?`<div class="labs-av" style="width:24px;height:24px;font-size:0.58rem;">${m.assigned}</div><span style="font-size:0.73rem;color:var(--text-2);">${m.assigned}</span>`:`<span style="font-size:0.71rem;color:var(--text-3);background:var(--bg);border:1px solid var(--border);padding:2px 7px;border-radius:6px;">Unassigned</span>`}
+              </div>
+            </div>
+            <div class="labs-mc-bar-wrap"><div class="labs-mc-bar" style="width:${m.pct}%;background:${barColor};"></div></div>
+            <div class="labs-mc-bottom">
+              <div class="labs-mc-pct">${m.pct}% complete${m.draft?' · Draft submitted ✓':''}</div>
+              <div class="labs-mc-actions">
+                <button class="labs-assign-btn" onclick="labsOpenAssign('${m.id}','${m.title.replace(/'/g,"\\'")}')">Assign</button>
+                <button class="labs-draft-btn" onclick="labsOpenDraft('${m.id}','${m.title.replace(/'/g,"\\'")}')">+ Draft</button>
+              </div>
+            </div>
+            ${fb?`<div class="labs-fb ${m.pct>=80?'success':m.pct>=40?'warn':'danger'}"><div class="labs-fb-label">AI Feedback</div>${fb}</div>`:''}
+            ${m.missing?`<div class="labs-fb danger"><div class="labs-fb-label">Missing</div>${m.missing}</div>`:''}
+          </div>`;
+        }).join('')}
+      </div>
+      <div class="labs-tab-panel" id="labsTab-team">
+        ${p.members.map(u=>`
+          <div class="labs-team-row">
+            <div class="labs-av">${u}</div>
+            <div style="flex:1;">
+              <div style="font-size:0.84rem;font-weight:500;">${u}</div>
+              <div style="font-size:0.71rem;color:var(--text-3);">${p.milestones.filter(m=>m.assigned===u).length} sections assigned</div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }
+
+  function labsSwitchTab(name, btn) {
+    document.querySelectorAll('.labs-tab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.labs-tab-panel').forEach(p=>p.classList.remove('active'));
+    document.getElementById('labsTab-'+name).classList.add('active');
+  }
+
+  function labsDoAnalyze() {
+    const btn = document.getElementById('labsAnalyzeBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="labs-spinner"></div> Analyzing...';
+    let i = 0;
+    const mils = _labsProject.milestones;
+    function next() {
+      if (i >= mils.length) { showToast('Analysis complete!'); labsOpenProject(); return; }
+      const m = mils[i];
+      const fb = LABS_FEEDBACK[m.id];
+      if (fb) {
+        m.pct = m.draft ? fb.pct : 0;
+        m.feedback = m.draft ? fb.fb : 'No draft submitted yet.';
+        m.missing = m.draft ? fb.missing : '';
+      }
+      i++; setTimeout(next, 350);
+    }
+    setTimeout(next, 400);
+  }
+
+  function labsOpenDraft(milId, title) {
+    _labsActiveDraftMil = milId;
+    document.getElementById('labsDraftTitle').textContent = 'Submit draft — ' + title;
+    document.getElementById('labsDraftText').value = '';
+    openLabsModal('labsDraftModal');
+  }
+
+  function labsSaveDraft() {
+    const text = document.getElementById('labsDraftText').value.trim();
+    if (!text) { showToast('Paste your draft text first'); return; }
+    const m = _labsProject.milestones.find(m=>m.id===_labsActiveDraftMil);
+    if (m) m.draft = true;
+    closeLabsModal('labsDraftModal');
+    showToast('Draft saved — hit Analyze to get feedback!');
+    labsOpenProject();
+  }
+
+  function labsOpenAssign(milId, title) {
+    _labsActiveAssignMil = milId;
+    document.getElementById('labsAssignSub').textContent = 'Assigning: ' + title;
+    const sel = document.getElementById('labsAssignSelect');
+    sel.innerHTML = '<option value="">Unassigned</option>' + _labsProject.members.map(u=>`<option value="${u}">${u}</option>`).join('');
+    const cur = _labsProject.milestones.find(m=>m.id===milId)?.assigned;
+    if (cur) sel.value = cur;
+    openLabsModal('labsAssignModal');
+  }
+
+  function labsConfirmAssign() {
+    const val = document.getElementById('labsAssignSelect').value || null;
+    const m = _labsProject.milestones.find(m=>m.id===_labsActiveAssignMil);
+    if (m) m.assigned = val;
+    closeLabsModal('labsAssignModal');
+    showToast(val ? `Assigned to ${val}` : 'Unassigned');
+    labsOpenProject();
+  }
+
+  function openLabsModal(id) { document.getElementById(id).classList.add('open'); }
+  function closeLabsModal(id) { document.getElementById(id).classList.remove('open'); }
+  document.querySelectorAll('.labs-modal-overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
 
   function syncBottomNav(btn){
     document.querySelectorAll('.bottom-nav-btn').forEach(b=>b.classList.remove('active'));
@@ -871,7 +1241,7 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
   }
   document.getElementById('createModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
-  async function logout(){await db.auth.signOut();window.location.href='./index.html';}
+  async function logout(){await db.auth.signOut();window.location.href='./login.html';}
 
   var DAYS=['Mon','Tue','Wed','Thu','Fri'];
   var HOURS=['8am','9am','10am','11am','12pm','1pm','2pm','3pm','4pm','5pm','6pm','7pm','8pm'];
@@ -1531,16 +1901,4 @@ input[type="range"]::-webkit-slider-thumb:hover{transform:scale(1.2);}
     const {data, error} = await db.storage.from('course-files').upload(path, file, {contentType: file.type});
     if (error) { showToast('Upload failed: ' + error.message); console.error('Upload error:', error); btn.disabled = false; return; }
     const {data: urlData} = db.storage.from('course-files').getPublicUrl(path);
-    const authorName = currentProfile && currentProfile.username ? currentProfile.username : 'anonymous';
-    await db.from('messages').insert({course_id: courseId, user_id: currentUser.id, author_name: authorName, content: '', file_url: urlData.publicUrl, file_name: file.name, reply_to: _chatReplying[courseId]||null});
-    btn.disabled = false;
-    input.value = '';
-    showToast('File shared!');
-  }
-
-  init();
-</script>
-</body>
-</html>
-</body>
-</html>
+    const authorName = currentProfile && currentProfile.username ? currentPro
