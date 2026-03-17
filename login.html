@@ -212,7 +212,7 @@
 
   async function redirectAfterAuth(userId) {
     const { data: profile } = await db.from('profiles').select('id').eq('id', userId).single();
-    window.location.href = profile ? './labs_mockup.html' : './onboarding.html';
+  window.location.href = profile ? './app.html' : './onboarding.html';
   }
 
   async function login() {
